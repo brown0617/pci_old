@@ -1,0 +1,23 @@
+﻿<!-- Wrapper-->
+<div id="wrapper">
+
+	<!-- Navigation -->
+	<div ng-include="'views/main/mainNavigation.html'"></div>
+	<!-- Page wraper -->
+	<div id="page-wrapper" class="gray-bg {{$state.current.name}}">
+
+		<!-- Top Nav bar -->
+		<div ng-include="'views/main/mainHeader.html'"></div>
+		<div> {{ctrl.errorMessage}}</div>
+
+		<!-- Main view  -->
+		<div ui-view></div>
+
+		<!-- Footer -->
+		<!--<div ng-include="'views/common/footer.html'"></div>-->
+
+	</div>
+	<!-- End page wrapper-->
+
+</div>
+<!-- End wrapper-->
