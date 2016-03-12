@@ -2,25 +2,26 @@
 
 var app = angular.module('PCI', [
 	'angular-storage',
-	'ui.router'
+	'ui.router',
+	'ui.bootstrap'
 ]);
 
 app.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
-	$urlRouterProvider.otherwise('/main/home');
+	$urlRouterProvider.otherwise('/pci/home');
 
 	$stateProvider
-		.state('main', {
+		.state('pci', {
 			abstract: true,
-			url: '/main',
+			url: '/pci',
 			templateUrl: '../views/main/main.html',
 			controller: 'MainCtrl',
-			controllerAs: 'ctrl'
+			controllerAs: 'main'
 		})
-		.state('main.home', {
+		.state('pci.home', {
 			url: '/home',
 			templateUrl: '../views/home/home.html'
 		})
-		.state('main.crm', {
+		.state('pci.crm', {
 			url: '/crm',
 			templateUrl: '../views/crm/crmDashboard.html',
 			data: {
@@ -28,11 +29,11 @@ app.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 				tools: [{ name: 'search' }]
 			}
 		})
-		.state('main.customer', {
+		.state('pci.customer', {
 			url: '/crm/customer',
 			templateUrl: '../views/crm/customer/customerMain.html',
 			controller: 'CustomerCtrl',
-			controllerAs: 'ctrl',
+			controllerAs: 'customer',
 			data: {
 				module: 'Customers',
 				tools: [{ name: 'search' }]

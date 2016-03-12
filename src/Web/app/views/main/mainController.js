@@ -1,16 +1,31 @@
 ﻿'use strict';
 
 function MainCtrl($rootScope) {
+	var self = this;
+	var defaultAlert = { type: '', text: '', show: false, dismissOnTimeout: 0 };
 
-	this.userName = 'Example user';
-	this.helloText = 'Welcome to PCI';
-	this.descriptionText = 'It is an application skeleton for a typical AngularJS web app. You can use it to quickly bootstrap your angular webapp projects and dev environment for these projects.';
+	function buildAlert(msg) {
+		if (!msg.notify) {
+			return defaultAlert;
+		}
 
-	$rootScope.$on('Error', function (event, data) {
-		this.errorMessage = data;
+		return {
+			type: msg.type,
+			text: msg.text,
+			show: true,
+			dismissOnTimeout: msg.autoDismiss ? 0 : 3000
+		};
+	}
+
+	this.closeAlert = function() {
+		self.alert = defaultAlert;
+	};
+
+	$rootScope.$on('ApiResponse', function(event, responseMsg) {
+		self.alert = buildAlert(responseMsg);
 	});
 };
 
 angular
 	.module('PCI')
-	.controller('MainCtrl', MainCtrl)
+	.controller('MainCtrl', MainCtrl);
