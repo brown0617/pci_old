@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.AccessControl;
 
 namespace Backend.Domain.Entities
@@ -32,5 +33,9 @@ namespace Backend.Domain.Entities
 	public class CommercialCustomer : Customer
 	{
 		public string AccountNumber { get; set; }
+
+		public int? PrimaryContactId { get; set; }
+		[ForeignKey("PrimaryContactId")]
+		public virtual Person Person { get; set; }
 	}
 }

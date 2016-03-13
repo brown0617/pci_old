@@ -135,8 +135,10 @@
     <Compile Include="API\Controllers\CustomersController.cs" />
     <Compile Include="API\ExceptionHandlingAttribute.cs" />
     <Compile Include="Domain\AppDbContext.cs" />
+    <Compile Include="Domain\Entities\Person.cs" />
     <Compile Include="Domain\Entities\Property.cs" />
     <Compile Include="Domain\Entities\Customer.cs" />
+    <Compile Include="Domain\Migration\ContactBase.cs" />
     <Compile Include="Domain\Migration\CustomerAddressBase.cs" />
     <Compile Include="Domain\Migration\AccountBase.cs" />
     <Compile Include="Domain\Migration\CrmDbContext.cs" />

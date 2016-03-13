@@ -13,4 +13,12 @@
 			</li>
 		</ul>
 	</nav>
+	<!-- Message Bar-->
+	<div class="col-md-12 small" ng-show="main.alert.show">
+		<uib-alert type="{{main.alert.type}}"
+		           close="main.closeAlert()"
+		           dismiss-on-timeout="{{main.alert.dismissOnTimeout}}">
+			{{main.alert.text}}
+		</uib-alert>
+	</div>
 </div>
