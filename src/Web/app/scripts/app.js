@@ -3,7 +3,9 @@
 var app = angular.module('PCI', [
 	'angular-storage',
 	'ui.router',
-	'ui.bootstrap'
+	'ui.bootstrap',
+	'ui.grid',
+	'ui.grid.edit'
 ]);
 
 app.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
@@ -32,6 +34,15 @@ app.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 		.state('pci.customer', {
 			url: '/crm/customer',
 			templateUrl: '../views/crm/customer/customerMain.html',
+			controller: 'CustomerCtrl',
+			controllerAs: 'customer',
+			data: {
+				module: 'Customers',
+				tools: [{ name: 'search' }]
+			}
+		}).state('pci.customerDetail', {
+			url: '/crm/customer/detail',
+			templateUrl: '../views/crm/customer/customerDetail.html',
 			controller: 'CustomerCtrl',
 			controllerAs: 'customer',
 			data: {
