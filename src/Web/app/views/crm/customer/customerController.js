@@ -17,11 +17,12 @@ function CustomerCtrl(customerData) {
 			{ field: 'BillingAddressCity', displayName: 'City' },
 			{ field: 'BillingAddressState', displayName: 'State' },
 			{ field: 'BillingAddressZip', displayName: 'Zip' },
-			{ name: 'edit', displayName: '', cellTemplate: '<a class="btn" ui-sref="pci.customerDetail"><i class="fa fa-pencil-square-o"></i></a>' }
+			{ name: 'edit', displayName: '', cellTemplate: '<a class="btn" ui-sref="pci.customerDetail({id: row.entity.Id})"><i class="fa fa-pencil-square-o"></i></a>' }
 		]
 	};
 }
 
+CustomerCtrl.$inject = ['customerData'];
 angular
 	.module('PCI')
 	.controller('CustomerCtrl', CustomerCtrl);

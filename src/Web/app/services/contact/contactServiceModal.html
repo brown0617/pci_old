@@ -1,0 +1,25 @@
+﻿<form name="contactModal" novalidate>
+	<div class="modal-header">
+		<h3 class="modal-title">Contact Information</h3>
+	</div>
+	<div class="modal-body">
+		<div class="form-group">
+			<div class="col-md-5">
+				<label>First Name</label>
+				<input type="text" class="form-control" ng-model="ctrl.contact.FirstName"/>
+			</div>
+			<div class="col-md-2">
+				<label>MI</label>
+				<input type="text" class="form-control" ng-model="ctrl.contact.MiddleName"/>
+			</div>
+			<div class="col-md-5">
+				<label>Last Name</label>
+				<input type="text" class="form-control" ng-model="ctrl.contact.LastName" />
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-default" ng-click="ctrl.save()">Okay</button>
+		<button type="button" class="btn btn-default" ng-click="ctrl.cancel()">Cancel</button>
+	</div>
+</form>

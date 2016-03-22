@@ -26,6 +26,7 @@ function MainCtrl($rootScope) {
 	});
 };
 
+MainCtrl.$inject = ['$rootScope'];
 angular
 	.module('PCI')
 	.controller('MainCtrl', MainCtrl);

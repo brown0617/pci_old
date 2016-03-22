@@ -41,10 +41,10 @@ app.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 				tools: [{ name: 'search' }]
 			}
 		}).state('pci.customerDetail', {
-			url: '/crm/customer/detail',
+			url: '/crm/customer/detail/:id',
 			templateUrl: '../views/crm/customer/customerDetail.html',
-			controller: 'CustomerCtrl',
-			controllerAs: 'customer',
+			controller: 'CustomerDtlCtrl',
+			controllerAs: 'customerDtl',
 			data: {
 				module: 'Customers',
 				tools: [{ name: 'search' }]
