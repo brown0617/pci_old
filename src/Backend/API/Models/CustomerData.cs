@@ -10,5 +10,6 @@
 		public string BillingAddressState { get; set; }
 		public string BillingAddressZip { get; set; }
 		public string Terms { get; set; }
+		public string Type { get; set; }
 	}
 }

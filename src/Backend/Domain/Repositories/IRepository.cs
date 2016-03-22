@@ -6,6 +6,7 @@ namespace Backend.Domain.Repositories
 	{
 		IEnumerable<TEntity> Get();
 		TEntity Get(TKey id);
+		TEntity New();
 		void Save(TEntity entity);
 		void Delete(TEntity entity);
 	}

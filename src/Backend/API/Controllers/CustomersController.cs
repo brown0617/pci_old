@@ -1,18 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using AutoMapper;
 using Backend.API.Models;
 using Backend.Domain.Repositories;
-using NLog;
 
 namespace Backend.API.Controllers
 {
-	[EnableCors("http://localhost:9000", "*", "get,post")]
 	[ExceptionHandling]
 	public class CustomersController : ApiController
 	{
-		private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 		private readonly IMapper _mapper;
 		private readonly ICustomerRepository _repository;
 
@@ -26,7 +23,7 @@ namespace Backend.API.Controllers
 		{
 			var customerData = new List<CustomerData>();
 			_mapper.Map(_repository.Get(), customerData);
-			return customerData;
+			return customerData.OrderBy(x => x.Name);
 		}
 
 		public CustomerData Get(int id)

@@ -8,7 +8,10 @@ namespace Backend.API
 	{
 		protected override void Configure()
 		{
-			CreateMap<Customer, CustomerData>();
+			CreateMap<Customer, CustomerData>()
+				.ForMember(dto => dto.Type, opts => opts.MapFrom(ent => ent.GetType().Name.Split('_')[0]));
+			CreateMap<Person, PersonData>();
+			CreateMap<PersonData, Person>();
 		}
 	}
 }

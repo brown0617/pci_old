@@ -31,7 +31,12 @@ namespace Backend.Domain.Repositories
 
 		public IEnumerable<Customer> Get()
 		{
-			return _ctx.Customers.OrderBy(x => x.Name);
+			return _ctx.Customers;
+		}
+
+		public Customer New()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

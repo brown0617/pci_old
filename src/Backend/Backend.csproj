@@ -64,7 +64,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
@@ -133,7 +133,9 @@
   <ItemGroup>
     <Compile Include="API\AutoMapperConfig.cs" />
     <Compile Include="API\Controllers\CustomersController.cs" />
+    <Compile Include="API\Controllers\PeopleController.cs" />
     <Compile Include="API\ExceptionHandlingAttribute.cs" />
+    <Compile Include="API\Models\PersonData.cs" />
     <Compile Include="Domain\AppDbContext.cs" />
     <Compile Include="Domain\Entities\Person.cs" />
     <Compile Include="Domain\Entities\Property.cs" />
@@ -143,9 +145,11 @@
     <Compile Include="Domain\Migration\AccountBase.cs" />
     <Compile Include="Domain\Migration\CrmDbContext.cs" />
     <Compile Include="Domain\Repositories\CustomerRepository.cs" />
+    <Compile Include="Domain\Repositories\IPersonRepository.cs" />
     <Compile Include="Domain\Repositories\ICustomerRepository.cs" />
     <Compile Include="Domain\Repositories\IRepository.cs" />
     <Compile Include="API\Models\CustomerData.cs" />
+    <Compile Include="Domain\Repositories\PersonRepository.cs" />
     <Compile Include="NinjectConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
