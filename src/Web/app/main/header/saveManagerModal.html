@@ -1,0 +1,46 @@
+﻿<div class="modal" tabindex="-1" role="dialog" data-backdrop="static">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">You Have Unsaved Changes</h4>
+			</div>
+			<div class="modal-body">
+				<p>Do you want to save the changes before continuing?</p>
+			</div>
+			<div class="modal-footer padding-bot-md">
+				<div class="row no-gutters">
+					<div class="col-md-4">
+						<div class="button text-and-icon left error">
+							<button ng-click="closeSaveManagerModal()" name="saveManagerModalCancelButton">
+								<span class="icon icon-x"></span>
+								<div>
+									<span>Cancel</span>
+								</div>
+							</button>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="button text-and-icon left danger">
+							<button ng-click="cancelSaveManagerModal()" name="saveManagerModalNoButton">
+								<span class="icon icon-no"></span>
+								<div>
+									<span>No</span>
+								</div>
+							</button>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="button text-and-icon left success">
+							<button ng-click="saveSaveManagerModal()" name="saveManagerModalYesButton">
+								<span class="icon icon-checkmark"></span>
+								<div>
+									<span>Yes</span>
+								</div>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

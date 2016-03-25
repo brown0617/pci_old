@@ -36,25 +36,33 @@
 <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 <script src="../bower_components/a0-angular-storage/dist/angular-storage.min.js"></script>
 <script src="../bower_components/angular-ui-grid/ui-grid.min.js"></script>
+<script src="../bower_components/underscore/underscore.js"></script>
 
-<!-- Angular App Scripts -->
+<!-- App Scripts -->
 <script src="scripts/app.js"></script>
 <script src="services/apiInterceptor.js"></script>
 
-<!-- Angular Service Scripts -->
+<!-- Service Scripts -->
+<script src="services/dialog/dialogService.js"></script>
+<script src="services/dialog/dialogServiceModalController.js"></script>
 <script src="services/customerData.js"></script>
 <script src="services/personData.js"></script>
 <script src="services/contact/contactService.js"></script>
 <script src="services/contact/contactServiceModalController.js"></script>
 
-<!-- Angular Directive Scripts -->
+<!-- Directive Scripts -->
 <script src="directives/contactDirective.js"></script>
 
-<!-- Angular Controller Scripts -->
-<script src="views/main/mainController.js"></script>
+<!-- Main Scripts -->
+<script src="main/header/headerDirective.js"></script>
+<script src="main/header/saveManagerDirective.js"></script>
+<script src="main/header/saveManagerModalDirective.js"></script>
+
+<!-- Controller Scripts -->
+<script src="main/mainController.js"></script>
 <script src="views/crm/customer/customerController.js"></script>
 <script src="views/crm/customer/customerDetailController.js"></script>
-<script src="services/contact/contactServiceModalController.js"></script>
+
 
 </body>
 </html>

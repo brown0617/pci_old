@@ -1,0 +1,16 @@
+﻿<form name="dialogModal" novalidate>
+	<div class="modal-header">
+		<h3 class="modal-title">{{ ctrl.params.title }}</h3>
+	</div>
+	<div class="modal-body text-center">
+		<p>
+			{{ ctrl.params.message }}
+		</p>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-default" ng-click="ctrl.Respond('Yes')" ng-show="ctrl.params.btnYesNo">Yes</button>
+		<button type="button" class="btn btn-default" ng-click="ctrl.Respond('No')" ng-show="ctrl.params.btnYesNo">No</button>
+		<button type="button" class="btn btn-default" ng-click="ctrl.Respond('Ok')" ng-show="ctrl.params.btnOk">Okay</button>
+		<button type="button" class="btn btn-default" ng-click="ctrl.Respond('Cancel')" ng-show="ctrl.params.btnCancel">Cancel</button>
+	</div>
+</form>

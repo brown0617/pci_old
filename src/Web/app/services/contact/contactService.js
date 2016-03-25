@@ -40,6 +40,4 @@ function contactService($uibModal, personData) {
 };
 
 contactService.$inject = ['$uibModal', 'personData'];
-angular
-	.module('PCI')
-	.service('contactService', contactService);
+app.service('contactService', contactService);

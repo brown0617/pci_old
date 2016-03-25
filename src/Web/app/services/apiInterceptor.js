@@ -35,6 +35,4 @@ function apiInterceptor($rootScope) {
 	};
 };
 
-angular
-	.module('PCI')
-	.service('apiInterceptor', apiInterceptor);
+app.service('apiInterceptor', apiInterceptor);
