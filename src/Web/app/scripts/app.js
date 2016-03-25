@@ -43,10 +43,23 @@ app.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 		}).state('pci.customerDetail', {
 			url: '/crm/customer/detail/:id',
 			templateUrl: '../views/crm/customer/customerDetail.html',
+			resolve: {
+				previousState: [
+                    '$state',
+                    function ($state) {
+                    	var currentStateData = {
+                    		Name: $state.current.name,
+                    		Params: $state.params,
+                    		URL: $state.href($state.current.name, $state.params)
+                    	};
+                    	return currentStateData;
+                    }
+				]
+			},
 			controller: 'CustomerDtlCtrl',
 			controllerAs: 'customerDtl',
 			data: {
-				module: 'Customers',
+				module: 'Customer Detail',
 				tools: [{ name: 'search' }]
 			}
 		});

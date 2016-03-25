@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-function CustomerDtlCtrl(customerData, $stateParams) {
+function CustomerDtlCtrl(customerData, $stateParams, previousState) {
 	var self = this;
 
 	self.customer = {};
@@ -16,9 +16,11 @@ function CustomerDtlCtrl(customerData, $stateParams) {
 	this.save = function() {
 		return customerData.save(self.customer);
 	};
+
+	this.previousState = previousState;
 }
 
-CustomerDtlCtrl.$inject = ['customerData', '$stateParams'];
+CustomerDtlCtrl.$inject = ['customerData', '$stateParams', 'previousState'];
 angular
 	.module('PCI')
 	.controller('CustomerDtlCtrl', CustomerDtlCtrl);

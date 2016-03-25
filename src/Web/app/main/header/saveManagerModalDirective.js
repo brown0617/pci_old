@@ -1,87 +1,65 @@
 ﻿'use strict';
 
-function saveManagerModal($rootScope, $q) {
+function saveManagerModal($rootScope, $q, dialogService) {
 
 	return {
 		restrict: 'E',
 		replace: true,
 		transclude: true,
-		require: ['^saveManager', '^form'],
+		require: ['^saveManager'],
 		templateUrl: '../main/header/saveManagerModal.html',
 		link: function(scope, element, attrs, controllers) {
 
 			var saveManager = controllers[0];
-			var form = controllers[1];
 
-			var openModalDeferred;
+			// Open the Save/Cancel modal. 
+			scope.openModal = function() {
+				var deferred = $q.defer();
 
-			function hideModal() {
-				scope.$parent.$root.modalBackdrop = false;
-				element.addClass('ng-hide');
-			}
+				dialogService.message = 'Do you want to save the changes before continuing?';
+				dialogService.title = 'Unsaved Changes';
+				dialogService.btnYesNo = true;
+				dialogService.btnCancel = true;
 
-			// Init step to hide the modal. 
-			hideModal();
+				dialogService.open().then(function(response) {
+					switch (response) {
+					case 'Yes':
+						saveManager.save()
+							.then(function() {
+								$rootScope.form.$setPristine();
 
-			_.extend(scope, {
+								// in certain situations this is not being reset 
+								if (scope.mainForm && scope.mainForm.$dirty) {
+									scope.mainForm.$setPristine();
+								}
 
-				// Open the Save/Cancel modal. 
-				openModal: function() {
-					openModalDeferred = $q.defer();
-					// TODO: This seems messy - why can't we just show and hide a modal as necessary? 
-					scope.$parent.$root.modalBackdrop = true;
-					element.removeClass('ng-hide');
-					return openModalDeferred.promise;
-				},
-
-				// Close the Save/Cancel modal and return a promise that resolves to 'Closed'
-				closeModal: function() {
-					hideModal();
-					openModalDeferred.resolve('Closed');
-				},
-
-				// Close the modal, set pristine on the form and return a promise
-				saveModal: function() {
-					if (form.$invalid || form.$pending) {
-						hideModal();
-						return openModalDeferred.resolve('ErrorInPage');
-					}
-
-					saveManager.save().then(function() {
-						hideModal();
+								deferred.resolve('SaveSuccess');
+							}, (function() {
+								deferred.resolve('SaveFailure');
+							}));
+						break;
+					case 'No':
 						$rootScope.form.$setPristine();
 
-						// in certain situations this is not being reset 
 						if (scope.mainForm && scope.mainForm.$dirty) {
 							scope.mainForm.$setPristine();
 						}
 
-						openModalDeferred.resolve('SaveSuccess');
-					}).catch(function(result) {
-						//$log.error(result);
-						hideModal();
-						//confirmationModalService.saveFailedConfirmation();
-						openModalDeferred.resolve('SaveFailure');
-					});
-				},
-
-				// Close the modal, set pristine on the form and return a promise that resolves to 'CancelSuccess'
-				cancelModal: function() {
-					// Enable navigation without saving changes. 
-					hideModal();
-					$rootScope.form.$setPristine();
-
-					// in certain situations this is not being reset 
-					if (scope.mainForm && scope.mainForm.$dirty) {
-						scope.mainForm.$setPristine();
+						deferred.resolve('CancelSuccess');
+						break;
+					case 'Cancel':
+						deferred.resolve('Closed');
+						break;
+					default:
 					}
 
-					openModalDeferred.resolve('CancelSuccess');
-				}
-			});
+				});
+
+				return deferred.promise;
+			};
 		}
 	};
 }
 
-saveManagerModal.$inject = ['$rootScope', '$q'];
+saveManagerModal.$inject = ['$rootScope', '$q', 'dialogService'];
 app.directive('saveManagerModal', saveManagerModal);

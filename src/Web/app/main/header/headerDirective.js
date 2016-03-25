@@ -14,6 +14,7 @@ function mainHeader($rootScope, $window, $state, $timeout, dialogService) {
 
 			_.defaults($scope, {
 				form: form,
+				allowBack: form.previousState != undefined,
 
 				// Saves the current form 
 				save: function() {
@@ -52,6 +53,11 @@ function mainHeader($rootScope, $window, $state, $timeout, dialogService) {
 							$scope.cancel();
 						}
 					});
+				},
+
+				// Go back to previous page
+				back: function() {
+					
 				}
 			});
 		}
