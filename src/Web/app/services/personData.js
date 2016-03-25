@@ -25,6 +25,4 @@ function personData($http) {
 };
 
 personData.$inject = ['$http'];
-angular
-	.module('PCI')
-	.service('personData', personData);
+app.service('personData', personData);

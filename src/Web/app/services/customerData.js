@@ -12,9 +12,12 @@ function customerData($http) {
 	this.get = function(id) {
 		return $http.get(uri + '/' + id);
 	};
+
+	// save a customer
+	this.save = function(customer) {
+		return $http.put(uri, customer);
+	}
 };
 
 customerData.$inject = ['$http'];
-angular
-	.module('PCI')
-	.service('customerData', customerData);
+app.service('customerData', customerData);

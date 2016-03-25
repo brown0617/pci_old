@@ -15,7 +15,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 		.state('pci', {
 			abstract: true,
 			url: '/pci',
-			templateUrl: '../views/main/main.html',
+			templateUrl: '../main/main.html',
 			controller: 'MainCtrl',
 			controllerAs: 'main'
 		})

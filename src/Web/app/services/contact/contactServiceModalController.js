@@ -14,6 +14,4 @@ function ContactServiceModalCtrl($uibModalInstance, contact) {
 };
 
 ContactServiceModalCtrl.$inject = ['$uibModalInstance', 'contact'];
-angular
-	.module('PCI')
-	.controller('ContactServiceModalCtrl', ContactServiceModalCtrl);
+app.controller('ContactServiceModalCtrl', ContactServiceModalCtrl);

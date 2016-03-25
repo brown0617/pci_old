@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-function PciContact(personData, contactService) {
+function pciContact(personData, contactService) {
 	return {
 		restrict: 'E',
 		require: 'ngModel',
@@ -9,24 +9,24 @@ function PciContact(personData, contactService) {
 		},
 		template: '<div class="form-group">' +
 			'<label class="control-label">{{label}}</label>' +
-			'<div class="input-group"><select class="form-control" ng-model="ngModel" ng-options="contact.Id as contact.FullName for contact in contacts">'+
+			'<div class="input-group"><select class="form-control" ng-model="ngModel" ng-options="contact.Id as contact.FullName for contact in contacts">' +
 			'<option value="">Select a contact</option>' +
 			'</select>' +
 			'<div class="input-group-btn"><a class="btn" ng-click="editContact(ngModel)"><i class="fa fa-pencil-square-o fa-2x"></i></a>' +
 			'</div></div>',
-		link: function (scope, elem, attrs, ngModel) {
-			personData.getAll().then(function (result) {
+		link: function(scope) {
+			personData.getAll().then(function(result) {
 				scope.contacts = result.data;
 			});
 
-			scope.editContact = function (id) {
-				//var id = ngModel.$viewValue;
+			scope.editContact = function(id) {
 				contactService.edit(id);
 			};
 		}
 	};
 };
 
+pciContact.$inject = ['personData', 'contactService'];
 angular
 	.module('PCI')
-	.directive('pciContact', PciContact);
+	.directive('pciContact', pciContact);
