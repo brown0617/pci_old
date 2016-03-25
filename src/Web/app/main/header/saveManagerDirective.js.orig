@@ -1,0 +1,89 @@
+﻿'use strict';
+
+function saveManager($q) {
+	return {
+		restrict: 'A',
+		require: ['saveManager'],
+		controller: [
+			function() {
+
+				var controls = [];
+
+<<<<<<< HEAD
+				// Save the registered controls 
+				this.save = function() {
+					var deferred = this.fire('save');
+					deferred.then(function() {
+						controls.forEach(function(control) {
+							if (control.saveComplete) {
+								control.saveComplete(control, null);
+							}
+						});
+					},
+=======
+				//Save the registered controls 
+				this.save = function() {
+					var deferred = this.fire('save');
+					deferred.then(function() {
+							controls.forEach(function(control) {
+								if (control.saveComplete) {
+									control.saveComplete(control, null);
+								}
+							});
+						},
+>>>>>>> 6ae6f6d8b323c58525cc3f16324f6414aeb122b0
+						function(error) {
+							throw error;
+						}
+					);
+					return deferred;
+				};
+
+				// Cancel the save controls 
+				this.cancel = function() {
+					var deferred = this.fire('cancel');
+					return deferred;
+				};
+
+<<<<<<< HEAD
+				// Fire off a specific call on all registered controls
+=======
+				// Fire off a specific call on all registered controls 
+>>>>>>> 6ae6f6d8b323c58525cc3f16324f6414aeb122b0
+				this.fire = function(event, args) {
+					var promises = [];
+
+					controls.forEach(function(control) {
+						if (event === 'save') {
+							promises.push(control[event]
+								? control[event].call(control, args)
+								: null);
+
+						} else {
+							promises.push($q.when(control[event]
+								? control[event].call(control, args)
+								: null));
+						}
+
+					});
+
+					return $q.all(promises);
+				};
+
+				// Register a savable control ie. { save, cancel, onSave } 
+				this.register = function(control) {
+					controls.push(control);
+					return _.bind(function() { this.unregister(control); }, this);
+				};
+
+				// Unregister a registered control 
+				this.unregister = function(control) {
+					controls.splice(controls.indexOf(control), 1);
+				};
+			}
+		]
+	};
+}
+
+saveManager.$inject = ['$q'];
+app.directive('saveManager', saveManager);
