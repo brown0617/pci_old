@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using AutoMapper;
 using Backend.API.Models;
+using Backend.Domain.Entities;
 using Backend.Domain.Repositories;
 
 namespace Backend.API.Controllers
@@ -31,6 +33,15 @@ namespace Backend.API.Controllers
 			var customerData = new CustomerData();
 			_mapper.Map(_repository.Get(id), customerData);
 			return customerData;
+		}
+
+		public void Put([FromBody] CustomerData customerData)
+		{
+			var entityType = Type.GetType(customerData.Type);
+			if (entityType == null) return;
+			var entity = Activator.CreateInstance(entityType) as Customer;
+			var customer = _mapper.Map(customerData, entity);
+			_repository.Save(customer);
 		}
 	}
 }

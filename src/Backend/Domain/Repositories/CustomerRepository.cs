@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using Backend.Domain.Entities;
 
@@ -21,7 +22,8 @@ namespace Backend.Domain.Repositories
 
 		public void Save(Customer entity)
 		{
-			throw new NotImplementedException();
+			_ctx.Customers.AddOrUpdate(entity);
+			_ctx.SaveChanges();
 		}
 
 		public void Delete(Customer entity)
