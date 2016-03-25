@@ -25,12 +25,7 @@ function saveManagerModal($rootScope, $q) {
 
 			_.extend(scope, {
 
-				/** 
-						 * @xrs method 
-						 * @name openModal 
-						 * 
-						 * @description - Open the Save/Cancel modal. 
-						 */
+				// Open the Save/Cancel modal
 				openModal: function() {
 					openModalDeferred = $q.defer();
 					// TODO: This seems messy - why can't we just show and hide a modal as necessary? 
@@ -39,25 +34,13 @@ function saveManagerModal($rootScope, $q) {
 					return openModalDeferred.promise;
 				},
 
-				/** 
-						 * @xrs method 
-						 * @name closeModal 
-						 * 
-						 * @description - Close the Save/Cancel modal and return a promise that resolves to 'Closed'. 
-						 */
+				//Close the Save/Cancel modal and return a promise that resolves to 'Closed'. 
 				closeModal: function() {
 					hideModal();
 					openModalDeferred.resolve('Closed');
 				},
 
-				/** 
-						 * @xrs method 
-						 * @name saveModal 
-						 * 
-						 * @description - Close the modal, set pristine on the form and return a promise. 
-						 * If successful, the promise resolves to 'SaveSuccess'.  Otherwise, 
-						 * it resolves to 'SaveFailure'. 
-						 */
+				// Close the modal, set pristine on the form and return a promise. 
 				saveModal: function() {
 					if (form.$invalid || form.$pending) {
 						hideModal();
@@ -82,12 +65,7 @@ function saveManagerModal($rootScope, $q) {
 					});
 				},
 
-				/** 
-						 * @xrs method 
-						 * @name cancelModal 
-						 * 
-						 * @description - Close the modal, set pristine on the form and return a promise that resolves to 'CancelSuccess'. 
-						 */
+				// Close the modal, set pristine on the form and return a promise that resolves to 'CancelSuccess'. 
 				cancelModal: function() {
 					// Enable navigation without saving changes. 
 					hideModal();

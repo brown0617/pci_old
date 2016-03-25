@@ -9,21 +9,16 @@ function saveManager($q) {
 
 				var controls = [];
 
-				/** 
-				 * @xrs method  
-				 * @name save 
-				 * 
-				 * @description - Save the registered controls 
-				 */
+				//Save the registered controls 
 				this.save = function() {
 					var deferred = this.fire('save');
 					deferred.then(function() {
-						controls.forEach(function(control) {
-							if (control.saveComplete) {
-								control.saveComplete(control, null);
-							}
-						});
-					},
+							controls.forEach(function(control) {
+								if (control.saveComplete) {
+									control.saveComplete(control, null);
+								}
+							});
+						},
 						function(error) {
 							throw error;
 						}
@@ -31,23 +26,13 @@ function saveManager($q) {
 					return deferred;
 				};
 
-				/** 
-				 * @xrs method  
-				 * @name cancel 
-				 * 
-				 * @description - Cancel the save controls 
-				 */
+				// Cancel the save controls 
 				this.cancel = function() {
 					var deferred = this.fire('cancel');
 					return deferred;
 				};
 
-				/** 
-				 * @xrs method  
-				 * @name fire 
-				 * 
-				 * @description - Fire off a specific call on all registered controls 
-				 */
+				// Fire off a specific call on all registered controls 
 				this.fire = function(event, args) {
 					var promises = [];
 
@@ -68,23 +53,13 @@ function saveManager($q) {
 					return $q.all(promises);
 				};
 
-				/** 
-				 * @xrs method  
-				 * @name register 
-				 * 
-				 * @description - Register a savable control ie. { save, cancel, onSave } 
-				 */
+				// Register a savable control ie. { save, cancel, onSave } 
 				this.register = function(control) {
 					controls.push(control);
 					return _.bind(function() { this.unregister(control); }, this);
 				};
 
-				/** 
-				 * @xrs method  
-				 * @name unregister 
-				 * 
-				 * @description - Unregister a registered control 
-				 */
+				// Unregister a registered control 
 				this.unregister = function(control) {
 					controls.splice(controls.indexOf(control), 1);
 				};
