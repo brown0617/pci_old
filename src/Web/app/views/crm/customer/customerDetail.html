@@ -31,4 +31,7 @@
 	<div class="panel-body col-md-6" ng-if="customerDtl.customer.Type === 'CommercialCustomer'">
 		<pci-contact ng-model="customerDtl.customer.PrimaryContactId" label="Primary Contact"></pci-contact>
 	</div>
+	<div class="col-md-12">
+		<div class="gridStyle" ui-grid="customerDtl.gridProperties"></div>
+	</div>
 </form>
