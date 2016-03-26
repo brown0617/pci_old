@@ -16,6 +16,10 @@ namespace Backend.API
 			// Person
 			CreateMap<Person, PersonData>();
 			CreateMap<PersonData, Person>();
+
+			// Property
+			CreateMap<Property, PropertyData>();
+			CreateMap<PropertyData, Property>();
 		}
 	}
 }

@@ -17,6 +17,7 @@ namespace Backend.Domain
 
 		public IDbSet<Customer> Customers { get; set; }
 		public IDbSet<Property> Properties { get; set; }
+		public IDbSet<PropertyCustomer> PropertyCustomer { get; set; }
 		public IDbSet<Person> People { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -80,13 +81,39 @@ namespace Backend.Domain
 					}));
 
 			// Accounts ==> Property (Commercial)
-			crmContext.Accounts.Where(x => x.ParentAccountId.HasValue).ToList().ForEach(
-				a =>
-					pciContext.Properties.Add(new Property
+			crmContext.Accounts.Select(c => new
+			{
+				Customer = c,
+				Address = c.Addresses.FirstOrDefault(a => a.AddressNumber == 1)
+			}).Where(w => w.Customer.ParentAccountId.HasValue).ToList().ForEach(
+				x => pciContext.Properties.Add(
+					new Property
 					{
-						Name = a.Name,
-						CrmAccountId = a.AccountId
+						Name = x.Customer.Name,
+						AddressStreet1 = x.Address.Line1,
+						AddressStreet2 = x.Address.Line2,
+						AddressCity = x.Address.City,
+						AddressState = x.Address.StateOrProvince,
+						AddressZip = x.Address.PostalCode,
+						CrmAccountId = x.Customer.AccountId,
+						CrmParentAccountId = (Guid) x.Customer.ParentAccountId,
+						CrmPrimaryContactId = x.Customer.PrimaryContactId
 					}));
+
+			pciContext.SaveChanges();
+
+			// Property/Customer relationship
+			pciContext.Properties.Join(pciContext.Customers, prop => prop.CrmParentAccountId, cust => cust.CrmAccountId,
+				(prop, cust) => new
+				{
+					Prop = prop,
+					Cust = cust
+				}).ToList().ForEach(a => pciContext.PropertyCustomer.Add(new PropertyCustomer
+				{
+					PropertyId = a.Prop.Id,
+					CustomerId = a.Cust.Id,
+					PrimaryContactId = GetPersonId(a.Prop.CrmPrimaryContactId)
+				}));
 
 			pciContext.SaveChanges();
 		}

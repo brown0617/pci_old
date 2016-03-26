@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Backend.Domain.Entities
+﻿namespace Backend.API.Models
 {
-	public class Property
+	public class PropertyData
 	{
 		/// <summary>
 		///     Property Id
@@ -39,24 +36,5 @@ namespace Backend.Domain.Entities
 		///     Zip code for the property
 		/// </summary>
 		public string AddressZip { get; set; }
-		
-		#region TODO: remove once in production
-
-		/// <summary>
-		///     Id representing the property from CRM used for migration purposes
-		/// </summary>
-		public Guid CrmAccountId { get; set; }
-
-		/// <summary>
-		///     Id representing the customer from CRM used for migration purposes
-		/// </summary>
-		public Guid CrmParentAccountId { get; set; }
-
-		/// <summary>
-		///     Id representing the primary contact from CRM used for migration purposes
-		/// </summary>
-		public Guid? CrmPrimaryContactId { get; set; }
-
-		#endregion
 	}
 }
