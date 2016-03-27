@@ -30,6 +30,21 @@ namespace Backend.Domain.Entities
 		public string LastName { get; set; }
 
 		/// <summary>
+		///     The person's full name
+		/// </summary>
+		public string FullName
+		{
+			get
+			{
+				var fName = FirstName ?? string.Empty;
+				var mName = MiddleName != null ? " " + MiddleName : string.Empty;
+				var lName = LastName != null ? " " + LastName : string.Empty;
+
+				return fName + mName + lName;
+			}
+		}
+
+		/// <summary>
 		///     The suffix of the person's name
 		/// </summary>
 		public string Suffix { get; set; }

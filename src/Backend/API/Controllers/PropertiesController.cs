@@ -31,7 +31,8 @@ namespace Backend.API.Controllers
 		public IEnumerable<PropertyData> GetByCustomerId(int customerId)
 		{
 			var propertyData = new List<PropertyData>();
-			_mapper.Map(_repository.FilterByCustomer(customerId), propertyData);
+			var property = _repository.Get().Where(w => w.CustomerId == customerId);
+			_mapper.Map(property, propertyData);
 			return propertyData.OrderBy(x => x.Name);
 		}
 

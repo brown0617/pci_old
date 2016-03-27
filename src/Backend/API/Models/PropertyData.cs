@@ -36,5 +36,25 @@
 		///     Zip code for the property
 		/// </summary>
 		public string AddressZip { get; set; }
+
+		/// <summary>
+		///     Foreign key for customer
+		/// </summary>
+		public int CustomerId { get; set; }
+
+		/// <summary>
+		/// Name of the customer
+		/// </summary>
+		public string CustomerName { get; set; }
+
+		/// <summary>
+		///     Foreign key for primary contact
+		/// </summary>
+		public int? PrimaryContactId { get; set; }
+
+		/// <summary>
+		/// Name of the primary contact
+		/// </summary>
+		public string PrimaryContactName { get; set; }
 	}
 }

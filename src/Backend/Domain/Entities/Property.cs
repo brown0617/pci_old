@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Domain.Entities
 {
@@ -39,7 +39,23 @@ namespace Backend.Domain.Entities
 		///     Zip code for the property
 		/// </summary>
 		public string AddressZip { get; set; }
-		
+
+		/// <summary>
+		///     Foreign key for customer
+		/// </summary>
+		public int? CustomerId { get; set; }
+
+		[ForeignKey("CustomerId")]
+		public virtual Customer Customer { get; set; }
+
+		/// <summary>
+		///     Foreign key for primary contact
+		/// </summary>
+		public int? PrimaryContactId { get; set; }
+
+		[ForeignKey("PrimaryContactId")]
+		public virtual Person PrimaryContact { get; set; }
+
 		#region TODO: remove once in production
 
 		/// <summary>
@@ -50,7 +66,7 @@ namespace Backend.Domain.Entities
 		/// <summary>
 		///     Id representing the customer from CRM used for migration purposes
 		/// </summary>
-		public Guid CrmParentAccountId { get; set; }
+		public Guid? CrmParentAccountId { get; set; }
 
 		/// <summary>
 		///     Id representing the primary contact from CRM used for migration purposes

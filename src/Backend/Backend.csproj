@@ -140,7 +140,6 @@
     <Compile Include="API\Models\PersonData.cs" />
     <Compile Include="Domain\AppDbContext.cs" />
     <Compile Include="Domain\Entities\Person.cs" />
-    <Compile Include="Domain\Entities\PropertyCustomer.cs" />
     <Compile Include="Domain\Entities\Property.cs" />
     <Compile Include="Domain\Entities\Customer.cs" />
     <Compile Include="Domain\Migration\ContactBase.cs" />

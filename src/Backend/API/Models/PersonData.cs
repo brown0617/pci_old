@@ -17,16 +17,7 @@ namespace Backend.API.Models
 		/// <summary>
 		///     The person's full name
 		/// </summary>
-		public string FullName {
-			get
-			{
-				var fName = FirstName ?? string.Empty;
-				var mName = MiddleName != null ? " " + MiddleName : string.Empty;
-				var lName = LastName != null ? " " + LastName : string.Empty;
-
-				return fName + mName + lName;
-			}
-		}
+		public string FullName { get; set; }
 
 		/// <summary>
 		///     The person's first name

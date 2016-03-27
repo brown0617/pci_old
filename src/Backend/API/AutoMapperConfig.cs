@@ -18,7 +18,9 @@ namespace Backend.API
 			CreateMap<PersonData, Person>();
 
 			// Property
-			CreateMap<Property, PropertyData>();
+			CreateMap<Property, PropertyData>()
+				.ForMember(dto => dto.CustomerName, opts => opts.MapFrom(ent => ent.Customer.Name))
+				.ForMember(dto => dto.PrimaryContactName, opts => opts.MapFrom(ent => ent.PrimaryContact.FullName));
 			CreateMap<PropertyData, Property>();
 		}
 	}
