@@ -48,10 +48,5 @@ namespace Backend.Domain.Repositories
 		{
 			throw new NotImplementedException();
 		}
-
-		private string GetCustomerNameFromId(int customerId)
-		{
-			return _ctx.Customers.Where(w => w.Id == customerId).Select(x => x.Name).ToString();
-		}
 	}
 }
