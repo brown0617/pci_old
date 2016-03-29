@@ -23,6 +23,4 @@ function CustomerCtrl(customerData) {
 }
 
 CustomerCtrl.$inject = ['customerData'];
-angular
-	.module('PCI')
-	.controller('CustomerCtrl', CustomerCtrl);
+app.controller('CustomerCtrl', CustomerCtrl);

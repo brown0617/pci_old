@@ -3,6 +3,8 @@
 function CustomerDtlCtrl($stateParams, previousState, $q, customerData, propertyData) {
 	var self = this;
 
+	self.previousState = previousState;
+
 	var promises = [
 		customerData.get($stateParams.id),
 		propertyData.getByCustomerId($stateParams.id)
@@ -34,10 +36,10 @@ function CustomerDtlCtrl($stateParams, previousState, $q, customerData, property
 		return customerData.save(self.customer);
 	};
 
-	this.previousState = previousState;
+	this.getPreviousState = function () {
+		return $q.when(self.previousState);
+	};
 }
 
 CustomerDtlCtrl.$inject = ['$stateParams', 'previousState', '$q', 'customerData', 'propertyData'];
-angular
-	.module('PCI')
-	.controller('CustomerDtlCtrl', CustomerDtlCtrl);
+app.controller('CustomerDtlCtrl', CustomerDtlCtrl);
