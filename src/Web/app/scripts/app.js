@@ -8,7 +8,7 @@ var app = angular.module('PCI', [
 	'ui.grid.edit'
 ]);
 
-app.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
+app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 	$urlRouterProvider.otherwise('/pci/home');
 
 	$stateProvider
@@ -33,7 +33,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 		})
 		.state('pci.customer', {
 			url: '/crm/customer',
-			templateUrl: '../views/crm/customer/customerMain.html',
+			templateUrl: '../views/crm/customer/customer.html',
 			controller: 'CustomerCtrl',
 			controllerAs: 'customer',
 			data: {
@@ -45,21 +45,31 @@ app.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 			templateUrl: '../views/crm/customer/customerDetail.html',
 			resolve: {
 				previousState: [
-                    '$state',
-                    function ($state) {
-                    	var currentStateData = {
-                    		Name: $state.current.name,
-                    		Params: $state.params,
-                    		URL: $state.href($state.current.name, $state.params)
-                    	};
-                    	return currentStateData;
-                    }
+					'$state',
+					function($state) {
+						var currentStateData = {
+							Name: $state.current.name,
+							Params: $state.params,
+							URL: $state.href($state.current.name, $state.params)
+						};
+						return currentStateData;
+					}
 				]
 			},
 			controller: 'CustomerDtlCtrl',
 			controllerAs: 'customerDtl',
 			data: {
 				module: 'Customer Detail',
+				tools: [{ name: 'search' }]
+			}
+		})
+		.state('pci.property', {
+			url: '/crm/property',
+			templateUrl: '../views/crm/property/property.html',
+			controller: 'PropertyCtrl',
+			controllerAs: 'property',
+			data: {
+				module: 'Properties',
 				tools: [{ name: 'search' }]
 			}
 		});

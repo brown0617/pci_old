@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-function saveManager($q) {
+function saveManager($q, $state) {
 	return {
 		restrict: 'A',
 		require: ['saveManager'],
@@ -27,9 +27,17 @@ function saveManager($q) {
 				};
 
 				// Cancel the save controls 
-				this.cancel = function() {
+				this.cancel = function () {
 					var deferred = this.fire('cancel');
 					return deferred;
+				};
+
+				// Nav back to previous state 
+				this.back = function () {
+					var previousStatePromise = this.fire('getPreviousState');
+					previousStatePromise.then(function(previousState) {
+						return $state.go(previousState[0].Name, previousState[0].Params);
+					});
 				};
 
 				// Fire off a specific call on all registered controls
@@ -68,5 +76,5 @@ function saveManager($q) {
 	};
 }
 
-saveManager.$inject = ['$q'];
+saveManager.$inject = ['$q', '$state'];
 app.directive('saveManager', saveManager);

@@ -57,7 +57,11 @@ function mainHeader($rootScope, $window, $state, $timeout, dialogService) {
 
 				// Go back to previous page
 				back: function() {
-					
+					$scope.form.$invalid = false;
+					return saveManager.back().then(function () {
+						//$scope.systemSettingsValidation.showAllErrors = false;
+						form.$setPristine();
+					});
 				}
 			});
 		}
