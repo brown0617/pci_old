@@ -37,7 +37,7 @@ namespace Backend.API.Controllers
 
 		public void Put([FromBody] CustomerData customerData)
 		{
-			var entityType = Type.GetType(customerData.Type);
+			var entityType = Type.GetType("Backend.Domain.Entities." + customerData.Type);
 			if (entityType == null) return;
 			var entity = Activator.CreateInstance(entityType) as Customer;
 			var customer = _mapper.Map(customerData, entity);
