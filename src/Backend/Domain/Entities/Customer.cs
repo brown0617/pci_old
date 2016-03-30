@@ -12,6 +12,7 @@ namespace Backend.Domain.Entities
 		public string BillingAddressCity { get; set; }
 		public string BillingAddressState { get; set; }
 		public string BillingAddressZip { get; set; }
+		public float SalesTaxPercent { get; set; }
 		public string Terms { get; set; }
 		public Guid CrmAccountId { get; set; }
 	}

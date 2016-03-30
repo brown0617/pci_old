@@ -142,10 +142,13 @@
     <Compile Include="Domain\Entities\Person.cs" />
     <Compile Include="Domain\Entities\Property.cs" />
     <Compile Include="Domain\Entities\Customer.cs" />
+    <Compile Include="Domain\Entities\Quote.cs" />
     <Compile Include="Domain\Migration\ContactBase.cs" />
     <Compile Include="Domain\Migration\CustomerAddressBase.cs" />
     <Compile Include="Domain\Migration\AccountBase.cs" />
     <Compile Include="Domain\Migration\CrmDbContext.cs" />
+    <Compile Include="Domain\Migration\QuoteExtensionBase.cs" />
+    <Compile Include="Domain\Migration\QuoteBase.cs" />
     <Compile Include="Domain\Repositories\CustomerRepository.cs" />
     <Compile Include="Domain\Repositories\IPropertyRepository.cs" />
     <Compile Include="Domain\Repositories\IPersonRepository.cs" />
