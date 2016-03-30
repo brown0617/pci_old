@@ -1,9 +1,10 @@
 ﻿'use strict';
 
-function CustomerDtlCtrl($stateParams, previousState, $q, customerData, propertyData) {
+function CustomerDtlCtrl($stateParams, $q, $filter, previousState, customerData, propertyData) {
 	var self = this;
 
 	self.previousState = previousState;
+	self.searchText = '';
 
 	var promises = [
 		customerData.get($stateParams.id),
@@ -12,10 +13,11 @@ function CustomerDtlCtrl($stateParams, previousState, $q, customerData, property
 
 	$q.all(promises).then(function(results) {
 		self.customer = results[0].data;
-		self.properties = results[1].data;
+		self.allProperties = results[1].data;
+		self.properties = self.allProperties;
 	});
 
-	self.gridProperties = {
+	self.gridConfig = {
 		data: 'customerDtl.properties',
 		multiSelect: false,
 		columnDefs: [
@@ -36,10 +38,14 @@ function CustomerDtlCtrl($stateParams, previousState, $q, customerData, property
 		return customerData.save(self.customer);
 	};
 
-	this.getPreviousState = function () {
+	this.getPreviousState = function() {
 		return $q.when(self.previousState);
+	};
+
+	this.filterGridData = function () {
+		self.properties = $filter('filter')(self.allProperties, self.searchText, undefined);
 	};
 }
 
-CustomerDtlCtrl.$inject = ['$stateParams', 'previousState', '$q', 'customerData', 'propertyData'];
+CustomerDtlCtrl.$inject = ['$stateParams', '$q', '$filter', 'previousState', 'customerData', 'propertyData'];
 app.controller('CustomerDtlCtrl', CustomerDtlCtrl);

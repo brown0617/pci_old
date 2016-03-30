@@ -1,13 +1,15 @@
 ﻿'use strict';
 
-function CustomerCtrl(customerData) {
+function CustomerCtrl(customerData, $filter) {
 	var self = this;
 
 	customerData.getAll().then(function(result) {
-		self.customers = result.data;
+		self.allCustomers = result.data;
+		self.customers = self.allCustomers;
+
 	});
 
-	self.gridCustomers = {
+	self.gridConfig = {
 		data: 'customer.customers',
 		multiSelect: false,
 		columnDefs: [
@@ -20,7 +22,11 @@ function CustomerCtrl(customerData) {
 			{ name: 'edit', displayName: '', cellTemplate: '<a class="btn" ui-sref="pci.customerDetail({id: row.entity.Id})"><i class="fa fa-pencil-square-o"></i></a>' }
 		]
 	};
+
+	this.filterGridData = function () {
+		self.customers = $filter('filter')(self.allCustomers, self.searchText, undefined);
+	};
 }
 
-CustomerCtrl.$inject = ['customerData'];
+CustomerCtrl.$inject = ['customerData', '$filter'];
 app.controller('CustomerCtrl', CustomerCtrl);

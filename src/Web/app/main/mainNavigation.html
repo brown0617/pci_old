@@ -4,7 +4,7 @@
 			<li class="nav-header">
 
 				<div class="dropdown profile-element" uib-dropdown>
-					<a class="dropdown-toggle" uib-dropdown-toggle href>
+					<a class="dropdown-toggle" uib-dropdown-toggle>
 						<span class="clear">
 							<span class="block m-t-xs">
 								<strong class="font-bold">PCI</strong>
@@ -23,27 +23,30 @@
 				</div>
 
 			</li>
-
-			<!--<li ui-sref-active="active">
-				<a ui-sref="index.home">
-					<i class="fa fa-laptop"></i> <span class="nav-label">Home</span>
-				</a>
-			</li>-->
 			<li ui-sref-active="active">
-				<a ui-sref="pci.crm">
-					<i class="fa fa-group"></i> <span class="nav-label">CRM</span>
+				<a ui-sref="pci.customer" ui-sref-active="active">
+					<i class="fa fa-group"></i> <span class="nav-label">Customers</span>
 				</a>
 				<ul class="nav-pills nav-stacked" style="list-style-type: none;">
 					<li ui-sref-active="active">
-						<a ui-sref="pci.customer">Customers</a>
+						<a ui-sref="" ui-sref-active="active">Quotes</a>
 					</li>
 					<li>
-						<a ui-sref="pci.property">Properties</a>
+						<a ui-sref="" ui-sref-active="active">Sales Orders</a>
+					</li>
+					<li>
+						<a ui-sref="" ui-sref-active="active">Invoices</a>
 					</li>
 				</ul>
-
+				<a ui-sref="pci.property" ui-sref-active="active">
+					<i class="fa fa-home"></i> <span class="nav-label">Properties</span>
+				</a>
+				<ul class="nav-pills nav-stacked" style="list-style-type: none;">
+					<li ui-sref-active="active">
+						<a ui-sref="">Work Orders</a>
+					</li>
+				</ul>
 			</li>
 		</ul>
-
 	</div>
 </nav>

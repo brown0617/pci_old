@@ -1,3 +1,13 @@
-﻿<div class="col-md-12">
-	<div class="gridStyle" ui-grid="property.gridProperties"></div>
-</div>
+﻿<form role="form" class="form-horizontal">
+	<br />
+	<div class="col-md-12">
+		<div class="form-group">
+			<div class="col-md-8 col-md-offset-2">
+				<input ng-model="property.searchText" class="form-control" ng-change="property.filterGridData()" placeholder="Search...">
+			</div>
+		</div>
+		<div class="col-md-12">
+			<div class="gridStyle" ui-grid="property.gridConfig"></div>
+		</div>
+	</div>
+</form>

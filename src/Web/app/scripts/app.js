@@ -9,7 +9,7 @@ var app = angular.module('PCI', [
 ]);
 
 app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
-	$urlRouterProvider.otherwise('/pci/home');
+	$urlRouterProvider.otherwise('/pci/customer');
 
 	$stateProvider
 		.state('pci', {

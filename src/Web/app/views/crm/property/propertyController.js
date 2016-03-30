@@ -5,10 +5,11 @@ function PropertyCtrl(propertyData) {
 	self.properties = {};
 
 	propertyData.getAll().then(function(results) {
-		self.properties = results.data;
+		self.allProperties = results.data;
+		self.properties = self.allProperties;
 	});
 
-	self.gridProperties = {
+	self.gridConfig = {
 		data: 'property.properties',
 		multiSelect: false,
 		columnDefs: [
@@ -19,6 +20,10 @@ function PropertyCtrl(propertyData) {
 			{ field: 'AddressZip', displayName: 'Zip' },
 			{ name: 'edit', displayName: '', cellTemplate: '<a class="btn" ui-sref="pci.customerDetail({id: row.entity.Id})"><i class="fa fa-pencil-square-o"></i></a>' }
 		]
+	};
+
+	this.filterGridData = function () {
+		self.properties = $filter('filter')(self.allProperties, self.searchText, undefined);
 	};
 }
 
