@@ -143,6 +143,13 @@
     <Compile Include="Domain\Entities\Property.cs" />
     <Compile Include="Domain\Entities\Customer.cs" />
     <Compile Include="Domain\Entities\Quote.cs" />
+    <Compile Include="Domain\Enums\BillingDay.cs" />
+    <Compile Include="Domain\Enums\EnumDescription.cs" />
+    <Compile Include="Domain\Enums\EnumExtensions.cs" />
+    <Compile Include="Domain\Enums\Month.cs" />
+    <Compile Include="Domain\Enums\QuoteStatus.cs" />
+    <Compile Include="Domain\Enums\QuoteType.cs" />
+    <Compile Include="Domain\Enums\Season.cs" />
     <Compile Include="Domain\Migration\ContactBase.cs" />
     <Compile Include="Domain\Migration\CustomerAddressBase.cs" />
     <Compile Include="Domain\Migration\AccountBase.cs" />

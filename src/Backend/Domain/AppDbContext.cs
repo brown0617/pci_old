@@ -5,6 +5,7 @@ using System.Data.Entity.Migrations;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using Backend.Domain.Entities;
+using Backend.Domain.Enums;
 using Backend.Domain.Migration;
 
 namespace Backend.Domain
@@ -17,8 +18,9 @@ namespace Backend.Domain
 		}
 
 		public IDbSet<Customer> Customers { get; set; }
-		public IDbSet<Property> Properties { get; set; }
 		public IDbSet<Person> People { get; set; }
+		public IDbSet<Property> Properties { get; set; }
+		public IDbSet<Quote> Quotes { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
@@ -144,29 +146,45 @@ namespace Backend.Domain
 				}
 			}
 
-			//// Accounts ==> CommercialCustomer
-			//crmContext.Accounts.Select(c => new
-			//{
-			//	Account = c,
-			//	Address = c.Addresses.FirstOrDefault(a => a.AddressNumber == 1)
-			//}).Where(w => IsCommercialCustomer(w.Account.AccountId)).ToList().ForEach(
-			//	x => pciContext.Customers.Add(
-			//		new CommercialCustomer
-			//		{
-			//			AccountNumber = x.Account.AccountNumber,
-			//			BillingAddressCity = x.Address.City,
-			//			BillingAddressStreet1 = x.Address.Line1,
-			//			BillingAddressStreet2 = x.Address.Line2,
-			//			BillingAddressState = x.Address.StateOrProvince,
-			//			BillingAddressZip = x.Address.PostalCode,
-			//			CrmAccountId = x.Account.AccountId,
-			//			PrimaryContactId = GetPersonId(x.Account.PrimaryContactId),
-			//			Name = x.Account.Name
-			//		}));
+			// QuoteBase/QuoteExtensionBase ==> Quote
+			var quotes =
+				crmContext.QuoteBases.Join(crmContext.QuoteExtensionBases, quote => quote.QuoteId, quoteExt => quoteExt.QuoteId,
+					(quote, quoteExt) => new {quote, quoteExt})
+					.Where(c => c.quote.AccountId.HasValue)
+					.ToList();
 
-			//pciContext.SaveChanges();
+			foreach (var quote in quotes)
+			{
+				var property =
+					pciContext.Properties.FirstOrDefault(w => w.CrmAccountId == quote.quote.AccountId);
 
-			//_customers = pciContext.Customers.ToList();
+				if (property == null) continue;
+
+				var newQuote = new Quote
+				{
+					AnnualIncreasePercentage = quote.quoteExt.New_AnnualIncrease ?? 0,
+					BillingDay = (BillingDay) (quote.quoteExt.New_BillingDay ?? 1),
+					BillingStart = (Month) (quote.quoteExt.New_BillingStart ?? 1),
+					ContractTermYears = (quote.quoteExt.New_ContractTermYears ?? 1),
+					ContractYear = quote.quoteExt.New_ContractYear,
+					PropertyId = property.Id,
+					NumberOfPayments = (quote.quoteExt.New_NumPayments ?? 1),
+					SalesTaxAmount = (quote.quoteExt.New_SalesTaxAmount ?? 0),
+					Season = (Season) (quote.quoteExt.New_Season ?? 1),
+					Status = (QuoteStatus) quote.quote.StatusCode,
+					Taxable = (quote.quoteExt.New_Taxable ?? true),
+					Title = quote.quote.Name,
+					TotalAmountLabor = (quote.quoteExt.New_TotalAmountLabor ?? 0),
+					TotalAmountMaterials = (quote.quoteExt.New_TotalAmountMaterials ?? 0),
+					TotalAmountPretax = (quote.quoteExt.New_TotalAmountPretax ?? 0),
+					TotalAmountQuote = (quote.quoteExt.New_TotalAmountQuote ?? 0),
+					TotalEstimatedManHours = (quote.quoteExt.New_TotalManHoursEst ?? 0),
+					Type = (QuoteType) (quote.quoteExt.New_QuoteType ?? 0)
+				};
+
+				pciContext.Quotes.Add(newQuote);
+				pciContext.SaveChanges();
+			}
 		}
 
 		private int? GetPersonId(Guid? crmContactId)
