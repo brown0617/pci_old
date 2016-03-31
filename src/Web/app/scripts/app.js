@@ -25,24 +25,25 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 		})
 		.state('pci.crm', {
 			url: '/crm',
-			templateUrl: '../views/crm/crmDashboard.html',
+			templateUrl: '../views/crmDashboard.html',
 			data: {
 				module: 'CRM',
 				tools: [{ name: 'search' }]
 			}
 		})
 		.state('pci.customer', {
-			url: '/crm/customer',
-			templateUrl: '../views/crm/customer/customer.html',
+			url: '/customer',
+			templateUrl: '../views/customer/customer.html',
 			controller: 'CustomerCtrl',
 			controllerAs: 'customer',
 			data: {
 				module: 'Customers',
 				tools: [{ name: 'search' }]
 			}
-		}).state('pci.customerDetail', {
-			url: '/crm/customer/detail/:id',
-			templateUrl: '../views/crm/customer/customerDetail.html',
+		})
+		.state('pci.customerDetail', {
+			url: '/customer/detail/:id',
+			templateUrl: '../views/customer/customerDetail.html',
 			resolve: {
 				previousState: [
 					'$state',
@@ -63,9 +64,19 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 				tools: [{ name: 'search' }]
 			}
 		})
+		.state('pci.quote', {
+			url: '/quote',
+			templateUrl: '../views/quote/quote.html',
+			controller: 'QuoteCtrl',
+			controllerAs: 'quote',
+			data: {
+				module: 'Quotes',
+				tools: [{ name: 'search' }]
+			}
+		})
 		.state('pci.property', {
-			url: '/crm/property',
-			templateUrl: '../views/crm/property/property.html',
+			url: '/property',
+			templateUrl: '../views/property/property.html',
 			controller: 'PropertyCtrl',
 			controllerAs: 'property',
 			data: {

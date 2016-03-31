@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-function PropertyCtrl(propertyData) {
+function PropertyCtrl(propertyData, $filter) {
 	var self = this;
 	self.properties = {};
 
@@ -27,5 +27,5 @@ function PropertyCtrl(propertyData) {
 	};
 }
 
-PropertyCtrl.$inject = ['propertyData'];
+PropertyCtrl.$inject = ['propertyData', '$filter'];
 app.controller('PropertyCtrl', PropertyCtrl);
