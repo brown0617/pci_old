@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Backend.Domain.Enums;
 
 namespace Backend.Domain.Entities
 {
@@ -15,25 +16,25 @@ namespace Backend.Domain.Entities
 		public string Title { get; set; }
 
 		/// <summary>
-		///     Identifier of Customer whom the quote is for
+		///     Identifier of Property whom the quote is for
 		/// </summary>
-		public int CustomerId { get; set; }
+		public int PropertyId { get; set; }
 
 		/// <summary>
-		///     Foreign key relationship to Customer
+		///     Foreign key relationship to Property
 		/// </summary>
-		[ForeignKey("CustomerId")]
-		public virtual Customer Customer { get; set; }
+		[ForeignKey("PropertyId")]
+		public virtual Property Property { get; set; }
 
 		/// <summary>
 		///     Enum representing the status of the quote
 		/// </summary>
-		public int Status { get; set; }
+		public QuoteStatus Status { get; set; }
 
 		/// <summary>
 		///     Enum representing the type of quote
 		/// </summary>
-		public int Type { get; set; }
+		public QuoteType Type { get; set; }
 
 		/// <summary>
 		///     Base year of the Contract
@@ -48,37 +49,37 @@ namespace Backend.Domain.Entities
 		/// <summary>
 		///     Month that billing starts
 		/// </summary>
-		public int BillingStart { get; set; }
+		public Month BillingStart { get; set; }
 
 		/// <summary>
 		///     The total amount for materials
 		/// </summary>
-		public double TotalAmountMaterials { get; set; }
+		public decimal TotalAmountMaterials { get; set; }
 
 		/// <summary>
 		///     The total sales tax for the quote
 		/// </summary>
-		public double SalesTaxAmount { get; set; }
+		public decimal SalesTaxAmount { get; set; }
 
 		/// <summary>
 		///     The total amount for the quote
 		/// </summary>
-		public double TotalAmountQuote { get; set; }
+		public decimal TotalAmountQuote { get; set; }
 
 		/// <summary>
 		///     The total pre-tax amount for the quote
 		/// </summary>
-		public double TotalAmountPretax { get; set; }
+		public decimal TotalAmountPretax { get; set; }
 
 		/// <summary>
 		///     The total amount for labor
 		/// </summary>
-		public double TotalAmountLabor { get; set; }
+		public decimal TotalAmountLabor { get; set; }
 
 		/// <summary>
 		///     The total estimated man hours
 		/// </summary>
-		public float TotalEstimatedManHours { get; set; }
+		public decimal TotalEstimatedManHours { get; set; }
 
 		/// <summary>
 		///     Indicates if quote should include sales tax
@@ -93,16 +94,16 @@ namespace Backend.Domain.Entities
 		/// <summary>
 		///     Billing day (i.e. 1, 15, 30)
 		/// </summary>
-		public int BillingDay { get; set; }
+		public BillingDay BillingDay { get; set; }
 
 		/// <summary>
 		///     Percentage increase per year
 		/// </summary>
-		public float AnnualIncreasePercentage { get; set; }
+		public decimal AnnualIncreasePercentage { get; set; }
 
 		/// <summary>
 		///     Enum representing Season (Summer or Winter)
 		/// </summary>
-		public int Season { get; set; }
+		public Season Season { get; set; }
 	}
 }
