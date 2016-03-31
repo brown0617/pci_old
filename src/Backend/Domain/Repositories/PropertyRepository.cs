@@ -26,7 +26,7 @@ namespace Backend.Domain.Repositories
 
 		public IEnumerable<Property> Get()
 		{
-			return _ctx.Properties.ToList();
+			return _ctx.Properties.Include(c => c.Customer).ToList();
 		}
 
 		public Property Get(int id)

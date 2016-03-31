@@ -1,9 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Backend.Domain.Enums;
-
-namespace Backend.Domain.Entities
+﻿namespace Backend.API.Models
 {
-	public class Quote
+	public class QuoteData
 	{
 		/// <summary>
 		///     Identifier for the quote
@@ -21,36 +18,34 @@ namespace Backend.Domain.Entities
 		public int PropertyId { get; set; }
 
 		/// <summary>
-		///     Foreign key relationship to Property
+		///     Name of Customer whom the quote is for
 		/// </summary>
-		[ForeignKey("PropertyId")]
-		public virtual Property Property { get; set; }
+		public string CustomerName { get; set; }
 
 		/// <summary>
-		///     Enum representing the status of the quote
+		///     Name of Property whom the quote is for
 		/// </summary>
-		public QuoteStatus Status { get; set; }
+		public string PropertyName { get; set; }
+
+		/// <summary>
+		///     Int representing the status of the quote
+		/// </summary>
+		public int Status { get; set; }
 
 		/// <summary>
 		///     Status description of the quote
 		/// </summary>
-		public virtual string StatusDesc
-		{
-			get { return Status.ToDescription(); }
-		}
+		public string StatusDesc { get; set; }
 
 		/// <summary>
-		///     Enum representing the type of quote
+		///     Int representing the type of quote
 		/// </summary>
-		public QuoteType Type { get; set; }
+		public int Type { get; set; }
 
 		/// <summary>
 		///     Type description of quote
 		/// </summary>
-		public virtual string TypeDesc
-		{
-			get { return Type.ToDescription(); }
-		}
+		public string TypeDesc { get; set; }
 
 		/// <summary>
 		///     Base year of the Contract
@@ -65,15 +60,12 @@ namespace Backend.Domain.Entities
 		/// <summary>
 		///     Month that billing starts
 		/// </summary>
-		public Month BillingStart { get; set; }
+		public int BillingStart { get; set; }
 
 		/// <summary>
 		///     Month description that billing starts
 		/// </summary>
-		public virtual string BillingStartDesc
-		{
-			get { return BillingStart.ToDescription(); }
-		}
+		public string BillingStartDesc { get; set; }
 
 		/// <summary>
 		///     The total amount for materials
@@ -118,12 +110,12 @@ namespace Backend.Domain.Entities
 		/// <summary>
 		///     Billing day (i.e. 1, 15, 30)
 		/// </summary>
-		public BillingDay BillingDay { get; set; }
+		public int BillingDay { get; set; }
 
 		/// <summary>
 		///     Billing day description (i.e. First, Fifteenth, Thirtieth)
 		/// </summary>
-		public virtual string BillingDayDesc { get; set; }
+		public string BillingDayDesc { get; set; }
 
 		/// <summary>
 		///     Percentage increase per year
@@ -131,16 +123,13 @@ namespace Backend.Domain.Entities
 		public decimal AnnualIncreasePercentage { get; set; }
 
 		/// <summary>
-		///     Enum representing Season (1 or 2)
+		///     Int representing Season (1 or 2)
 		/// </summary>
-		public Season Season { get; set; }
+		public int Season { get; set; }
 
 		/// <summary>
 		///     Season description (Summer or Winter)
 		/// </summary>
-		public virtual string SeasonDesc
-		{
-			get { return Season.ToDescription(); }
-		}
+		public string SeasonDesc { get; set; }
 	}
 }

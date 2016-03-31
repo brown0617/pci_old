@@ -2,8 +2,8 @@
 {
 	public enum QuoteType
 	{
-		[EnumDescription("Complete Care")] Installment = 0,
-		[EnumDescription("Maintenance")] Monthly = 1,
-		[EnumDescription("Project")] OneTime = 2
+		[EnumDescription("Complete Care")] Installment = 1,
+		[EnumDescription("Maintenance")] Monthly = 2,
+		[EnumDescription("Project")] OneTime = 3
 	}
 }
