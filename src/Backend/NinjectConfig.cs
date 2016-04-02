@@ -13,6 +13,7 @@ namespace Backend
 
 			// interface bindings
 			kernel.Bind<ICustomerRepository>().To<CustomerRepository>();
+			kernel.Bind<IOptionRepository>().To<OptionRepository>();
 			kernel.Bind<IPersonRepository>().To<PersonRepository>();
 			kernel.Bind<IPropertyRepository>().To<PropertyRepository>();
 			kernel.Bind<IQuoteRepository>().To<QuoteRepository>();

@@ -132,15 +132,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\AutoMapperConfig.cs" />
+    <Compile Include="API\Controllers\OptionsController.cs" />
     <Compile Include="API\Controllers\QuotesController.cs" />
     <Compile Include="API\Controllers\PropertiesController.cs" />
     <Compile Include="API\Controllers\CustomersController.cs" />
     <Compile Include="API\Controllers\PeopleController.cs" />
     <Compile Include="API\ExceptionHandlingAttribute.cs" />
+    <Compile Include="API\Models\OptionData.cs" />
     <Compile Include="API\Models\PropertyData.cs" />
     <Compile Include="API\Models\PersonData.cs" />
     <Compile Include="API\Models\QuoteData.cs" />
     <Compile Include="Domain\AppDbContext.cs" />
+    <Compile Include="Domain\Entities\Option.cs" />
     <Compile Include="Domain\Entities\Person.cs" />
     <Compile Include="Domain\Entities\Property.cs" />
     <Compile Include="Domain\Entities\Customer.cs" />
@@ -159,9 +162,11 @@
     <Compile Include="Domain\Migration\QuoteExtensionBase.cs" />
     <Compile Include="Domain\Migration\QuoteBase.cs" />
     <Compile Include="Domain\Repositories\CustomerRepository.cs" />
+    <Compile Include="Domain\Repositories\OptionRepository.cs" />
     <Compile Include="Domain\Repositories\IPropertyRepository.cs" />
     <Compile Include="Domain\Repositories\IPersonRepository.cs" />
     <Compile Include="Domain\Repositories\ICustomerRepository.cs" />
+    <Compile Include="Domain\Repositories\IOptionRepository.cs" />
     <Compile Include="Domain\Repositories\IQuoteRepository.cs" />
     <Compile Include="Domain\Repositories\IRepository.cs" />
     <Compile Include="API\Models\CustomerData.cs" />

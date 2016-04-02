@@ -13,6 +13,9 @@ namespace Backend.API
 				.ForMember(dto => dto.Type, opts => opts.MapFrom(ent => ent.GetType().Name.Split('_')[0]));
 			CreateMap<CustomerData, Customer>();
 
+			// Option
+			CreateMap<Option, OptionData>();
+
 			// Person
 			CreateMap<Person, PersonData>();
 			CreateMap<PersonData, Person>();
