@@ -18,20 +18,17 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 			templateUrl: '../main/main.html',
 			controller: 'MainCtrl',
 			controllerAs: 'main'
-		})
-		.state('pci.home', {
+		}).state('pci.home', {
 			url: '/home',
 			templateUrl: '../views/home/home.html'
-		})
-		.state('pci.crm', {
+		}).state('pci.crm', {
 			url: '/crm',
 			templateUrl: '../views/crmDashboard.html',
 			data: {
 				module: 'CRM',
 				tools: [{ name: 'search' }]
 			}
-		})
-		.state('pci.customer', {
+		}).state('pci.customer', {
 			url: '/customer',
 			templateUrl: '../views/customer/customer.html',
 			controller: 'CustomerCtrl',
@@ -40,8 +37,7 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 				module: 'Customers',
 				tools: [{ name: 'search' }]
 			}
-		})
-		.state('pci.customerDetail', {
+		}).state('pci.customerDetail', {
 			url: '/customer/detail/:id',
 			templateUrl: '../views/customer/customerDetail.html',
 			resolve: {
@@ -63,8 +59,7 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 				module: 'Customer Detail',
 				tools: [{ name: 'search' }]
 			}
-		})
-		.state('pci.quote', {
+		}).state('pci.quote', {
 			url: '/quote',
 			templateUrl: '../views/quote/quote.html',
 			controller: 'QuoteCtrl',
@@ -73,8 +68,29 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 				module: 'Quotes',
 				tools: [{ name: 'search' }]
 			}
-		})
-		.state('pci.property', {
+		}).state('pci.quoteDetail', {
+			url: '/quote/detail:id',
+			templateUrl: '../views/quote/quoteDetail.html',
+			resolve: {
+				previousState: [
+					'$state',
+					function($state) {
+						var currentStateData = {
+							Name: $state.current.name,
+							Params: $state.params,
+							URL: $state.href($state.current.name, $state.params)
+						};
+						return currentStateData;
+					}
+				]
+			},
+			controller: 'QuoteDtlCtrl',
+			controllerAs: 'quoteDtl',
+			data: {
+				module: 'Quote',
+				tools: [{ name: 'search' }]
+			}
+		}).state('pci.property', {
 			url: '/property',
 			templateUrl: '../views/property/property.html',
 			controller: 'PropertyCtrl',

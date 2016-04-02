@@ -1,16 +1,16 @@
 ﻿'use strict';
 
-function QuoteCtrl(quoteData, $filter) {
+function QuoteCtrl($filter, quoteData) {
 	var self = this;
 	self.quotes = {};
 
 	quoteData.getAll().then(function(results) {
-		self.allQuotes = results.data;
-		self.quotes = self.allQuotes;
+		self.allRows = results.data;
+		self.visibleRows = self.allRows;
 	});
 
 	self.gridConfig = {
-		data: 'quote.quotes',
+		data: 'quote.visibleRows',
 		multiSelect: false,
 		columnDefs: [
 			{ field: 'PropertyName', displayName: 'Property Name' },
@@ -19,14 +19,19 @@ function QuoteCtrl(quoteData, $filter) {
 			{ field: 'ContractYear', displayName: 'Year' },
 			{ field: 'TypeDesc', displayName: 'Type' },
 			{ field: 'SeasonDesc', displayName: 'Season' },
-			{ name: 'edit', displayName: '', cellTemplate: '<a class="btn" ui-sref="pci.customerDetail({id: row.entity.Id})"><i class="fa fa-pencil-square-o"></i></a>' }
+			{ name: 'edit', displayName: '', cellTemplate: '<a class="btn" ui-sref="pci.quoteDetail({id: row.entity.Id})"><i class="fa fa-pencil-square-o"></i></a>' }
 		]
 	};
 
 	this.filterGridData = function() {
-		self.quotes = $filter('filter')(self.allQuotes, self.searchText, undefined);
+		var filtered = self.allRows;
+		var parsedSearchText = self.searchText.split(' ');
+		_.each(parsedSearchText, function(searchText) {
+			filtered = $filter('filter')(filtered, searchText, undefined);
+		});
+		self.visibleRows = filtered;
 	};
 }
 
-QuoteCtrl.$inject = ['quoteData', '$filter'];
+QuoteCtrl.$inject = ['$filter','quoteData', ];
 app.controller('QuoteCtrl', QuoteCtrl);

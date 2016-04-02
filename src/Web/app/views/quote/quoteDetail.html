@@ -1,0 +1,43 @@
+﻿<form role="form" class="form-horizontal" save-registration>
+	<br/>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="col-md-6">
+						<label for="customerName">Customer Name</label>
+						<input type="text" id="customerName" class="form-control" ng-model="quoteDtl.quote.CustomerName" />
+					</div>
+					<div class="col-md-6">
+						<label for="propertyName">Property Name</label>
+						<input type="text" id="propertyName" class="form-control" ng-model="quoteDtl.quote.PropertyName" />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="col-md-12">
+						<label for="quoteTitle">Quote Title</label>
+						<input type="text" id="quoteTitle" class="form-control" ng-model="quoteDtl.quote.Title" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="col-md-6">
+						<label for="season">Season</label>
+						<select id="season" class="form-control" ng-model="quoteDtl.quote.Season" ng-options="season.Id as season.Name for season in quoteDtl.seasons"></select>
+					</div>
+					<div class="col-md-6">
+						<label for="contractYear">Contract Year</label>
+						<input type="text" id="contractYear" class="form-control" ng-model="quoteDtl.quote.ContractYear" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
