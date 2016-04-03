@@ -4,21 +4,41 @@
 		<div class="panel-body">
 			<div class="col-md-12">
 				<div class="form-group">
-					<div class="col-md-6">
-						<label for="customerName">Customer Name</label>
-						<input type="text" id="customerName" class="form-control" ng-model="quoteDtl.quote.CustomerName" />
-					</div>
-					<div class="col-md-6">
-						<label for="propertyName">Property Name</label>
-						<input type="text" id="propertyName" class="form-control" ng-model="quoteDtl.quote.PropertyName" />
+					<div class="col-md-12">
+						<label for="quoteTitle">Quote Title</label>
+						<input type="text" id="quoteTitle" class="form-control" ng-model="quoteDtl.quote.Title" />
 					</div>
 				</div>
 			</div>
 			<div class="col-md-12">
 				<div class="form-group">
-					<div class="col-md-12">
-						<label for="quoteTitle">Quote Title</label>
-						<input type="text" id="quoteTitle" class="form-control" ng-model="quoteDtl.quote.Title" />
+					<div class="col-md-6">
+						<label for="customerName">Customer Name</label>
+						<input type="text" id="customerName" class="form-control" ng-model="quoteDtl.quote.CustomerName"/>
+					</div>
+					<div class="col-md-6">
+						<label for="propertyName">Property Name</label>
+						<input type="text" id="propertyName" class="form-control" ng-model="quoteDtl.quote.PropertyName"/>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="col-md-3">
+						<label for="type">Quote Type</label>
+						<select id="type" class="form-control" ng-model="quoteDtl.quote.Type" ng-options="type.Id as type.Name for type in quoteDtl.types"></select>
+					</div>
+					<div class="col-md-3">
+						<label for="season">Season</label>
+						<select id="season" class="form-control" ng-model="quoteDtl.quote.Season" ng-options="season.Id as season.Name for season in quoteDtl.seasons"></select>
+					</div>
+					<div class="col-md-3">
+						<label for="contractYear">Contract Year</label>
+						<input type="text" id="contractYear" class="form-control" ng-model="quoteDtl.quote.ContractYear" />
+					</div>
+					<div class="col-md-3">
+						<label for="contractTermYears">Contract Term (Years)</label>
+						<input type="text" id="contractTermYears" class="form-control" ng-model="quoteDtl.quote.ContractTermYears" />
 					</div>
 				</div>
 			</div>
@@ -28,13 +48,71 @@
 		<div class="panel-body">
 			<div class="col-md-12">
 				<div class="form-group">
-					<div class="col-md-6">
-						<label for="season">Season</label>
-						<select id="season" class="form-control" ng-model="quoteDtl.quote.Season" ng-options="season.Id as season.Name for season in quoteDtl.seasons"></select>
+					<div class="col-md-4">
+						<label for="numberOfPayments"># of Payments</label>
+						<input type="text" id="numberOfPayments" class="form-control" ng-model="quoteDtl.quote.NumberOfPayments"/>
 					</div>
-					<div class="col-md-6">
-						<label for="contractYear">Contract Year</label>
-						<input type="text" id="contractYear" class="form-control" ng-model="quoteDtl.quote.ContractYear" />
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="col-md-4">
+						<label for="billingStart">Billing Starts (Month)</label>
+						<select id="billingStart" class="form-control" ng-model="quoteDtl.quote.BillingStart" ng-options="month.Id as month.Name for month in quoteDtl.months"></select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="col-md-4">
+					</div>
+					<div class="col-md-4">
+						<label for="annualIncreasePercentage">Annual Increase %</label>
+						<input type="text" id="annualIncreasePercentage" class="form-control" ng-model="quoteDtl.quote.AnnualIncreasePercentage"/>
+					</div>
+					<div class="col-md-4">
+						<label for="billingDay">Billing Day</label>
+						<select id="billingDay" class="form-control" ng-model="quoteDtl.quote.BillingDay" ng-options="billingDay.Id as billingDay.Name for billingDay in quoteDtl.billingDays"></select>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-md-2">Labor</label>
+					<div class="col-md-2">
+						<input type="text" id="totalAmountLabor" class="form-control text-right" ng-model="quoteDtl.quote.TotalAmountLabor | number: 2" readonly />
+					</div>
+					<div class="col-md-4">
+					</div>
+					<div class="col-md-4">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-md-2">Materials</label>
+					<div class="col-md-2">
+						<input type="text" id="totalAmountMaterials" class="form-control text-right" ng-model="quoteDtl.quote.TotalAmountMaterials | number: 2" readonly/>
+					</div>
+					<div class="col-md-4">
+					</div>
+					<div class="col-md-4">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-md-2">Total (Pre-tax)</label>
+					<div class="col-md-2">
+						<input type="text" id="totalAmountPretax" class="form-control text-right" ng-model="quoteDtl.quote.TotalAmountPretax | number: 2" readonly />
+					</div>
+					<div class="col-md-4">
+					</div>
+					<div class="col-md-4">
 					</div>
 				</div>
 			</div>
