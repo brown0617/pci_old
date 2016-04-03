@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Backend.Domain.Enums
 {
@@ -12,6 +13,11 @@ namespace Backend.Domain.Enums
 			if (memInfo.Length <= 0) return enumeration.ToString();
 			var attrs = memInfo[0].GetCustomAttributes(typeof (EnumDescription), false);
 			return attrs.Length > 0 ? ((EnumDescription) attrs[0]).Text : enumeration.ToString();
+		}
+
+		public static IReadOnlyList<T> GetValues<T>()
+		{
+			return (T[]) Enum.GetValues(typeof (T));
 		}
 	}
 }

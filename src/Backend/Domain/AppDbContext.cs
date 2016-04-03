@@ -18,8 +18,10 @@ namespace Backend.Domain
 		}
 
 		public IDbSet<Customer> Customers { get; set; }
+		public IDbSet<GlItem> GlItems { get; set; }
 		public IDbSet<Person> People { get; set; }
 		public IDbSet<Property> Properties { get; set; }
+		public IDbSet<Service> Services { get; set; }
 		public IDbSet<Quote> Quotes { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -185,6 +187,44 @@ namespace Backend.Domain
 				pciContext.Quotes.Add(newQuote);
 				pciContext.SaveChanges();
 			}
+
+			// GlItemBase ==> GlItem
+			crmContext.GlItemBases.ToList().ForEach(x => pciContext.GlItems.Add(new GlItem
+			{
+				Name = x.New_itemname,
+				SubitemOf = x.New_Subitemof,
+				CrmGlItemId = x.GlItemId
+			}));
+			pciContext.SaveChanges();
+
+			// ProductBase/Extension ==> Service
+			var products = crmContext.ProductBases.Join(crmContext.ProductExtensionBases, p => p.ProductId, pe => pe.ProductId,
+				(p, pe) => new {p, pe})
+				.Where(w => w.p.Name.StartsWith("Service") || w.p.Name.StartsWith("Maintenance"))
+				.ToList();
+
+			foreach (var product in products)
+			{
+				int? glItemId = null;
+				var crmGlItemId = product.pe.New_GLItemId;
+				if (crmGlItemId.HasValue)
+				{
+					glItemId = pciContext.GlItems.Where(w => w.CrmGlItemId == crmGlItemId).Select(s => s.Id).FirstOrDefault();
+				}
+				pciContext.Services.Add(new Service
+				{
+					Name = product.p.Name,
+					Description = product.p.Description,
+					LaborCost = (product.p.CurrentCost ?? 0),
+					LaborPrice = (product.p.Price ?? 0),
+					IncludeLabor = true,
+					GlItemId = glItemId
+				});
+			}
+			pciContext.SaveChanges();
+
+			// QuoteDetailBase ==> Service
+
 		}
 
 		private int? GetPersonId(Guid? crmContactId)

@@ -1,23 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Backend.Domain.Entities;
+using Backend.Domain.Enums;
 
 namespace Backend.Domain.Repositories
 {
 	public class OptionRepository : IOptionRepository
 	{
-		public IEnumerable<Option> Get(string tEnum)
+		public List<Option> GetBillingDays()
 		{
-			var enumType = Type.GetType(tEnum, true);
+			var options = EnumExtensions.GetValues<BillingDay>();
+			return
+				options.Select(option => new Option {Id = (int) option, Name = option.ToDescription()}).ToList();
+		}
 
-			if (!enumType.IsEnum)
-			{
-				throw new ArgumentException("tEnum must be an enum.");
-			}
+		public List<Option> GetMonths()
+		{
+			var options = EnumExtensions.GetValues<Month>();
+			return
+				options.Select(option => new Option {Id = (int) option, Name = option.ToDescription()}).ToList();
+		}
 
-			var enumValues = (int[]) Enum.GetValues(enumType);
-			return enumValues.Select(enumValue => new Option {Id = enumValue, Name = Enum.GetName(enumType, enumValue)}).ToList();
+		public List<Option> GetQuoteStatuses()
+		{
+			var options = EnumExtensions.GetValues<QuoteStatus>();
+			return
+				options.Select(option => new Option {Id = (int) option, Name = option.ToDescription()}).ToList();
+		}
+
+		public List<Option> GetQuoteTypes()
+		{
+			var options = EnumExtensions.GetValues<QuoteType>();
+			return
+				options.Select(option => new Option {Id = (int) option, Name = option.ToDescription()}).ToList();
+		}
+
+		public List<Option> GetSeasons()
+		{
+			var options = EnumExtensions.GetValues<Season>();
+			return
+				options.Select(option => new Option {Id = (int) option, Name = option.ToDescription()}).ToList();
 		}
 	}
 }

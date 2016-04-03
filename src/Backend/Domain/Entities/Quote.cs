@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Backend.Domain.Enums;
 
 namespace Backend.Domain.Entities
@@ -142,5 +143,12 @@ namespace Backend.Domain.Entities
 		{
 			get { return Season.ToDescription(); }
 		}
+
+		#region Remove after Migration
+
+		[Column("QuoteId")]
+		public Guid CrmQuoteId { get; set; }
+
+		#endregion
 	}
 }

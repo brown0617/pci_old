@@ -2,6 +2,7 @@
 using System.Web.Http;
 using AutoMapper;
 using Backend.API.Models;
+using Backend.Domain.Entities;
 using Backend.Domain.Repositories;
 
 namespace Backend.API.Controllers
@@ -21,7 +22,27 @@ namespace Backend.API.Controllers
 		public IEnumerable<OptionData> Get(string id)
 		{
 			var optionData = new List<OptionData>();
-			_mapper.Map(_repository.Get("Backend.Domain.Enums." + id), optionData);
+			var options = new List<Option>();
+			switch (id)
+			{
+				case "BillingDay":
+					options = _repository.GetBillingDays();
+					break;
+				case "Month":
+					options = _repository.GetMonths();
+					break;
+				case "QuoteStatus":
+					options = _repository.GetQuoteStatuses();
+					break;
+				case "QuoteType":
+					options = _repository.GetQuoteTypes();
+					break;
+				case "Season":
+					options = _repository.GetSeasons();
+					break;
+			}
+
+			_mapper.Map(options, optionData);
 			return optionData;
 		}
 	}

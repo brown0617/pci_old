@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using Backend.Domain.Entities;
 
@@ -27,12 +28,13 @@ namespace Backend.Domain.Repositories
 
 		public Quote New()
 		{
-			throw new NotImplementedException();
+			return new Quote();
 		}
 
 		public void Save(Quote entity)
 		{
-			throw new NotImplementedException();
+			_ctx.Quotes.AddOrUpdate(entity);
+			_ctx.SaveChanges();
 		}
 
 		public void Delete(Quote entity)

@@ -5,6 +5,10 @@ namespace Backend.Domain.Repositories
 {
 	public interface IOptionRepository
 	{
-		IEnumerable<Option> Get(string tEnum);
+		List<Option> GetBillingDays();
+		List<Option> GetMonths();
+		List<Option> GetQuoteStatuses();
+		List<Option> GetQuoteTypes();
+		List<Option> GetSeasons();
 	}
 }
