@@ -1,4 +1,6 @@
-﻿namespace Backend.API.Models
+﻿using System.Collections.Generic;
+
+namespace Backend.API.Models
 {
 	public class QuoteData
 	{
@@ -131,5 +133,10 @@
 		///     Season description (Summer or Winter)
 		/// </summary>
 		public string SeasonDesc { get; set; }
+
+		/// <summary>
+		/// Collection of items related to quote
+		/// </summary>
+		public List<QuoteItemData> Items { get; set; }
 	}
 }

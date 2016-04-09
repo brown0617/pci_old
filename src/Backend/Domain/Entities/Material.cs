@@ -1,9 +1,8 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Domain.Entities
 {
-	public class Service
+	public class Material
 	{
 		public int Id { get; set; }
 		public string Name { get; set; }
@@ -11,9 +10,6 @@ namespace Backend.Domain.Entities
 		public decimal Price { get; set; }
 		public decimal Cost { get; set; }
 		public int? GlItemId { get; set; }
-
-		[ForeignKey("GlItemId")]
-		public virtual GlItem GlItem { get; set; }
 
 		#region remove after migration
 

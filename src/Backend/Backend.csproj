@@ -142,13 +142,16 @@
     <Compile Include="API\Models\PropertyData.cs" />
     <Compile Include="API\Models\PersonData.cs" />
     <Compile Include="API\Models\QuoteData.cs" />
+    <Compile Include="API\Models\QuoteItemData.cs" />
     <Compile Include="Domain\AppDbContext.cs" />
     <Compile Include="Domain\Entities\GlItem.cs" />
+    <Compile Include="Domain\Entities\Material.cs" />
     <Compile Include="Domain\Entities\Option.cs" />
     <Compile Include="Domain\Entities\Person.cs" />
     <Compile Include="Domain\Entities\Property.cs" />
     <Compile Include="Domain\Entities\Customer.cs" />
     <Compile Include="Domain\Entities\Quote.cs" />
+    <Compile Include="Domain\Entities\QuoteItem.cs" />
     <Compile Include="Domain\Entities\Service.cs" />
     <Compile Include="Domain\Enums\BillingDay.cs" />
     <Compile Include="Domain\Enums\EnumDescription.cs" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Backend.Domain.Enums;
 
@@ -143,6 +144,11 @@ namespace Backend.Domain.Entities
 		{
 			get { return Season.ToDescription(); }
 		}
+
+		/// <summary>
+		/// Collection of items related to quote
+		/// </summary>
+		public ICollection<QuoteItem> Items { get; set; }
 
 		#region Remove after Migration
 

@@ -19,10 +19,12 @@ namespace Backend.Domain
 
 		public IDbSet<Customer> Customers { get; set; }
 		public IDbSet<GlItem> GlItems { get; set; }
+		public IDbSet<Material> Materials { get; set; }
 		public IDbSet<Person> People { get; set; }
 		public IDbSet<Property> Properties { get; set; }
 		public IDbSet<Service> Services { get; set; }
 		public IDbSet<Quote> Quotes { get; set; }
+		public IDbSet<QuoteItem> QuoteItems { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
@@ -150,7 +152,7 @@ namespace Backend.Domain
 
 			// QuoteBase/QuoteExtensionBase ==> Quote
 			var quotes =
-				crmContext.QuoteBases.Join(crmContext.QuoteExtensionBases, quote => quote.QuoteId, quoteExt => quoteExt.QuoteId,
+				crmContext.Quotes.Join(crmContext.QuotesExtension, quote => quote.QuoteId, quoteExt => quoteExt.QuoteId,
 					(quote, quoteExt) => new {quote, quoteExt})
 					.Where(c => c.quote.AccountId.HasValue)
 					.ToList();
@@ -169,6 +171,7 @@ namespace Backend.Domain
 					BillingStart = (Month) (quote.quoteExt.New_BillingStart ?? 1),
 					ContractTermYears = (quote.quoteExt.New_ContractTermYears ?? 1),
 					ContractYear = quote.quoteExt.New_ContractYear,
+					CrmQuoteId = quote.quote.QuoteId,
 					PropertyId = property.Id,
 					NumberOfPayments = (quote.quoteExt.New_NumPayments ?? 1),
 					SalesTaxAmount = (quote.quoteExt.New_SalesTaxAmount ?? 0),
@@ -189,7 +192,7 @@ namespace Backend.Domain
 			}
 
 			// GlItemBase ==> GlItem
-			crmContext.GlItemBases.ToList().ForEach(x => pciContext.GlItems.Add(new GlItem
+			crmContext.GlItems.ToList().ForEach(x => pciContext.GlItems.Add(new GlItem
 			{
 				Name = x.New_itemname,
 				SubitemOf = x.New_Subitemof,
@@ -198,9 +201,9 @@ namespace Backend.Domain
 			pciContext.SaveChanges();
 
 			// ProductBase/Extension ==> Service
-			var products = crmContext.ProductBases.Join(crmContext.ProductExtensionBases, p => p.ProductId, pe => pe.ProductId,
+			var products = crmContext.Products.Join(crmContext.ProductsExtension, p => p.ProductId, pe => pe.ProductId,
 				(p, pe) => new {p, pe})
-				.Where(w => w.p.Name.StartsWith("Service") || w.p.Name.StartsWith("Maintenance"))
+				.Where(w => w.p.Name.StartsWith("Service") || w.p.Name.StartsWith("Maintenance") || w.p.Name.StartsWith("Labor"))
 				.ToList();
 
 			foreach (var product in products)
@@ -215,16 +218,88 @@ namespace Backend.Domain
 				{
 					Name = product.p.Name,
 					Description = product.p.Description,
-					LaborCost = (product.p.CurrentCost ?? 0),
-					LaborPrice = (product.p.Price ?? 0),
-					IncludeLabor = true,
-					GlItemId = glItemId
+					Cost = (product.p.CurrentCost ?? 0),
+					Price = (product.p.Price ?? 0),
+					GlItemId = glItemId,
+					CrmProductId = product.p.ProductId
 				});
 			}
 			pciContext.SaveChanges();
 
-			// QuoteDetailBase ==> Service
+			// ProductBase/Extension ==> Material
+			var materials = crmContext.Products.Join(crmContext.ProductsExtension, p => p.ProductId, pe => pe.ProductId,
+				(p, pe) => new {p, pe})
+				.Where(w => !(w.p.Name.StartsWith("Service") || w.p.Name.StartsWith("Maintenance") || w.p.Name.StartsWith("Labor")))
+				.ToList();
 
+			foreach (var material in materials)
+			{
+				int? glItemId = null;
+				var crmGlItemId = material.pe.New_GLItemId;
+				if (crmGlItemId.HasValue)
+				{
+					glItemId = pciContext.GlItems.Where(w => w.CrmGlItemId == crmGlItemId).Select(s => s.Id).FirstOrDefault();
+				}
+				pciContext.Materials.Add(new Material
+				{
+					Name = material.p.Name,
+					Description = material.p.Description,
+					Cost = (material.p.CurrentCost ?? 0),
+					Price = (material.p.Price ?? 0),
+					GlItemId = glItemId,
+					CrmProductId = material.p.ProductId
+				});
+			}
+			pciContext.SaveChanges();
+
+			// QuoteDetailBase/Extension ==> QuoteItem
+			var quoteItems =
+				crmContext.QuoteDetails.Join(crmContext.QuoteDetailsExtension, qd => qd.QuoteDetailId, qde => qde.QuoteDetailId,
+					(qd, qde) => new {qd, qde})
+					.ToList();
+			foreach (var quoteItem in quoteItems)
+			{
+				var quoteId = pciContext.Quotes.Where(w => w.CrmQuoteId == quoteItem.qd.QuoteId).Select(s => s.Id).FirstOrDefault();
+				if (quoteId == 0) continue;
+
+				int? serviceId =null;
+				var serviceProductId = quoteItem.qd.ProductId;
+				if (serviceProductId != null)
+				{
+					serviceId = pciContext.Services.Where(w => w.CrmProductId == serviceProductId).Select(s => s.Id).FirstOrDefault();
+					serviceId = serviceId == 0 ? null : serviceId;
+				}
+				int? materialId = null;
+				var materialProductId = quoteItem.qde.New_MaterialsId;
+				if (materialProductId != null)
+				{
+					materialId = pciContext.Materials.Where(w => w.CrmProductId == materialProductId).Select(s => s.Id).FirstOrDefault();
+					materialId = materialId == 0 ? null : materialId;
+				}
+
+				var newQuoteItem = new QuoteItem
+				{
+					BillingMethod = quoteItem.qde.New_BillingMethod,
+					BillingStart = quoteItem.qde.New_BillingStart,
+					Description = quoteItem.qde.New_Details,
+					ManualDiscountAmount = (quoteItem.qd.ManualDiscountAmount ?? 0),
+					MaterialId = materialId,
+					MaterialPrice = (quoteItem.qde.New_PricePerUnit_Materials ?? 0)*(quoteItem.qde.New_QuantityMaterials ?? 0),
+					MaterialQuantity = (quoteItem.qde.New_QuantityMaterials ?? 0),
+					MaterialUnitPrice = (quoteItem.qde.New_PricePerUnit_Materials ?? 0),
+					NumberOfPayments = (quoteItem.qde.New_NumPayments ?? 0),
+					QuoteId = quoteId,
+					ServiceDeadline = quoteItem.qde.New_ServiceDeadline,
+					ServiceFrequency = quoteItem.qde.New_ServiceFrequency,
+					ServiceId = serviceId,
+					ServicePrice = (quoteItem.qd.ExtendedAmount ?? 0),
+					ServiceQuantity = (quoteItem.qd.Quantity ?? 0),
+					ServiceUnitPrice = (quoteItem.qd.PricePerUnit ?? 0),
+					Visits = (quoteItem.qde.New_Visits ?? 0) 
+				};
+				pciContext.QuoteItems.Add(newQuoteItem);
+				pciContext.SaveChanges();
+			}
 		}
 
 		private int? GetPersonId(Guid? crmContactId)

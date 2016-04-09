@@ -23,7 +23,7 @@ namespace Backend.Domain.Repositories
 
 		public Quote Get(int id)
 		{
-			return _ctx.Quotes.Include(c => c.Property).FirstOrDefault(x => x.Id == id);
+			return _ctx.Quotes.Include(c => c.Property).Include(i => i.Items).FirstOrDefault(x => x.Id == id);
 		}
 
 		public Quote New()

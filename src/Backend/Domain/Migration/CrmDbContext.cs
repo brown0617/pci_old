@@ -13,12 +13,13 @@ namespace Backend.Domain.Migration
 		public IDbSet<AccountBase> Accounts { get; set; }
 		public IDbSet<ContactBase> Contacts { get; set; }
 		public IDbSet<CustomerAddressBase> CustomerAddresses { get; set; }
-		public IDbSet<GlItemBase> GlItemBases { get; set; }
-		public IDbSet<ProductBase> ProductBases { get; set; }
-		public IDbSet<ProductExtensionBase> ProductExtensionBases { get; set; }
-		public IDbSet<QuoteBase> QuoteBases { get; set; }
-		public IDbSet<QuoteExtensionBase> QuoteExtensionBases { get; set; }
-		public IDbSet<QuoteDetailBase> QuoteDetailBases { get; set; }
+		public IDbSet<GlItemBase> GlItems { get; set; }
+		public IDbSet<ProductBase> Products { get; set; }
+		public IDbSet<ProductExtensionBase> ProductsExtension { get; set; }
+		public IDbSet<QuoteBase> Quotes { get; set; }
+		public IDbSet<QuoteExtensionBase> QuotesExtension { get; set; }
+		public IDbSet<QuoteDetailBase> QuoteDetails { get; set; }
+		public IDbSet<QuoteDetailExtensionBase> QuoteDetailsExtension { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{

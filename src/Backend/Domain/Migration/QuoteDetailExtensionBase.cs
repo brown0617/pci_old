@@ -7,8 +7,15 @@ namespace Backend.Domain.Migration
 	{
 		[Key]
 		public Guid QuoteDetailId { get; set; }
-
 		public string New_Details { get; set; }
 		public int? New_Visits { get; set; }
+		public int? New_BillingMethod { get; set; }
+		public int? New_NumPayments { get; set; }
+		public int? New_BillingStart { get; set; }
+		public Guid? New_MaterialsId { get; set; }
+		public decimal? New_PricePerUnit_Materials { get; set; }
+		public decimal? New_QuantityMaterials { get; set; }
+		public DateTime? New_ServiceDeadline { get; set; }
+		public int? New_ServiceFrequency { get; set; }
 	}
 }

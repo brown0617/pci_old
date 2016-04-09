@@ -14,13 +14,9 @@ namespace Backend.Domain.Migration
 		[ForeignKey("QuoteId")]
 		public virtual QuoteBase Quote { get; set; }
 
-		public Guid ProductId { get; set; }
-
-		[ForeignKey("ProductId")]
-		public virtual ProductBase Product { get; set; }
-
+		public Guid? ProductId { get; set; }
 		public decimal? Quantity { get; set; }
-		public decimal? BaseAmount { get; set; }
+		public decimal? PricePerUnit { get; set; }
 		public decimal? ExtendedAmount { get; set; }
 		public string Description { get; set; }
 		public decimal? ManualDiscountAmount { get; set; }
