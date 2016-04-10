@@ -13,7 +13,7 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 			controller: 'QuoteItemModalCtrl',
 			controllerAs: 'ctrl',
 			resolve: {
-				item: function () {
+				item: function() {
 					return item;
 				}
 			}
@@ -22,11 +22,11 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 
 	var promises = [
 		quoteData.get($stateParams.id),
-		optionData.get('BillingDay'),
-		optionData.get('Month'),
-		optionData.get('QuoteStatus'),
-		optionData.get('QuoteType'),
-		optionData.get('Season')
+		optionData.getBillingDayOptions(),
+		optionData.getMonthOptions(),
+		optionData.getQuoteStatusOptions(),
+		optionData.getQuoteTypeOptions(),
+		optionData.getSeasonOptions()
 	];
 
 	$q.all(promises).then(function(results) {
@@ -39,11 +39,15 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 		self.seasons = results[5].data;
 	});
 
-	self.editItem = function (item) {
+	self.setIncrease = function() {
+		self.quote.AnnualIncreasePercentage = self.quote.ContractTermYears <= 1 ? 0 : self.quote.AnnualIncreasePercentage;
+	};
+
+	self.editItem = function(item) {
 		var modalInstance = getModalInstance(item);
-		modalInstance.result.then(function (updatedItem) {
-			// add contact
-			//personData.save(addedContact);
+		modalInstance.result.then(function() {
+			// update item
+			//self.quoteDetailForm.$setDirty();
 		});
 	};
 

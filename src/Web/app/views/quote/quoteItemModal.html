@@ -2,33 +2,68 @@
 	<h3 class="modal-title">Item Detail</h3>
 </div>
 <div class="modal-body">
-	<div class="col-md-12">
+	<div class="row">
 		<div class="col-md-12">
-			<label>Description</label>
-			<textarea class="form-control" ng-model="ctrl.item.Description" rows="4"></textarea>
+			<div class="col-md-6">
+				<label>Labor</label>
+				<select type="text" class="form-control" ng-model="ctrl.item.Service" ng-options="service as service.Name for service in ctrl.services track by service.Id" ng-change="ctrl.updatePrice()"></select>
+			</div>
+			<div class="col-md-2">
+				<label>Man Hours</label>
+				<input type="text" class="form-control text-right" ng-model="ctrl.item.ServiceQuantity" ng-change="ctrl.calcServicePrice()"/>
+			</div>
+			<div class="col-md-2">
+				<label>Unit Price</label>
+				<input type="text" class="form-control text-right" ng-model="ctrl.item.ServiceUnitPrice" ng-change="ctrl.calcServicePrice()"/>
+			</div>
+			<div class="col-md-2">
+				<label>Price</label>
+				<input type="text" class="form-control text-right" ng-model="ctrl.item.ServicePrice | number: 2" readonly/>
+			</div>
 		</div>
 	</div>
-	<div class="col-md-12">
-		<div class="col-md-4">
-			<label>Labor</label>
-			<select type="text" class="form-control" ng-model="ctrl.item.ServiceId"></select>
+	<br/>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-12">
+				<label>Description</label>
+				<textarea class="form-control" ng-model="ctrl.item.Description" rows="4"></textarea>
+			</div>
 		</div>
-		<div class="col-md-2">
-			<label>Man Hours</label>
-			<input type="text" class="form-control text-right" ng-model="ctrl.item.ServiceQuantity" />
+	</div>
+	<br />
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<label>Materials</label>
+			</div>
+			<div class="col-md-2">
+				<label>Quantity</label>
+			</div>
+			<div class="col-md-2">
+				<label>Unit Price</label>
+			</div>
+			<div class="col-md-2">
+				<label>Price</label>
+			</div>
 		</div>
-		<div class="col-md-2">
-			<label>Unit Price</label>
-			<input type="text" class="form-control text-right" ng-model="ctrl.item.ServiceUnitPrice" />
-		</div>
-		<div class="col-md-2">
-			<label>Price</label>
-			<input type="text" class="form-control text-right" ng-model="ctrl.item.ServicePrice" />
+		<div class="col-md-12" ng-repeat="material in ctrl.item.Materials">
+			<div class="col-md-6">
+				<input type="text" ng-model="material.Name"/>
+			</div>
+			<div class="col-md-2">
+				<input type="text" ng-model="material.Quantity | number:2"/>
+			</div>
+			<div class="col-md-2">
+				<input type="text" ng-model="material.UnitPrice | number:2"/>
+			</div>
+			<div class="col-md-2">
+				<input type="text" ng-model="material.Price | number:2" readonly/>
+			</div>
 		</div>
 	</div>
 </div>
-<br/>
 <div class="modal-footer">
-	<button type="button" class="btn btn-default" ng-click="ctrl.save()">Okay</button>
-	<button type="button" class="btn btn-default" ng-click="ctrl.cancel()">Cancel</button>
+	<button type="button" class="btn btn-primary" ng-click="ctrl.save()">Okay</button>
+	<button type="button" class="btn btn-warning" ng-click="ctrl.cancel()">Cancel</button>
 </div>
