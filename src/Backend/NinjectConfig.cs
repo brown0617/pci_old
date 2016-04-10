@@ -17,6 +17,7 @@ namespace Backend
 			kernel.Bind<IPersonRepository>().To<PersonRepository>();
 			kernel.Bind<IPropertyRepository>().To<PropertyRepository>();
 			kernel.Bind<IQuoteRepository>().To<QuoteRepository>();
+			kernel.Bind<IServiceRepository>().To<ServiceRepository>();
 
 			// automapper binding
 			var profile = new AutoMapperConfig();

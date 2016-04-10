@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 
-namespace Backend.Domain.Entities
+namespace Backend.API.Models
 {
-	public class Service
+	public class ServiceData
 	{
 		public int Id { get; set; }
 		public string Name { get; set; }

@@ -133,6 +133,7 @@
   <ItemGroup>
     <Compile Include="API\AutoMapperConfig.cs" />
     <Compile Include="API\Controllers\OptionsController.cs" />
+    <Compile Include="API\Controllers\ServicesController.cs" />
     <Compile Include="API\Controllers\QuotesController.cs" />
     <Compile Include="API\Controllers\PropertiesController.cs" />
     <Compile Include="API\Controllers\CustomersController.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="Domain\Entities\Quote.cs" />
     <Compile Include="Domain\Entities\QuoteItem.cs" />
     <Compile Include="Domain\Entities\Service.cs" />
+    <Compile Include="API\Models\ServiceData.cs" />
     <Compile Include="Domain\Enums\BillingDay.cs" />
     <Compile Include="Domain\Enums\EnumDescription.cs" />
     <Compile Include="Domain\Enums\EnumExtensions.cs" />
@@ -172,6 +174,7 @@
     <Compile Include="Domain\Migration\QuoteExtensionBase.cs" />
     <Compile Include="Domain\Migration\QuoteBase.cs" />
     <Compile Include="Domain\Repositories\CustomerRepository.cs" />
+    <Compile Include="Domain\Repositories\IServiceRepository.cs" />
     <Compile Include="Domain\Repositories\OptionRepository.cs" />
     <Compile Include="Domain\Repositories\IPropertyRepository.cs" />
     <Compile Include="Domain\Repositories\IPersonRepository.cs" />
@@ -183,6 +186,7 @@
     <Compile Include="Domain\Repositories\PersonRepository.cs" />
     <Compile Include="Domain\Repositories\PropertyRepository.cs" />
     <Compile Include="Domain\Repositories\QuoteRepository.cs" />
+    <Compile Include="Domain\Repositories\ServiceRepository.cs" />
     <Compile Include="NinjectConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

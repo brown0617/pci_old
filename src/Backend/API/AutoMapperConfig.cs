@@ -41,6 +41,10 @@ namespace Backend.API
 				.ForMember(ent => ent.StatusDesc, opts => opts.Ignore())
 				.ForMember(ent => ent.BillingStartDesc, opts => opts.Ignore())
 				.ForMember(ent => ent.TypeDesc, opts => opts.Ignore());
+
+			// Service
+			CreateMap<Service, ServiceData>();
+			CreateMap<ServiceData, Service>();
 		}
 	}
 }
