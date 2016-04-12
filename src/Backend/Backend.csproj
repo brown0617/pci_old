@@ -145,6 +145,7 @@
     <Compile Include="API\Models\QuoteData.cs" />
     <Compile Include="API\Models\QuoteItemData.cs" />
     <Compile Include="Domain\AppDbContext.cs" />
+    <Compile Include="Domain\Entities\County.cs" />
     <Compile Include="Domain\Entities\GlItem.cs" />
     <Compile Include="Domain\Entities\Material.cs" />
     <Compile Include="Domain\Entities\Option.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Domain\Entities\QuoteItem.cs" />
     <Compile Include="Domain\Entities\Service.cs" />
     <Compile Include="API\Models\ServiceData.cs" />
+    <Compile Include="Domain\Entities\State.cs" />
     <Compile Include="Domain\Enums\BillingDay.cs" />
     <Compile Include="Domain\Enums\EnumDescription.cs" />
     <Compile Include="Domain\Enums\EnumExtensions.cs" />
@@ -162,6 +164,9 @@
     <Compile Include="Domain\Enums\QuoteStatus.cs" />
     <Compile Include="Domain\Enums\QuoteType.cs" />
     <Compile Include="Domain\Enums\Season.cs" />
+    <Compile Include="Domain\Migration\CountySalesTaxExtensionBase.cs" />
+    <Compile Include="Domain\Migration\CountyExtensionBase.cs" />
+    <Compile Include="Domain\Migration\AccountExtensionBase.cs" />
     <Compile Include="Domain\Migration\ContactBase.cs" />
     <Compile Include="Domain\Migration\CustomerAddressBase.cs" />
     <Compile Include="Domain\Migration\AccountBase.cs" />

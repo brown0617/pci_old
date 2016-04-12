@@ -41,6 +41,17 @@ namespace Backend.Domain.Entities
 		public string AddressZip { get; set; }
 
 		/// <summary>
+		///     Identifier for county that the property is located in
+		/// </summary>
+		public int AddressCountyId { get; set; }
+
+		/// <summary>
+		/// Foreign key relationship to County entity
+		/// </summary>
+		[ForeignKey("AddressCountyId")]
+		public virtual County County { get; set; }
+
+		/// <summary>
 		///     Foreign key for customer
 		/// </summary>
 		public int? CustomerId { get; set; }

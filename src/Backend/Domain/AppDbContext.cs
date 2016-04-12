@@ -17,12 +17,14 @@ namespace Backend.Domain
 		{
 		}
 
+		public IDbSet<County> Counties { get; set; }
 		public IDbSet<Customer> Customers { get; set; }
 		public IDbSet<GlItem> GlItems { get; set; }
 		public IDbSet<Material> Materials { get; set; }
 		public IDbSet<Person> People { get; set; }
 		public IDbSet<Property> Properties { get; set; }
 		public IDbSet<Service> Services { get; set; }
+		public IDbSet<State> States { get; set; }
 		public IDbSet<Quote> Quotes { get; set; }
 		public IDbSet<QuoteItem> QuoteItems { get; set; }
 
@@ -34,6 +36,7 @@ namespace Backend.Domain
 
 	public class AppDbInitializer : DropCreateDatabaseIfModelChanges<AppDbContext>
 	{
+		private IEnumerable<County> _counties;
 		// seed data from MS Dynamics CRM extract
 		private IEnumerable<Person> _people;
 
@@ -66,6 +69,26 @@ namespace Backend.Domain
 
 			_people = pciContext.People.ToList();
 
+			// State
+			pciContext.States.Add(new State {Name = "New York", StateAbbreviation = "NY"});
+			pciContext.SaveChanges();
+
+			// CountyExtensionBase ==> Counties
+			crmContext.Counties.Join(crmContext.CountySalesTax, county => county.CountyId, countyTax => countyTax.CountyId,
+				(county, countyTax) => new {county, countyTax})
+				.ToList()
+				.ForEach(
+					x => pciContext.Counties.Add(new County
+					{
+						Name = x.county.New_countyname,
+						CrmCountyId = x.county.CountyId,
+						SalesTaxRate = (x.countyTax.New_salestaxrate ?? 0),
+						StateAbbreviation = "NY"
+					}));
+			pciContext.SaveChanges();
+
+			_counties = pciContext.Counties.ToList();
+
 			// Accounts ==> Property (Commercial)
 			var allCrmAccounts = crmContext.Accounts.Select(c => new
 			{
@@ -88,7 +111,7 @@ namespace Backend.Domain
 						BillingAddressStreet1 = account.Address.Line1,
 						BillingAddressStreet2 = account.Address.Line2,
 						BillingAddressCity = account.Address.City,
-						BillingAddressState = account.Address.StateOrProvince,
+						BillingAddressState = "NY",
 						BillingAddressZip = account.Address.PostalCode,
 						CrmAccountId = account.Account.AccountId,
 						PrimaryContactId = GetPersonId(account.Account.PrimaryContactId)
@@ -105,12 +128,13 @@ namespace Backend.Domain
 					AddressStreet1 = account.Address.Line1,
 					AddressStreet2 = account.Address.Line2,
 					AddressCity = account.Address.City,
-					AddressState = account.Address.StateOrProvince,
+					AddressState = "NY",
 					AddressZip = account.Address.PostalCode,
 					CrmAccountId = account.Account.AccountId,
 					CrmParentAccountId = crmParentAccountId,
 					PrimaryContactId = GetPersonId(account.Account.PrimaryContactId),
-					CustomerId = customerId
+					CustomerId = customerId,
+					AddressCountyId = GetCountyId(account.Account.AccountExtension.New_Address1_CountyId)
 				};
 				pciContext.Properties.Add(newProperty);
 				pciContext.SaveChanges();
@@ -262,7 +286,7 @@ namespace Backend.Domain
 				var quoteId = pciContext.Quotes.Where(w => w.CrmQuoteId == quoteItem.qd.QuoteId).Select(s => s.Id).FirstOrDefault();
 				if (quoteId == 0) continue;
 
-				int? serviceId =null;
+				int? serviceId = null;
 				var serviceProductId = quoteItem.qd.ProductId;
 				if (serviceProductId != null)
 				{
@@ -273,7 +297,8 @@ namespace Backend.Domain
 				var materialProductId = quoteItem.qde.New_MaterialsId;
 				if (materialProductId != null)
 				{
-					materialId = pciContext.Materials.Where(w => w.CrmProductId == materialProductId).Select(s => s.Id).FirstOrDefault();
+					materialId =
+						pciContext.Materials.Where(w => w.CrmProductId == materialProductId).Select(s => s.Id).FirstOrDefault();
 					materialId = materialId == 0 ? null : materialId;
 				}
 
@@ -295,11 +320,22 @@ namespace Backend.Domain
 					ServicePrice = (quoteItem.qd.ExtendedAmount ?? 0),
 					ServiceQuantity = (quoteItem.qd.Quantity ?? 0),
 					ServiceUnitPrice = (quoteItem.qd.PricePerUnit ?? 0),
-					Visits = (quoteItem.qde.New_Visits ?? 0) 
+					Visits = (quoteItem.qde.New_Visits ?? 0)
 				};
 				pciContext.QuoteItems.Add(newQuoteItem);
 				pciContext.SaveChanges();
 			}
+		}
+
+		private int GetCountyId(Guid? countyId)
+		{
+			var defaultCounty = _counties.Where(w => w.Name == "Monroe").Select(x => x.Id).FirstOrDefault();
+			if (countyId == null)
+			{
+				return defaultCounty;
+			}
+			var county = _counties.Where(w => w.CrmCountyId == countyId).Select(x => x.Id).FirstOrDefault();
+			return county == 0 ? defaultCounty : county;
 		}
 
 		private int? GetPersonId(Guid? crmContactId)
