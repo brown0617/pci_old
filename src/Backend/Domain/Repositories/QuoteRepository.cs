@@ -33,7 +33,13 @@ namespace Backend.Domain.Repositories
 
 		public void Save(Quote entity)
 		{
+			// add/update quote
 			_ctx.Quotes.AddOrUpdate(entity);
+
+			// add/update quote items
+			entity.Items.ToList().ForEach(item => _ctx.QuoteItems.AddOrUpdate(item));
+
+			// save changes
 			_ctx.SaveChanges();
 		}
 

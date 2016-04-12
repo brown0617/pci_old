@@ -75,6 +75,11 @@ namespace Backend.API.Models
 		public decimal TotalAmountMaterials { get; set; }
 
 		/// <summary>
+		///     The sales tax for the property at the time the quote was added
+		/// </summary>
+		public decimal SalesTaxRate { get; set; }
+	
+		/// <summary>
 		///     The total sales tax for the quote
 		/// </summary>
 		public decimal SalesTaxAmount { get; set; }

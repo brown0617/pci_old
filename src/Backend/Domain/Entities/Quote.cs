@@ -83,6 +83,11 @@ namespace Backend.Domain.Entities
 		public decimal TotalAmountMaterials { get; set; }
 
 		/// <summary>
+		///     The sales tax for the property at the time the quote was added
+		/// </summary>
+		public decimal SalesTaxRate { get; set; }
+
+		/// <summary>
 		///     The total sales tax for the quote
 		/// </summary>
 		public decimal SalesTaxAmount { get; set; }
@@ -146,7 +151,7 @@ namespace Backend.Domain.Entities
 		}
 
 		/// <summary>
-		/// Collection of items related to quote
+		///     Collection of items related to quote
 		/// </summary>
 		public ICollection<QuoteItem> Items { get; set; }
 

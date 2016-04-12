@@ -82,7 +82,7 @@ namespace Backend.Domain
 					{
 						Name = x.county.New_countyname,
 						CrmCountyId = x.county.CountyId,
-						SalesTaxRate = (x.countyTax.New_salestaxrate ?? 0),
+						SalesTaxRate = (x.countyTax.New_salestaxrate ?? 0)/100,
 						StateAbbreviation = "NY"
 					}));
 			pciContext.SaveChanges();
@@ -184,7 +184,7 @@ namespace Backend.Domain
 			foreach (var quote in quotes)
 			{
 				var property =
-					pciContext.Properties.FirstOrDefault(w => w.CrmAccountId == quote.quote.AccountId);
+					pciContext.Properties.Include("County").FirstOrDefault(w => w.CrmAccountId == quote.quote.AccountId);
 
 				if (property == null) continue;
 
@@ -199,6 +199,7 @@ namespace Backend.Domain
 					PropertyId = property.Id,
 					NumberOfPayments = (quote.quoteExt.New_NumPayments ?? 1),
 					SalesTaxAmount = (quote.quoteExt.New_SalesTaxAmount ?? 0),
+					SalesTaxRate = property.County.SalesTaxRate,
 					Season = (Season) (quote.quoteExt.New_Season ?? 1),
 					Status = (QuoteStatus) quote.quote.StatusCode,
 					Taxable = (quote.quoteExt.New_Taxable ?? true),
