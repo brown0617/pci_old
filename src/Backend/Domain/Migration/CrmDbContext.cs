@@ -11,7 +11,10 @@ namespace Backend.Domain.Migration
 		}
 
 		public IDbSet<AccountBase> Accounts { get; set; }
+		public IDbSet<AccountExtensionBase> AccountExtension { get; set; }
 		public IDbSet<ContactBase> Contacts { get; set; }
+		public IDbSet<CountyExtensionBase> Counties { get; set; }
+		public IDbSet<CountySalesTaxExtensionBase> CountySalesTax { get; set; }
 		public IDbSet<CustomerAddressBase> CustomerAddresses { get; set; }
 		public IDbSet<GlItemBase> GlItems { get; set; }
 		public IDbSet<ProductBase> Products { get; set; }

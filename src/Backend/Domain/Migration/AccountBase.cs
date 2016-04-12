@@ -10,14 +10,17 @@ namespace Backend.Domain.Migration
 		[Key]
 		public Guid AccountId { get; set; }
 
+		[ForeignKey("AccountId")]
+		public virtual AccountExtensionBase AccountExtension { get; set; }
+
 		public string Name { get; set; }
 		public string AccountNumber { get; set; }
 		public Guid? ParentAccountId { get; set; }
-
 		public Guid? PrimaryContactId { get; set; }
+
 		[ForeignKey("PrimaryContactId")]
 		public virtual ContactBase Contact { get; set; }
-		
+
 		public ICollection<CustomerAddressBase> Addresses { get; set; }
 	}
 }
