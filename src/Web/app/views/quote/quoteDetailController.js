@@ -42,7 +42,7 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 		self.quote.AnnualIncreasePercentage = self.quote.ContractTermYears <= 1 ? 0 : self.quote.AnnualIncreasePercentage;
 	};
 
-	function calculateTotals() {
+	self.calculateTotals = function() {
 		var labor = 0, materials = 0;
 		_.each(self.quoteItems, function(item) {
 				labor += item.ServicePrice || 0;
@@ -50,15 +50,14 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 			}
 		);
 		var preTaxTotal = labor + materials;
-		var salesTax = self.quote.Taxable ? preTaxTotal : 0;
+		var salesTax = self.quote.Taxable ? preTaxTotal * self.quote.SalesTaxRate : 0;
 
 		self.quote.TotalAmountLabor = labor;
 		self.quote.TotalAmountMaterials = materials;
 		self.quote.TotalAmountPretax = preTaxTotal;
 		self.quote.SalesTaxAmount = salesTax;
 		self.quote.TotalAmount = preTaxTotal + salesTax;
-	}
-
+	};
 	self.editItem = function(item) {
 		var itemToEdit = angular.copy(item);
 		var modalInstance = getModalInstance(itemToEdit);
@@ -68,7 +67,7 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 			self.quoteItems[index] = editedItem;
 
 			// recalculate totals
-			calculateTotals();
+			self.calculateTotals();
 
 			// set form dirty
 			self.form.$setDirty();
@@ -91,6 +90,7 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 	};
 
 	this.save = function() {
+		self.quote.items = self.quoteItems;
 		return quoteData.save(self.quote);
 	};
 
