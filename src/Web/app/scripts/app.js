@@ -99,6 +99,28 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 				module: 'Properties',
 				tools: [{ name: 'search' }]
 			}
+		}).state('pci.propertyDetail', {
+			url: '/property/detail/:id',
+			templateUrl: '../views/property/propertyDetail.html',
+			resolve: {
+				previousState: [
+					'$state',
+					function ($state) {
+						var currentStateData = {
+							Name: $state.current.name,
+							Params: $state.params,
+							URL: $state.href($state.current.name, $state.params)
+						};
+						return currentStateData;
+					}
+				]
+			},
+			controller: 'PropertyDtlCtrl',
+			controllerAs: 'propertyDtl',
+			data: {
+				module: 'Property Detail',
+				tools: [{ name: 'search' }]
+			}
 		});
 
 	$httpProvider.interceptors.push('apiInterceptor');

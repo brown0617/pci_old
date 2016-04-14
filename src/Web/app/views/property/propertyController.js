@@ -18,7 +18,7 @@ function PropertyCtrl(propertyData, $filter) {
 			{ field: 'AddressCity', displayName: 'City' },
 			{ field: 'AddressState', displayName: 'State' },
 			{ field: 'AddressZip', displayName: 'Zip' },
-			{ name: 'edit', displayName: '', cellTemplate: '<a class="btn" ui-sref="pci.customerDetail({id: row.entity.Id})"><i class="fa fa-pencil-square-o"></i></a>' }
+			{ name: 'edit', displayName: '', cellTemplate: '<a class="btn" ui-sref="pci.propertyDetail({id: row.entity.Id})"><i class="fa fa-pencil-square-o"></i></a>' }
 		]
 	};
 
