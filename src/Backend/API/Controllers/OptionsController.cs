@@ -23,7 +23,15 @@ namespace Backend.API.Controllers
 		public IEnumerable<OptionData> GetBillingDayOptions()
 		{
 			var optionData = new List<OptionData>();
-			_mapper.Map(_repository.GetBillingDays(), optionData);
+			_mapper.Map(_repository.GetBillingDayList(), optionData);
+			return optionData;
+		}
+
+		[Route("billingMethod")]
+		public IEnumerable<OptionData> GetBillingMethodOptions()
+		{
+			var optionData = new List<OptionData>();
+			_mapper.Map(_repository.GetBillingMethodList(), optionData);
 			return optionData;
 		}
 
@@ -31,7 +39,7 @@ namespace Backend.API.Controllers
 		public IEnumerable<OptionData> GetMonthOptions()
 		{
 			var optionData = new List<OptionData>();
-			_mapper.Map(_repository.GetMonths(), optionData);
+			_mapper.Map(_repository.GetMonthList(), optionData);
 			return optionData;
 		}
 
@@ -39,7 +47,7 @@ namespace Backend.API.Controllers
 		public IEnumerable<OptionData> GetQuoteStatusOptions()
 		{
 			var optionData = new List<OptionData>();
-			_mapper.Map(_repository.GetQuoteStatuses(), optionData);
+			_mapper.Map(_repository.GetQuoteStatusList(), optionData);
 			return optionData;
 		}
 
@@ -47,7 +55,7 @@ namespace Backend.API.Controllers
 		public IEnumerable<OptionData> GetQuoteType()
 		{
 			var optionData = new List<OptionData>();
-			_mapper.Map(_repository.GetQuoteTypes(), optionData);
+			_mapper.Map(_repository.GetQuoteTypeList(), optionData);
 			return optionData;
 		}
 
@@ -55,7 +63,15 @@ namespace Backend.API.Controllers
 		public IEnumerable<OptionData> GetSeasonOptions()
 		{
 			var optionData = new List<OptionData>();
-			_mapper.Map(_repository.GetSeasons(), optionData);
+			_mapper.Map(_repository.GetSeasonList(), optionData);
+			return optionData;
+		}
+
+		[Route("serviceFrequency")]
+		public IEnumerable<OptionData> GetServiveFrequencyOptions()
+		{
+			var optionData = new List<OptionData>();
+			_mapper.Map(_repository.GetServiceFrequencyList(), optionData);
 			return optionData;
 		}
 	}

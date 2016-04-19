@@ -133,12 +133,14 @@
   <ItemGroup>
     <Compile Include="API\AutoMapperConfig.cs" />
     <Compile Include="API\Controllers\OptionsController.cs" />
+    <Compile Include="API\Controllers\MaterialController.cs" />
     <Compile Include="API\Controllers\ServicesController.cs" />
     <Compile Include="API\Controllers\QuotesController.cs" />
     <Compile Include="API\Controllers\PropertiesController.cs" />
     <Compile Include="API\Controllers\CustomersController.cs" />
     <Compile Include="API\Controllers\PeopleController.cs" />
     <Compile Include="API\ExceptionHandlingAttribute.cs" />
+    <Compile Include="API\Models\MaterialData.cs" />
     <Compile Include="API\Models\OptionData.cs" />
     <Compile Include="API\Models\PropertyData.cs" />
     <Compile Include="API\Models\PersonData.cs" />
@@ -157,12 +159,14 @@
     <Compile Include="Domain\Entities\Service.cs" />
     <Compile Include="API\Models\ServiceData.cs" />
     <Compile Include="Domain\Entities\State.cs" />
+    <Compile Include="Domain\Enums\BillingMethod.cs" />
     <Compile Include="Domain\Enums\BillingDay.cs" />
     <Compile Include="Domain\Enums\EnumDescription.cs" />
     <Compile Include="Domain\Enums\EnumExtensions.cs" />
     <Compile Include="Domain\Enums\Month.cs" />
     <Compile Include="Domain\Enums\QuoteStatus.cs" />
     <Compile Include="Domain\Enums\QuoteType.cs" />
+    <Compile Include="Domain\Enums\ServiceFrequency.cs" />
     <Compile Include="Domain\Enums\Season.cs" />
     <Compile Include="Domain\Migration\CountySalesTaxExtensionBase.cs" />
     <Compile Include="Domain\Migration\CountyExtensionBase.cs" />
@@ -179,7 +183,9 @@
     <Compile Include="Domain\Migration\QuoteExtensionBase.cs" />
     <Compile Include="Domain\Migration\QuoteBase.cs" />
     <Compile Include="Domain\Repositories\CustomerRepository.cs" />
+    <Compile Include="Domain\Repositories\IMaterialRepository.cs" />
     <Compile Include="Domain\Repositories\IServiceRepository.cs" />
+    <Compile Include="Domain\Repositories\MaterialRepository.cs" />
     <Compile Include="Domain\Repositories\OptionRepository.cs" />
     <Compile Include="Domain\Repositories\IPropertyRepository.cs" />
     <Compile Include="Domain\Repositories\IPersonRepository.cs" />

@@ -5,10 +5,12 @@ namespace Backend.Domain.Repositories
 {
 	public interface IOptionRepository
 	{
-		List<Option> GetBillingDays();
-		List<Option> GetMonths();
-		List<Option> GetQuoteStatuses();
-		List<Option> GetQuoteTypes();
-		List<Option> GetSeasons();
+		List<Option> GetBillingDayList();
+		List<Option> GetBillingMethodList();
+		List<Option> GetMonthList();
+		List<Option> GetQuoteStatusList();
+		List<Option> GetQuoteTypeList();
+		List<Option> GetSeasonList();
+		List<Option> GetServiceFrequencyList();
 	}
 }

@@ -15,10 +15,14 @@ namespace Backend.API.Models
 		public virtual Service Service { get; set; }
 
 		public decimal ServiceQuantity { get; set; }
+		public decimal ServiceUnitCost { get; set; }
+		public decimal ServiceCost { get; set; }
 		public decimal ServiceUnitPrice { get; set; }
 		public decimal ServicePrice { get; set; }
 		public int? MaterialId { get; set; }
 		public decimal MaterialQuantity { get; set; }
+		public decimal MaterialUnitCost { get; set; }
+		public decimal MaterialCost { get; set; }
 		public decimal MaterialUnitPrice { get; set; }
 		public decimal MaterialPrice { get; set; }
 		public decimal ManualDiscountAmount { get; set; }
