@@ -16,10 +16,10 @@ function QuoteCtrl($filter, quoteData) {
 			{ field: 'PropertyName', displayName: 'Property Name' },
 			{ field: 'CustomerName', displayName: 'Customer Name' },
 			{ field: 'Title', displayName: 'Title' },
-			{ field: 'ContractYear', displayName: 'Year' },
-			{ field: 'TypeDesc', displayName: 'Type' },
-			{ field: 'SeasonDesc', displayName: 'Season' },
-			{ name: 'edit', displayName: '', cellTemplate: '<a class="btn" ui-sref="pci.quoteDetail({id: row.entity.Id})"><i class="fa fa-pencil-square-o"></i></a>' }
+			{ field: 'ContractYear', displayName: 'Year', width:'7%' },
+			{ field: 'TypeDesc', displayName: 'Type', width: '13%' },
+			{ field: 'SeasonDesc', displayName: 'Season', width: '10%' },
+			{ name: 'edit', displayName: '', cellTemplate: '<a class="btn" ui-sref="pci.quoteDetail({id: row.entity.Id})"><i class="fa fa-pencil-square-o"></i></a>', width:'5%' }
 		]
 	};
 

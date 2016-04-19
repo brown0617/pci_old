@@ -4,7 +4,7 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 	var self = this;
 	self.previousState = previousState;
 
-	function getModalInstance(item) {
+	function getModalInstance(itemModel) {
 		return $uibModal.open({
 			templateUrl: '../views/quote/quoteItemModal.html',
 			backdrop: 'static',
@@ -12,8 +12,8 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 			controller: 'QuoteItemModalCtrl',
 			controllerAs: 'ctrl',
 			resolve: {
-				item: function() {
-					return item;
+				itemModel: function () {
+					return itemModel;
 				}
 			}
 		});
@@ -58,8 +58,9 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 		self.quote.SalesTaxAmount = salesTax;
 		self.quote.TotalAmount = preTaxTotal + salesTax;
 	};
+
 	self.editItem = function(item) {
-		var itemToEdit = angular.copy(item);
+		var itemToEdit = { quoteType: self.quote.Type, item: angular.copy(item) };
 		var modalInstance = getModalInstance(itemToEdit);
 		modalInstance.result.then(function(editedItem) {
 			// update item in model
