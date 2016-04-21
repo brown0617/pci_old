@@ -1,0 +1,59 @@
+﻿<div class="modal-header">
+	<h3 class="modal-title">New Quote</h3>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="form-group">
+			<div class="row">
+				<div class="col-md-12">
+					<label>Property</label>
+					<input type="text"
+					       ng-model="ctrl.quote.PropertyName"
+					       placeholder="Type the property name"
+					       uib-typeahead="property.Name as property.Name for property in ctrl.getPropertiesByName($viewValue)"
+					       typeahead-loading="ctrl.loadingProperties"
+					       typeahead-no-results="ctrl.noResults"
+					       typeahead-on-select="ctrl.propertySelected($item)"
+					       class="form-control">
+					<i ng-show="ctrl.loadingProperties" class="glyphicon glyphicon-refresh"></i>
+					<div ng-show="ctrl.noResults">
+						<div class="col-md-10 h5 text-right">
+							<i class="fa fa-exclamation-circle fa-1x"></i> <span>Property not found! Add it?</span>
+						</div>
+						<div class="input-group-btn h5">
+							<a class="btn" ng-click="editContact(ngModel)">
+								<i class="fa fa-thumbs-o-up fa-1x"></i>
+							</a><a class="btn" ng-click="editContact(ngModel)">
+								<i class="fa fa-thumbs-o-down fa-1x"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<label>Customer</label>
+					<select class="form-control" ng-model="ctrl.quote.CustomerId" ng-disabled="!ctrl.quote.PropertyId" ng-options="customer.Id as customer.Name for customer in ctrl.customers"></select>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<label>Type</label>
+					<select class="form-control" ng-model="ctrl.quote.Type" ng-disabled="!ctrl.quote.PropertyId || !ctrl.quote.CustomerId" ng-options="quoteType.Id as quoteType.Name for quoteType in ctrl.quoteTypes"></select>
+				</div>
+				<div class="col-md-4">
+					<label>Season</label>
+					<select class="form-control" ng-model="ctrl.quote.Season" ng-disabled="!ctrl.quote.PropertyId || !ctrl.quote.CustomerId" ng-options="season.Id as season.Name for season in ctrl.seasons"></select>
+				</div>
+				<div class="col-md-4">
+					<label>Year</label>
+					<input type="text" class="form-control" ng-model="ctrl.quote.ContractYear" ng-disabled="!ctrl.quote.PropertyId || !ctrl.quote.CustomerId"/>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-primary" ng-click="ctrl.save()">Okay</button>
+		<button type="button" class="btn btn-warning" ng-click="ctrl.cancel()">Cancel</button>
+	</div>
+</div>

@@ -24,6 +24,11 @@ namespace Backend.Domain.Repositories
 					.ToList();
 		}
 
+		public IEnumerable<Property> FilterByName(string propertyName)
+		{
+			return _ctx.Properties.Where(w => w.Name.Contains(propertyName)).OrderBy(o => o.Name).ToList();
+		}
+
 		public IEnumerable<Property> Get()
 		{
 			return _ctx.Properties.Include(c => c.Customer).ToList();

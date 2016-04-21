@@ -3,7 +3,7 @@
 function materialData($http) {
 	var uri = 'http://localhost:32150/api/materials';
 
-	//	fetch all services
+	//	fetch a list of materials by partial name match
 	this.getMaterialsByName = function(name) {
 		return $http.get(uri + '/' + name).then(function(result) {
 			return result.data;

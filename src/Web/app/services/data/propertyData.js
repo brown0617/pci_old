@@ -9,13 +9,20 @@ function propertyData($http) {
 	};
 
 	//	fetch a property by id
-	this.get = function (id) {
+	this.get = function(id) {
 		return $http.get(uri + '/' + id);
 	};
 
 	//	fetch a property by customer id
-	this.getByCustomerId = function (customerId) {
+	this.getByCustomerId = function(customerId) {
 		return $http.get(uri + '/customer/' + customerId);
+	};
+
+	//	fetch a list of properties by partial name match
+	this.getPropertiesByName = function (name) {
+		return $http.get(uri + '/' + name).then(function(result) {
+			return result.data;
+		});
 	};
 
 	//	fetch a new property

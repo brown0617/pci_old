@@ -2,117 +2,118 @@
 	<h3 class="modal-title">Item Detail</h3>
 </div>
 <div class="modal-body">
-<div class="row">
-	<div class="col-md-12">
+	<div class="row">
 		<div class="col-md-12">
-			<label>Description</label>
-			<textarea class="form-control" ng-model="ctrl.item.Description" rows="4"></textarea>
-		</div>
-	</div>
-</div>
-<br/>
-<div class="row">
-	<div class="col-md-12">
-		<div class="col-md-6">
-			<label>Labor</label>
-			<select type="text" class="form-control" ng-model="ctrl.item.Service" ng-options="service as service.Name for service in ctrl.services track by service.Id" ng-change="ctrl.updatePrice()"></select>
-		</div>
-		<div class="col-md-2">
-			<label>Man Hours</label>
-			<input type="text" class="form-control text-right" ng-model="ctrl.item.ServiceQuantity" ng-change="ctrl.calcServiceTotal()"/>
-		</div>
-		<div class="col-md-2">
-			<label>Unit Price</label>
-			<input type="text" class="form-control text-right" ng-model="ctrl.item.ServiceUnitPrice" ng-change="ctrl.calcServiceTotal()"/>
-		</div>
-		<div class="col-md-2">
-			<label>Price</label>
-			<input type="text" class="form-control text-right" ng-model="ctrl.item.ServicePrice | number: 2" readonly/>
-		</div>
-	</div>
-</div>
-<br/>
-<div class="row">
-	<div class="col-md-12">
-		<div class="col-md-6">
-			<label>Materials</label>
-		</div>
-		<div class="col-md-2">
-			<label>Quantity</label>
-		</div>
-		<div class="col-md-2">
-			<label>Unit Price</label>
-		</div>
-		<div class="col-md-2">
-			<label>Price</label>
-		</div>
-	</div>
-	<div class="col-md-12">
-		<div class="col-md-6">
-			<input type="text"
-			       ng-model="ctrl.item.Material.Name"
-			       placeholder="Type the material name"
-			       uib-typeahead="material.Name for material in ctrl.getMaterialsByName($viewValue)"
-			       typeahead-loading="ctrl.loadingMaterials"
-			       typeahead-no-results="ctrl.noResults"
-			       typeahead-on-select="ctrl.materialSelected($item, $model, $label)"
-			       class="form-control">
-			<i ng-show="ctrl.loadingMaterials" class="glyphicon glyphicon-refresh"></i>
-			<div ng-show="ctrl.noResults">
-				<i class="glyphicon glyphicon-remove"></i> No Materials Found
+			<div class="col-md-12">
+				<label>Description</label>
+				<textarea class="form-control" ng-model="ctrl.item.Description" rows="4"></textarea>
 			</div>
 		</div>
-		<div class="col-md-2">
-			<input type="text" class="form-control text-right" ng-model="ctrl.item.MaterialQuantity" ng-change="ctrl.calcMaterialTotal()"/>
-		</div>
-		<div class="col-md-2">
-			<input type="text" class="form-control text-right" ng-model="ctrl.item.MaterialUnitPrice" ng-change="ctrl.calcMaterialTotal()"/>
-		</div>
-		<div class="col-md-2">
-			<input type="text" class="form-control text-right" ng-model="ctrl.item.MaterialPrice | number:2" readonly/>
+	</div>
+	<br/>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<label>Labor</label>
+				<select type="text" class="form-control" ng-model="ctrl.item.Service" ng-options="service as service.Name for service in ctrl.services track by service.Id" ng-change="ctrl.updatePrice()"></select>
+			</div>
+			<div class="col-md-2">
+				<label>Man Hours</label>
+				<input type="text" class="form-control text-right" ng-model="ctrl.item.ServiceQuantity" ng-change="ctrl.calcServiceTotal()"/>
+			</div>
+			<div class="col-md-2">
+				<label>Unit Price</label>
+				<input type="text" class="form-control text-right" ng-model="ctrl.item.ServiceUnitPrice" ng-change="ctrl.calcServiceTotal()"/>
+			</div>
+			<div class="col-md-2">
+				<label>Price</label>
+				<input type="text" class="form-control text-right" ng-model="ctrl.item.ServicePrice | number: 2" readonly/>
+			</div>
 		</div>
 	</div>
-</div>
-<br/>
-<div class="row" ng-if="ctrl.quoteType!==3">
-	<div class="col-md-12">
-		<div class="col-md-4">
-			<label># of Visits</label>
-			<input type="text" class="form-control text-right" ng-model="ctrl.item.Visits"/>
+	<br/>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<label>Materials</label>
+			</div>
+			<div class="col-md-2">
+				<label>Quantity</label>
+			</div>
+			<div class="col-md-2">
+				<label>Unit Price</label>
+			</div>
+			<div class="col-md-2">
+				<label>Price</label>
+			</div>
 		</div>
-		<div class="col-md-4">
-			<label>Frequency</label>
-			<select class="form-control text-right" ng-model="ctrl.item.ServiceFrequency" ng-options="option.Id as option.Name for option in ctrl.serviceFrequencyOptions"></select>
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<input type="text"
+				       ng-model="ctrl.item.Material"
+				       placeholder="Type the material name"
+				       uib-typeahead="material as material.Name for material in ctrl.getMaterialsByName($viewValue)"
+				       typeahead-loading="ctrl.loadingMaterials"
+				       typeahead-no-results="ctrl.noResults"
+				       typeahead-on-select="ctrl.materialSelected($item)"
+				       class="form-control">
+				<i ng-show="ctrl.loadingMaterials" class="glyphicon glyphicon-refresh"></i>
+				<div ng-show="ctrl.noResults">
+					<i class="glyphicon glyphicon-remove"></i> No Materials Found
+				</div>
+			</div>
+			<div class="col-md-2">
+				<input type="text" class="form-control text-right" ng-model="ctrl.item.MaterialQuantity" ng-change="ctrl.calcMaterialTotal()"/>
+			</div>
+			<div class="col-md-2">
+				<input type="text" class="form-control text-right" ng-model="ctrl.item.MaterialUnitPrice" ng-change="ctrl.calcMaterialTotal()"/>
+			</div>
+			<div class="col-md-2">
+				<input type="text" class="form-control text-right" ng-model="ctrl.item.MaterialPrice | number:2" readonly/>
+			</div>
 		</div>
-		<div class="col-md-4">
-			<label>Deadline</label>
-			<p class="input-group">
-				<input type="text" class="form-control" uib-datepicker-popup="MM/dd/yyyy" ng-model="ctrl.item.ServiceDeadline" is-open="ctrl.serviceDeadlineOpen" datepicker-options="dateOptions" close-text="Close"/>
-				<span class="input-group-btn">
+	</div>
+	<br/>
+	<div class="row" ng-if="ctrl.quoteType!==3">
+		<div class="col-md-12">
+			<div class="col-md-4">
+				<label># of Visits</label>
+				<input type="text" class="form-control text-right" ng-model="ctrl.item.Visits"/>
+			</div>
+			<div class="col-md-4">
+				<label>Frequency</label>
+				<select class="form-control text-right" ng-model="ctrl.item.ServiceFrequency" ng-options="option.Id as option.Name for option in ctrl.serviceFrequencyOptions"></select>
+			</div>
+			<div class="col-md-4">
+				<label>Deadline</label>
+				<p class="input-group">
+					<input type="text" class="form-control" uib-datepicker-popup="MM/dd/yyyy" ng-model="ctrl.item.ServiceDeadline" is-open="ctrl.serviceDeadlineOpen" datepicker-options="dateOptions" close-text="Close"/>
+					<span class="input-group-btn">
 						<button type="button" class="btn btn-default" ng-click="ctrl.serviceDeadlineOpen=true"><i class="glyphicon glyphicon-calendar"></i></button>
 					</span>
-			</p>
+				</p>
+			</div>
 		</div>
 	</div>
-</div>
-<div class="row" ng-if="ctrl.quoteType===2">
-	<div class="col-md-12">
-		<div class="col-md-4">
-			<label>Billing Method</label>
-			<select class="form-control" ng-model="ctrl.item.BillingMethod" ng-options="option.Id as option.Name for option in ctrl.billingMethodOptions"></select>
-		</div>
-		<div class="col-md-4">
-			<label># of Payments</label>
-			<input type="text" id="numberOfPayments" class="form-control text-right" ng-model="ctrl.item.NumberOfPayments"/>
-		</div>
-		<div class="col-md-4">
-			{{ctrl.item.BillingStart}}
-			<label>Billing Starts</label>
-			<select class="form-control" ng-model="ctrl.item.BillingStart" ng-options="option.Id as option.Name for option in ctrl.monthOptions"></select>
+	<div class="row" ng-if="ctrl.quoteType===2">
+		<div class="col-md-12">
+			<div class="col-md-4">
+				<label>Billing Method</label>
+				<select class="form-control" ng-model="ctrl.item.BillingMethod" ng-options="option.Id as option.Name for option in ctrl.billingMethodOptions"></select>
+			</div>
+			<div class="col-md-4">
+				<label># of Payments</label>
+				<input type="text" id="numberOfPayments" class="form-control text-right" ng-model="ctrl.item.NumberOfPayments"/>
+			</div>
+			<div class="col-md-4">
+				{{ctrl.item.BillingStart}}
+				<label>Billing Starts</label>
+				<select class="form-control" ng-model="ctrl.item.BillingStart" ng-options="option.Id as option.Name for option in ctrl.monthOptions"></select>
+			</div>
 		</div>
 	</div>
-</div>
-<div class="modal-footer">
-	<button type="button" class="btn btn-primary" ng-click="ctrl.save()">Okay</button>
-	<button type="button" class="btn btn-warning" ng-click="ctrl.cancel()">Cancel</button>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-primary" ng-click="ctrl.save()">Okay</button>
+		<button type="button" class="btn btn-warning" ng-click="ctrl.cancel()">Cancel</button>
+	</div>
 </div>

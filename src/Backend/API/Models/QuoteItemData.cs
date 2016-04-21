@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using Backend.Domain.Entities;
 
 namespace Backend.API.Models
 {
@@ -12,7 +11,7 @@ namespace Backend.API.Models
 		public int? ServiceId { get; set; }
 
 		[ForeignKey("ServiceId")]
-		public virtual Service Service { get; set; }
+		public virtual ServiceData Service { get; set; }
 
 		public decimal ServiceQuantity { get; set; }
 		public decimal ServiceUnitCost { get; set; }
@@ -20,6 +19,10 @@ namespace Backend.API.Models
 		public decimal ServiceUnitPrice { get; set; }
 		public decimal ServicePrice { get; set; }
 		public int? MaterialId { get; set; }
+
+		[ForeignKey("MaterialId")]
+		public virtual MaterialData Material { get; set; }
+
 		public decimal MaterialQuantity { get; set; }
 		public decimal MaterialUnitCost { get; set; }
 		public decimal MaterialCost { get; set; }

@@ -8,6 +8,7 @@ using Backend.Domain.Repositories;
 
 namespace Backend.API.Controllers
 {
+	[RoutePrefix("api/quotes")]
 	[ExceptionHandling]
 	public class QuotesController : ApiController
 	{
@@ -38,6 +39,14 @@ namespace Backend.API.Controllers
 		{
 			var quote = _mapper.Map(quoteData, new Quote());
 			_repository.Save(quote);
+		}
+
+		[Route("new")]
+		public QuoteData GetNew()
+		{
+			var quoteData = new QuoteData();
+			_mapper.Map(_repository.New(), quoteData);
+			return quoteData;
 		}
 	}
 }

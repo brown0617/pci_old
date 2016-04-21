@@ -8,6 +8,7 @@ using Backend.Domain.Repositories;
 
 namespace Backend.API.Controllers
 {
+	[RoutePrefix("api/properties")]
 	[ExceptionHandling]
 	public class PropertiesController : ApiController
 	{
@@ -27,11 +28,20 @@ namespace Backend.API.Controllers
 			return propertyData.OrderBy(x => x.Name);
 		}
 
-		[Route("api/properties/customer/{customerId}")]
+		[Route("customer/{customerId}")]
 		public IEnumerable<PropertyData> GetByCustomerId(int customerId)
 		{
 			var propertyData = new List<PropertyData>();
 			var property = _repository.Get().Where(w => w.CustomerId == customerId);
+			_mapper.Map(property, propertyData);
+			return propertyData.OrderBy(x => x.Name);
+		}
+
+		[Route("{name}")]
+		public IEnumerable<PropertyData> GetByName(string name)
+		{
+			var propertyData = new List<PropertyData>();
+			var property = _repository.FilterByName(name);
 			_mapper.Map(property, propertyData);
 			return propertyData.OrderBy(x => x.Name);
 		}
