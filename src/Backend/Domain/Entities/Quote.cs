@@ -18,7 +18,18 @@ namespace Backend.Domain.Entities
 		public string Title { get; set; }
 
 		/// <summary>
-		///     Identifier of Property whom the quote is for
+		///     Identifier of the customer whom the quote is for
+		/// </summary>
+		public int CustomerId { get; set; }
+
+		/// <summary>
+		///     Foreign key relationship to Customer
+		/// </summary>
+		[ForeignKey("CustomerId")]
+		public virtual Customer Customer { get; set; }
+
+		/// <summary>
+		///     Identifier of the property whom the quote is for
 		/// </summary>
 		public int PropertyId { get; set; }
 

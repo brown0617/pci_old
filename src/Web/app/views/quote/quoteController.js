@@ -49,12 +49,12 @@ function QuoteCtrl($state, $filter, $uibModal, quoteData) {
 
 			modalInstance.result.then(function(newQuote) {
 				quoteData.save(newQuote).then(function(quote) {
-					$state.transition(pci.quoteDetail, { id: quote.id });
+					$state.go('pci.quoteDetail', { id: quote.data.Id });
 				});
 			});
 		});
 	}
 }
 
-QuoteCtrl.$inject = ['$state', '$filter', '$uibModal', 'quoteData',];
+QuoteCtrl.$inject = ['$state', '$filter', '$uibModal', 'quoteData'];
 app.controller('QuoteCtrl', QuoteCtrl);

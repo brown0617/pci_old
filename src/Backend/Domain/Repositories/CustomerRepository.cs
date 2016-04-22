@@ -20,10 +20,11 @@ namespace Backend.Domain.Repositories
 			return _ctx.Customers.FirstOrDefault(x => x.Id == id);
 		}
 
-		public void Save(Customer entity)
+		public Customer Save(Customer entity)
 		{
 			_ctx.Customers.AddOrUpdate(entity);
 			_ctx.SaveChanges();
+			return entity;
 		}
 
 		public void Delete(Customer entity)

@@ -101,6 +101,7 @@ namespace Backend.Domain
 					allCrmAccounts.Where(account => !crmContext.Accounts.Any(w => w.ParentAccountId == account.Account.AccountId)))
 			{
 				int? customerId = null;
+				var crmAccountId = account.Account.AccountId;
 				var crmParentAccountId = account.Account.ParentAccountId;
 				if (crmParentAccountId == null)
 				{
@@ -113,7 +114,7 @@ namespace Backend.Domain
 						BillingAddressCity = account.Address.City,
 						BillingAddressState = "NY",
 						BillingAddressZip = account.Address.PostalCode,
-						CrmAccountId = account.Account.AccountId,
+						CrmAccountId = crmAccountId,
 						PrimaryContactId = GetPersonId(account.Account.PrimaryContactId)
 					};
 					pciContext.Customers.Add(newFakeCustomer);
@@ -130,10 +131,10 @@ namespace Backend.Domain
 					AddressCity = account.Address.City,
 					AddressState = "NY",
 					AddressZip = account.Address.PostalCode,
-					CrmAccountId = account.Account.AccountId,
+					CrmAccountId = crmAccountId,
 					CrmParentAccountId = crmParentAccountId,
 					PrimaryContactId = GetPersonId(account.Account.PrimaryContactId),
-					CustomerId = customerId,
+					//CustomerId = customerId,
 					AddressCountyId = GetCountyId(account.Account.AccountExtension.New_Address1_CountyId)
 				};
 				pciContext.Properties.Add(newProperty);
@@ -144,7 +145,7 @@ namespace Backend.Domain
 				if (existingCustomer != null)
 				{
 					// customer exists, add to property
-					newProperty.CustomerId = existingCustomer.Id;
+					customerId = existingCustomer.Id;
 					pciContext.Properties.AddOrUpdate(newProperty);
 				}
 				else
@@ -168,53 +169,55 @@ namespace Backend.Domain
 						pciContext.Customers.Add(newCommercialCustomer);
 						pciContext.SaveChanges();
 
-						newProperty.CustomerId = newCommercialCustomer.Id;
+						customerId = newCommercialCustomer.Id;
 						pciContext.Properties.AddOrUpdate(newProperty);
 					}
 				}
-			}
 
-			// QuoteBase/QuoteExtensionBase ==> Quote
-			var quotes =
-				crmContext.Quotes.Join(crmContext.QuotesExtension, quote => quote.QuoteId, quoteExt => quoteExt.QuoteId,
-					(quote, quoteExt) => new {quote, quoteExt})
-					.Where(c => c.quote.AccountId.HasValue)
-					.ToList();
+				// QuoteBase/QuoteExtensionBase ==> Quote
+				var quotes =
+					crmContext.Quotes.Join(crmContext.QuotesExtension, quote => quote.QuoteId, quoteExt => quoteExt.QuoteId,
+						(quote, quoteExt) => new {quote, quoteExt})
+						.Where(c => c.quote.AccountId == crmAccountId)
+						.ToList();
 
-			foreach (var quote in quotes)
-			{
-				var property =
-					pciContext.Properties.Include("County").FirstOrDefault(w => w.CrmAccountId == quote.quote.AccountId);
-
-				if (property == null) continue;
-
-				var newQuote = new Quote
+				foreach (var quote in quotes)
 				{
-					AnnualIncreasePercentage = quote.quoteExt.New_AnnualIncrease ?? 0,
-					BillingDay = (BillingDay) (quote.quoteExt.New_BillingDay ?? 1),
-					BillingStart = (Month) (quote.quoteExt.New_BillingStart ?? 1),
-					ContractTermYears = (quote.quoteExt.New_ContractTermYears ?? 1),
-					ContractYear = quote.quoteExt.New_ContractYear,
-					CrmQuoteId = quote.quote.QuoteId,
-					PropertyId = property.Id,
-					NumberOfPayments = (quote.quoteExt.New_NumPayments ?? 1),
-					SalesTaxAmount = (quote.quoteExt.New_SalesTaxAmount ?? 0),
-					SalesTaxRate = property.County.SalesTaxRate,
-					Season = (Season) (quote.quoteExt.New_Season ?? 1),
-					Status = (QuoteStatus) quote.quote.StatusCode,
-					Taxable = (quote.quoteExt.New_Taxable ?? true),
-					Title = quote.quote.Name,
-					TotalAmountLabor = (quote.quoteExt.New_TotalAmountLabor ?? 0),
-					TotalAmountMaterials = (quote.quoteExt.New_TotalAmountMaterials ?? 0),
-					TotalAmountPretax = (quote.quoteExt.New_TotalAmountPretax ?? 0),
-					TotalAmountQuote = (quote.quoteExt.New_TotalAmountQuote ?? 0),
-					TotalEstimatedManHours = (quote.quoteExt.New_TotalManHoursEst ?? 0),
-					Type = (QuoteType) (quote.quoteExt.New_QuoteType ?? 0)
-				};
+					var property =
+						pciContext.Properties.Include("County").FirstOrDefault(w => w.CrmAccountId == quote.quote.AccountId);
 
-				pciContext.Quotes.Add(newQuote);
-				pciContext.SaveChanges();
+					if (property == null) continue;
+
+					var newQuote = new Quote
+					{
+						AnnualIncreasePercentage = quote.quoteExt.New_AnnualIncrease ?? 0,
+						BillingDay = (BillingDay) (quote.quoteExt.New_BillingDay ?? 1),
+						BillingStart = (Month) (quote.quoteExt.New_BillingStart ?? 1),
+						ContractTermYears = (quote.quoteExt.New_ContractTermYears ?? 1),
+						ContractYear = quote.quoteExt.New_ContractYear,
+						CrmQuoteId = quote.quote.QuoteId,
+						PropertyId = property.Id,
+						CustomerId = (int) customerId,
+						NumberOfPayments = (quote.quoteExt.New_NumPayments ?? 1),
+						SalesTaxAmount = (quote.quoteExt.New_SalesTaxAmount ?? 0),
+						SalesTaxRate = property.County.SalesTaxRate,
+						Season = (Season) (quote.quoteExt.New_Season ?? 1),
+						Status = (QuoteStatus) quote.quote.StatusCode,
+						Taxable = (quote.quoteExt.New_Taxable ?? true),
+						Title = quote.quote.Name,
+						TotalAmountLabor = (quote.quoteExt.New_TotalAmountLabor ?? 0),
+						TotalAmountMaterials = (quote.quoteExt.New_TotalAmountMaterials ?? 0),
+						TotalAmountPretax = (quote.quoteExt.New_TotalAmountPretax ?? 0),
+						TotalAmountQuote = (quote.quoteExt.New_TotalAmountQuote ?? 0),
+						TotalEstimatedManHours = (quote.quoteExt.New_TotalManHoursEst ?? 0),
+						Type = (QuoteType) (quote.quoteExt.New_QuoteType ?? 0)
+					};
+
+					pciContext.Quotes.Add(newQuote);
+					pciContext.SaveChanges();
+				}
 			}
+
 
 			// GlItemBase ==> GlItem
 			crmContext.GlItems.ToList().ForEach(x => pciContext.GlItems.Add(new GlItem

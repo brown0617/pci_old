@@ -15,14 +15,19 @@ namespace Backend.API.Models
 		public string Title { get; set; }
 
 		/// <summary>
-		///     Identifier of Property whom the quote is for
+		///     Identifier of the customer that the quote is for
 		/// </summary>
-		public int PropertyId { get; set; }
+		public int CustomerId { get; set; }
 
 		/// <summary>
 		///     Name of Customer whom the quote is for
 		/// </summary>
 		public string CustomerName { get; set; }
+
+		/// <summary>
+		///     Identifier of Property whom the quote is for
+		/// </summary>
+		public int PropertyId { get; set; }
 
 		/// <summary>
 		///     Name of Property whom the quote is for
@@ -78,7 +83,7 @@ namespace Backend.API.Models
 		///     The sales tax for the property at the time the quote was added
 		/// </summary>
 		public decimal SalesTaxRate { get; set; }
-	
+
 		/// <summary>
 		///     The total sales tax for the quote
 		/// </summary>
@@ -140,7 +145,7 @@ namespace Backend.API.Models
 		public string SeasonDesc { get; set; }
 
 		/// <summary>
-		/// Collection of items related to quote
+		///     Collection of items related to quote
 		/// </summary>
 		public List<QuoteItemData> Items { get; set; }
 	}

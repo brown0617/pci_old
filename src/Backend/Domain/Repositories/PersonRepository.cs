@@ -25,10 +25,11 @@ namespace Backend.Domain.Repositories
 			return _ctx.People.FirstOrDefault(x => x.Id == id);
 		}
 
-		public void Save(Person entity)
+		public Person Save(Person entity)
 		{
 			_ctx.People.AddOrUpdate(entity);
 			_ctx.SaveChanges();
+			return entity;
 		}
 
 		public void Delete(Person entity)

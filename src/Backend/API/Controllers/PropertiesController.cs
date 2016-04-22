@@ -32,7 +32,7 @@ namespace Backend.API.Controllers
 		public IEnumerable<PropertyData> GetByCustomerId(int customerId)
 		{
 			var propertyData = new List<PropertyData>();
-			var property = _repository.Get().Where(w => w.CustomerId == customerId);
+			var property = _repository.FilterByCustomer(customerId);
 			_mapper.Map(property, propertyData);
 			return propertyData.OrderBy(x => x.Name);
 		}

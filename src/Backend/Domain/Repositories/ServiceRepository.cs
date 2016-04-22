@@ -29,7 +29,7 @@ namespace Backend.Domain.Repositories
 			throw new NotImplementedException();
 		}
 
-		public void Save(Service entity)
+		public Service Save(Service entity)
 		{
 			throw new NotImplementedException();
 		}

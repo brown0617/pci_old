@@ -29,7 +29,7 @@ namespace Backend.Domain.Repositories
 			throw new NotImplementedException();
 		}
 
-		public void Save(Material entity)
+		public Material Save(Material entity)
 		{
 			throw new NotImplementedException();
 		}

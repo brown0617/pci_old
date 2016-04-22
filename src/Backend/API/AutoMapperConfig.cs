@@ -25,7 +25,7 @@ namespace Backend.API
 
 			// Property
 			CreateMap<Property, PropertyData>()
-				.ForMember(dto => dto.CustomerName, opts => opts.MapFrom(ent => ent.Customer.Name))
+				//.ForMember(dto => dto.CustomerName, opts => opts.MapFrom(ent => ent.Customer.Name))
 				.ForMember(dto => dto.PrimaryContactName, opts => opts.MapFrom(ent => ent.PrimaryContact.FullName));
 			CreateMap<PropertyData, Property>();
 
@@ -36,7 +36,7 @@ namespace Backend.API
 			// Quote
 			CreateMap<Quote, QuoteData>()
 				.ForMember(dto => dto.PropertyName, opts => opts.MapFrom(ent => ent.Property.Name))
-				.ForMember(dto => dto.CustomerName, opts => opts.MapFrom(ent => ent.Property.Customer.Name))
+				.ForMember(dto => dto.CustomerName, opts => opts.MapFrom(ent => ent.Customer.Name))
 				.ForMember(dto => dto.Items, opts => opts.MapFrom(ent => ent.Items));
 			CreateMap<QuoteData, Quote>()
 				.ForMember(ent => ent.BillingDayDesc, opts => opts.Ignore())

@@ -10,6 +10,7 @@ namespace Backend.Domain.Entities
 		public decimal Price { get; set; }
 		public decimal Cost { get; set; }
 		public int? GlItemId { get; set; }
+		public bool CompleteCare { get; set; }
 
 		#region remove after migration
 

@@ -51,13 +51,13 @@ namespace Backend.Domain.Entities
 		[ForeignKey("AddressCountyId")]
 		public virtual County County { get; set; }
 
-		/// <summary>
-		///     Foreign key for customer
-		/// </summary>
-		public int? CustomerId { get; set; }
+		///// <summary>
+		/////     Foreign key for customer
+		///// </summary>
+		//public int? CustomerId { get; set; }
 
-		[ForeignKey("CustomerId")]
-		public virtual Customer Customer { get; set; }
+		//[ForeignKey("CustomerId")]
+		//public virtual Customer Customer { get; set; }
 
 		/// <summary>
 		///     Foreign key for primary contact

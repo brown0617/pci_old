@@ -35,10 +35,10 @@ namespace Backend.API.Controllers
 			return quoteData;
 		}
 
-		public void Put([FromBody] QuoteData quoteData)
+		public QuoteData Put([FromBody] QuoteData quoteData)
 		{
 			var quote = _mapper.Map(quoteData, new Quote());
-			_repository.Save(quote);
+			return _mapper.Map(_repository.Save(quote), quoteData);
 		}
 
 		[Route("new")]

@@ -18,9 +18,10 @@ namespace Backend.Domain.Repositories
 		public IEnumerable<Property> FilterByCustomer(int customerId)
 		{
 			return
-				_ctx.Properties.Where(w => w.CustomerId == customerId)
-					.Include(c => c.Customer)
-					.Include(pc => pc.PrimaryContact)
+				_ctx.Quotes.Where(w => w.CustomerId == customerId)
+					.Include(p => p.Property)
+					//.Include(pc => pc.Property.PrimaryContact)
+					.Select(s => s.Property)
 					.ToList();
 		}
 
@@ -31,7 +32,7 @@ namespace Backend.Domain.Repositories
 
 		public IEnumerable<Property> Get()
 		{
-			return _ctx.Properties.Include(c => c.Customer).ToList();
+			return _ctx.Properties.ToList();
 		}
 
 		public Property Get(int id)
@@ -44,7 +45,7 @@ namespace Backend.Domain.Repositories
 			throw new NotImplementedException();
 		}
 
-		public void Save(Property entity)
+		public Property Save(Property entity)
 		{
 			throw new NotImplementedException();
 		}
