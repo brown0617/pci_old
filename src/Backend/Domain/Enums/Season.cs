@@ -3,6 +3,7 @@
 	public enum Season
 	{
 		[EnumDescription("Summer")] Summer = 1,
-		[EnumDescription("Winter")] Winter = 2
+		[EnumDescription("Winter")] Winter = 2,
+		[EnumDescription("Both")] Both = 3
 	}
 }

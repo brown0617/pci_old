@@ -3,8 +3,9 @@
 	public enum ServiceFrequency
 	{
 		[EnumDescription("Weekly")] Weekly = 1,
-		[EnumDescription("Monthly")] Monthly = 2,
-		[EnumDescription("Annually")] Annually = 3,
-		[EnumDescription("As Needed")] AsNeeded = 4
+		[EnumDescription("Biweekly")] Biweekly = 2,
+		[EnumDescription("Monthly")] Monthly = 3,
+		[EnumDescription("Annually")] Annually = 4,
+		[EnumDescription("As Needed")] AsNeeded = 5
 	}
 }

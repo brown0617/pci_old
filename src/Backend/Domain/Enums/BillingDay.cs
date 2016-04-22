@@ -3,6 +3,7 @@
 	public enum BillingDay
 	{
 		[EnumDescription("1st")] First = 1,
-		[EnumDescription("15th")] Fifteenth = 15
+		[EnumDescription("15th")] Fifteenth = 2,
+		[EnumDescription("Last")] Last = 3
 	}
 }
