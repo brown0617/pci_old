@@ -13,17 +13,21 @@
 	<br/>
 	<div class="row">
 		<div class="col-md-12">
-			<div class="col-md-6">
+			<div class="col-md-4">
 				<label>Labor</label>
-				<select type="text" class="form-control" ng-model="ctrl.item.Service" ng-options="service as service.Name for service in ctrl.services track by service.Id" ng-change="ctrl.updatePrice()"></select>
+				<select class="form-control" ng-model="ctrl.item.Service" ng-options="service as service.Name for service in ctrl.services track by service.Id" ng-change="ctrl.serviceChanged()"></select>
 			</div>
 			<div class="col-md-2">
-				<label>Man Hours</label>
-				<input type="text" class="form-control text-right" ng-model="ctrl.item.ServiceQuantity" ng-change="ctrl.calcServiceTotal()"/>
+				<label>Unit Cost</label>
+				<input type="text" class="form-control text-right" ng-model="ctrl.item.ServiceUnitCost"/>
 			</div>
 			<div class="col-md-2">
 				<label>Unit Price</label>
 				<input type="text" class="form-control text-right" ng-model="ctrl.item.ServiceUnitPrice" ng-change="ctrl.calcServiceTotal()"/>
+			</div>
+			<div class="col-md-2">
+				<label>Man Hours</label>
+				<input type="text" class="form-control text-right" ng-model="ctrl.item.ServiceQuantity" ng-change="ctrl.calcServiceTotal()"/>
 			</div>
 			<div class="col-md-2">
 				<label>Price</label>
@@ -34,21 +38,24 @@
 	<br/>
 	<div class="row">
 		<div class="col-md-12">
-			<div class="col-md-6">
+			<div class="col-md-4">
 				<label>Materials</label>
 			</div>
 			<div class="col-md-2">
-				<label>Quantity</label>
+				<label>Unit Cost</label>
 			</div>
 			<div class="col-md-2">
 				<label>Unit Price</label>
+			</div>
+			<div class="col-md-2">
+				<label>Quantity</label>
 			</div>
 			<div class="col-md-2">
 				<label>Price</label>
 			</div>
 		</div>
 		<div class="col-md-12">
-			<div class="col-md-6">
+			<div class="col-md-4">
 				<input type="text"
 				       ng-model="ctrl.item.Material"
 				       placeholder="Type the material name"
@@ -63,10 +70,13 @@
 				</div>
 			</div>
 			<div class="col-md-2">
-				<input type="text" class="form-control text-right" ng-model="ctrl.item.MaterialQuantity" ng-change="ctrl.calcMaterialTotal()"/>
+				<input type="text" class="form-control text-right" ng-model="ctrl.item.MaterialUnitCost"/>
 			</div>
 			<div class="col-md-2">
 				<input type="text" class="form-control text-right" ng-model="ctrl.item.MaterialUnitPrice" ng-change="ctrl.calcMaterialTotal()"/>
+			</div>
+			<div class="col-md-2">
+				<input type="text" class="form-control text-right" ng-model="ctrl.item.MaterialQuantity" ng-change="ctrl.calcMaterialTotal()"/>
 			</div>
 			<div class="col-md-2">
 				<input type="text" class="form-control text-right" ng-model="ctrl.item.MaterialPrice | number:2" readonly/>

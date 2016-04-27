@@ -12,7 +12,7 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 			controller: 'QuoteItemModalCtrl',
 			controllerAs: 'ctrl',
 			resolve: {
-				itemModel: function () {
+				itemModel: function() {
 					return itemModel;
 				}
 			}
@@ -43,20 +43,29 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 	};
 
 	self.calculateTotals = function() {
-		var labor = 0, materials = 0;
+		var laborPrice = 0, materialsPrice = 0, laborCost = 0, materialsCost = 0;
 		_.each(self.quoteItems, function(item) {
-				labor += item.ServicePrice || 0;
-				materials += item.MaterialPrice || 0;
+				laborPrice += item.ServicePrice || 0;
+				laborCost += item.ServiceCost || 0;
+				materialsPrice += item.MaterialPrice || 0;
+				materialsCost += item.MaterialCost || 0;
 			}
 		);
-		var preTaxTotal = labor + materials;
+
+		// cost
+		self.quote.TotalCostLabor = laborCost;
+		self.quote.TotalCostMaterials = materialsCost;
+		self.quote.TotalCost = laborCost + materialsCost;
+
+		// price
+		var preTaxTotal = laborPrice + materialsPrice;
 		var salesTax = self.quote.Taxable ? preTaxTotal * self.quote.SalesTaxRate : 0;
 
-		self.quote.TotalAmountLabor = labor;
-		self.quote.TotalAmountMaterials = materials;
-		self.quote.TotalAmountPretax = preTaxTotal;
+		self.quote.TotalPriceLabor = laborPrice;
+		self.quote.TotalPriceMaterials = materialsPrice;
+		self.quote.TotalPricePretax = preTaxTotal;
 		self.quote.SalesTaxAmount = salesTax;
-		self.quote.TotalAmount = preTaxTotal + salesTax;
+		self.quote.TotalPrice = preTaxTotal + salesTax;
 	};
 
 	self.editItem = function(item) {
@@ -66,6 +75,22 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 			// update item in model
 			var index = self.quoteItems.indexOf(item);
 			self.quoteItems[index] = editedItem;
+
+			// recalculate totals
+			self.calculateTotals();
+
+			// set form dirty
+			self.form.$setDirty();
+		});
+	};
+
+
+	self.addItem = function() {
+		var itemToAdd = { quoteType: self.quote.Type, item: { QuoteId: self.quote.Id } };
+		var modalInstance = getModalInstance(itemToAdd);
+		modalInstance.result.then(function(newItem) {
+			// add item to model
+			self.quoteItems.push(newItem);
 
 			// recalculate totals
 			self.calculateTotals();

@@ -15,6 +15,7 @@ namespace Backend.API
 
 			// Material
 			CreateMap<Material, MaterialData>();
+			CreateMap<MaterialData, Material>();
 
 			// Option
 			CreateMap<Option, OptionData>();

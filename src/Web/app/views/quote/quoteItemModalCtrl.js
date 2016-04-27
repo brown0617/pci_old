@@ -13,9 +13,15 @@ function QuoteItemModalCtrl($q, $uibModalInstance, serviceData, optionData, mate
 		self.quoteType = itemModel.quoteType;
 	});
 
+	self.serviceChanged = function() {
+		self.item.ServiceId = self.item.Service.Id;
+		this.updatePrice();
+	}
+
 	// 
 	self.updatePrice = function() {
 		self.item.ServiceUnitPrice = self.item.Service.Price;
+		self.item.ServiceUnitCost = self.item.Service.Cost;
 		this.calcServiceTotal();
 	};
 

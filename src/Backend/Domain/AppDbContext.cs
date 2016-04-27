@@ -205,10 +205,10 @@ namespace Backend.Domain
 						Status = (QuoteStatus) quote.quote.StatusCode,
 						Taxable = (quote.quoteExt.New_Taxable ?? true),
 						Title = quote.quote.Name,
-						TotalAmountLabor = (quote.quoteExt.New_TotalAmountLabor ?? 0),
-						TotalAmountMaterials = (quote.quoteExt.New_TotalAmountMaterials ?? 0),
-						TotalAmountPretax = (quote.quoteExt.New_TotalAmountPretax ?? 0),
-						TotalAmountQuote = (quote.quoteExt.New_TotalAmountQuote ?? 0),
+						TotalLaborPrice = (quote.quoteExt.New_TotalAmountLabor ?? 0),
+						TotalMaterialPrice = (quote.quoteExt.New_TotalAmountMaterials ?? 0),
+						TotalPricePretax = (quote.quoteExt.New_TotalAmountPretax ?? 0),
+						TotalPrice = (quote.quoteExt.New_TotalAmountQuote ?? 0),
 						TotalEstimatedManHours = (quote.quoteExt.New_TotalManHoursEst ?? 0),
 						Type = (QuoteType) (quote.quoteExt.New_QuoteType ?? 0)
 					};

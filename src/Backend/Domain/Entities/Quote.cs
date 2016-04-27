@@ -89,11 +89,6 @@ namespace Backend.Domain.Entities
 		}
 
 		/// <summary>
-		///     The total amount for materials
-		/// </summary>
-		public decimal TotalAmountMaterials { get; set; }
-
-		/// <summary>
 		///     The sales tax for the property at the time the quote was added
 		/// </summary>
 		public decimal SalesTaxRate { get; set; }
@@ -104,19 +99,39 @@ namespace Backend.Domain.Entities
 		public decimal SalesTaxAmount { get; set; }
 
 		/// <summary>
-		///     The total amount for the quote
+		///     The total amount for labor
 		/// </summary>
-		public decimal TotalAmountQuote { get; set; }
+		public decimal TotalLaborPrice { get; set; }
+
+		/// <summary>
+		///     The total amount for materials
+		/// </summary>
+		public decimal TotalMaterialPrice { get; set; }
 
 		/// <summary>
 		///     The total pre-tax amount for the quote
 		/// </summary>
-		public decimal TotalAmountPretax { get; set; }
+		public decimal TotalPricePretax { get; set; }
 
 		/// <summary>
-		///     The total amount for labor
+		///     The total cost for the quote
 		/// </summary>
-		public decimal TotalAmountLabor { get; set; }
+		public decimal TotalPrice { get; set; }
+
+		/// <summary>
+		///     The total cost for labor
+		/// </summary>
+		public decimal TotalCostLabor { get; set; }
+
+		/// <summary>
+		///     The total cost for materials
+		/// </summary>
+		public decimal TotalCostMaterials { get; set; }
+
+		/// <summary>
+		///     The total cost for the quote
+		/// </summary>
+		public decimal TotalCost { get; set; }
 
 		/// <summary>
 		///     The total estimated man hours

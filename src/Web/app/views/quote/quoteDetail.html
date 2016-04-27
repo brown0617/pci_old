@@ -1,11 +1,11 @@
 ﻿<form name="quoteDtl.form" role="form" class="form-horizontal" save-registration>
-	<br />
+	<br/>
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<div class="form-group" ng-if="quoteDtl.quote.Type===3">
 				<label class="col-md-2" for="quoteTitle">Quote Title</label>
 				<div class="col-md-10">
-					<input type="text" id="quoteTitle" class="form-control" ng-model="quoteDtl.quote.Title" />
+					<input type="text" id="quoteTitle" class="form-control" ng-model="quoteDtl.quote.Title"/>
 				</div>
 			</div>
 			<div class="form-group">
@@ -42,19 +42,19 @@
 				<div class="form-group">
 					<label class="col-md-7">Year</label>
 					<div class="col-md-5">
-						<input type="text" id="contractYear" class="form-control text-right" ng-model="quoteDtl.quote.ContractYear" />
+						<input type="text" id="contractYear" class="form-control text-right" ng-model="quoteDtl.quote.ContractYear"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-md-7">Term (Years)</label>
 					<div class="col-md-5">
-						<input type="text" id="contractTermYears" class="form-control text-right" ng-model="quoteDtl.quote.ContractTermYears" ng-change="quoteDtl.setIncrease()" />
+						<input type="text" id="contractTermYears" class="form-control text-right" ng-model="quoteDtl.quote.ContractTermYears" ng-change="quoteDtl.setIncrease()"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-md-7">Increase %</label>
 					<div class="col-md-5">
-						<input type="text" id="annualIncreasePercentage" class="form-control text-right" ng-model="quoteDtl.quote.AnnualIncreasePercentage" ng-disabled="quoteDtl.quote.ContractTermYears<=1" />
+						<input type="text" id="annualIncreasePercentage" class="form-control text-right" ng-model="quoteDtl.quote.AnnualIncreasePercentage" ng-disabled="quoteDtl.quote.ContractTermYears<=1"/>
 					</div>
 				</div>
 			</div>
@@ -62,11 +62,11 @@
 				<div class="form-group">
 					<label class="col-md-5"># Payments</label>
 					<div class="col-md-4">
-						<input type="text" id="numberOfPayments" class="form-control text-right" ng-model="quoteDtl.quote.NumberOfPayments" />
+						<input type="text" id="numberOfPayments" class="form-control text-right" ng-model="quoteDtl.quote.NumberOfPayments"/>
 					</div>
 					<div class="checkbox-inline">
 						<label>
-							<input type="checkbox" id="taxable" ng-model="quoteDtl.quote.Taxable" ng-change="quoteDtl.calculateTotals()" />Tax?
+							<input type="checkbox" id="taxable" ng-model="quoteDtl.quote.Taxable" ng-change="quoteDtl.calculateTotals()"/>Tax?
 						</label>
 					</div>
 
@@ -89,26 +89,46 @@
 	<div class="col-md-12 panel panel-default">
 		<div class="panel-body">
 			<div class="form-group">
-				<label class="col-md-6">Labor</label>
-				<div class="col-md-6">
-					<input type="text" id="totalAmountLabor" class="form-control text-right" ng-model="quoteDtl.quote.TotalAmountLabor | number: 2" readonly />
+				<div class="col-md-4"></div>
+				<label class="col-md-4 text-center">Price</label>
+				<label class="col-md-4 text-center">Cost</label>
+			</div>
+			<div class="form-group">
+				<label class="col-md-4">Labor</label>
+				<div class="col-md-4">
+					<input type="text" id="TotalPriceLabor" class="form-control text-right" ng-model="quoteDtl.quote.TotalPriceLabor | number: 2" readonly/>
+				</div>
+				<div class="col-md-4">
+					<input type="text" id="TotalCostLabor" class="form-control text-right" ng-model="quoteDtl.quote.TotalCostLabor | number: 2" readonly/>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-md-6">Materials</label>
-				<div class="col-md-6">
-					<input type="text" id="totalAmountMaterials" class="form-control text-right" ng-model="quoteDtl.quote.TotalAmountMaterials | number: 2" readonly />
+				<label class="col-md-4">Materials</label>
+				<div class="col-md-4">
+					<input type="text" id="TotalPriceMaterials" class="form-control text-right" ng-model="quoteDtl.quote.TotalPriceMaterials | number: 2" readonly/>
+				</div>
+				<div class="col-md-4">
+					<input type="text" id="TotalCostMaterials" class="form-control text-right" ng-model="quoteDtl.quote.TotalCostMaterials | number: 2" readonly/>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-md-6">Total</label>
-				<div class="col-md-6">
-					<input type="text" id="totalAmountPretax" class="form-control text-right" ng-model="quoteDtl.quote.TotalAmountPretax | number: 2" readonly />
+				<label class="col-md-4">Total</label>
+				<div class="col-md-4">
+					<input type="text" id="TotalPricePretax" class="form-control text-right" ng-model="quoteDtl.quote.TotalPricePretax | number: 2" readonly/>
+				</div>
+				<div class="col-md-4">
+					<input type="text" id="TotalCost" class="form-control text-right" ng-model="quoteDtl.quote.TotalCost | number: 2" readonly/>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="col-md-12">
 		<div id="quoteItemsGrid" class="grid" ui-grid="quoteDtl.gridConfig"></div>
+	</div>
+	<br/>
+	<div class="form-group">
+		<div class="col-md-12 text-right">
+			<button type="button" class="btn btn-primary" ng-click="quoteDtl.addItem()">New</button>
+		</div>
 	</div>
 </form>
