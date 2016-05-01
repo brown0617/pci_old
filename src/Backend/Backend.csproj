@@ -149,6 +149,7 @@
     <Compile Include="Domain\AppDbContext.cs" />
     <Compile Include="Domain\Entities\County.cs" />
     <Compile Include="Domain\Entities\GlItem.cs" />
+    <Compile Include="Domain\Entities\IRowState.cs" />
     <Compile Include="Domain\Entities\Material.cs" />
     <Compile Include="Domain\Entities\Option.cs" />
     <Compile Include="Domain\Entities\Person.cs" />

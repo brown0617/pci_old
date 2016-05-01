@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Migrations;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
@@ -31,6 +32,21 @@ namespace Backend.Domain
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 			modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+		}
+
+		public override int SaveChanges()
+		{
+			var context = ((IObjectContextAdapter)this).ObjectContext;
+			foreach (var entry in context.ObjectStateManager.GetObjectStateEntries(EntityState.Added | EntityState.Modified))
+			{
+				var entity = entry.Entity as IRowState;
+				if (entry.State == EntityState.Added)
+				{
+					if (entity != null) entity.CreatedOn = DateTime.UtcNow;
+				}
+				if (entity != null) entity.ModifiedOn = DateTime.UtcNow;
+			}
+			return base.SaveChanges();
 		}
 	}
 
@@ -188,6 +204,20 @@ namespace Backend.Domain
 
 					if (property == null) continue;
 
+					var statusCode = 0;
+					switch (quote.quote.StatusCode)
+					{
+						case 0:
+							statusCode = 0;
+							break;
+						case 1:
+							statusCode = 0;
+							break;
+						case 2:
+							statusCode = 1;
+							break;
+					}
+
 					var newQuote = new Quote
 					{
 						AnnualIncreasePercentage = quote.quoteExt.New_AnnualIncrease ?? 0,
@@ -202,7 +232,7 @@ namespace Backend.Domain
 						SalesTaxAmount = (quote.quoteExt.New_SalesTaxAmount ?? 0),
 						SalesTaxRate = property.County.SalesTaxRate,
 						Season = (Season) (quote.quoteExt.New_Season ?? 1),
-						Status = (QuoteStatus) quote.quote.StatusCode,
+						Status = (QuoteStatus) statusCode,
 						Taxable = (quote.quoteExt.New_Taxable ?? true),
 						Title = quote.quote.Name,
 						TotalLaborPrice = (quote.quoteExt.New_TotalAmountLabor ?? 0),
@@ -210,7 +240,9 @@ namespace Backend.Domain
 						TotalPricePretax = (quote.quoteExt.New_TotalAmountPretax ?? 0),
 						TotalPrice = (quote.quoteExt.New_TotalAmountQuote ?? 0),
 						TotalEstimatedManHours = (quote.quoteExt.New_TotalManHoursEst ?? 0),
-						Type = (QuoteType) (quote.quoteExt.New_QuoteType ?? 0)
+						Type = (QuoteType) (quote.quoteExt.New_QuoteType ?? 0),
+						CreatedOn = (quote.quote.CreatedOn ?? DateTime.UtcNow),
+						ModifiedOn = (quote.quote.ModifiedOn ?? DateTime.UtcNow)
 					};
 
 					pciContext.Quotes.Add(newQuote);
@@ -244,12 +276,14 @@ namespace Backend.Domain
 				}
 				pciContext.Services.Add(new Service
 				{
-					Name = product.p.Name,
-					Description = product.p.Description,
+					Name = CleanProductName(product.p.Name),
+					Description = product.pe.New_Description,
 					Cost = (product.p.CurrentCost ?? 0),
 					Price = (product.p.Price ?? 0),
 					GlItemId = glItemId,
-					CrmProductId = product.p.ProductId
+					CrmProductId = product.p.ProductId,
+					CompleteCare = product.pe.New_Description != null,
+					Season = Season.Summer
 				});
 			}
 			pciContext.SaveChanges();
@@ -324,7 +358,9 @@ namespace Backend.Domain
 					ServicePrice = (quoteItem.qd.ExtendedAmount ?? 0),
 					ServiceQuantity = (quoteItem.qd.Quantity ?? 0),
 					ServiceUnitPrice = (quoteItem.qd.PricePerUnit ?? 0),
-					Visits = (quoteItem.qde.New_Visits ?? 0)
+					Visits = (quoteItem.qde.New_Visits ?? 0),
+					CreatedOn = (quoteItem.qd.CreatedOn ?? DateTime.UtcNow),
+					ModifiedOn = (quoteItem.qd.ModifiedOn ?? DateTime.UtcNow)
 				};
 				pciContext.QuoteItems.Add(newQuoteItem);
 				pciContext.SaveChanges();
@@ -350,6 +386,14 @@ namespace Backend.Domain
 			}
 
 			return _people.Where(w => w.CrmContactId == crmContactId).Select(x => x.Id).FirstOrDefault();
+		}
+
+		private string CleanProductName(string productName)
+		{
+			var newProductName = productName.Replace("Maintenance, ", "");
+			newProductName = newProductName.Replace("Service, ", "");
+			newProductName = newProductName.Replace("Labor, ", "");
+			return newProductName;
 		}
 
 		//private int? GetCustomerId(Guid? crmAccountId)

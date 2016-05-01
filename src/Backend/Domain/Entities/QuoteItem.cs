@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Domain.Entities
 {
-	public class QuoteItem
+	public class QuoteItem:IRowState
 	{
 		public int Id { get; set; }
 		public int QuoteId { get; set; }
@@ -39,5 +39,20 @@ namespace Backend.Domain.Entities
 		public int? BillingStart { get; set; }
 		public DateTime? ServiceDeadline { get; set; }
 		public int? ServiceFrequency { get; set; }
+
+		/// <summary>
+		///     Date the row was created
+		/// </summary>
+		public DateTime CreatedOn { get; set; }
+
+		/// <summary>
+		///     Date the row was deleted
+		/// </summary>
+		public DateTime? DeletedOn { get; set; }
+
+		/// <summary>
+		///     Date the row was modified last
+		/// </summary>
+		public DateTime ModifiedOn { get; set; }
 	}
 }

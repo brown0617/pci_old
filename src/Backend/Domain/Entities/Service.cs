@@ -1,4 +1,5 @@
 ﻿using System;
+using Backend.Domain.Enums;
 
 namespace Backend.Domain.Entities
 {
@@ -11,6 +12,7 @@ namespace Backend.Domain.Entities
 		public decimal Cost { get; set; }
 		public int? GlItemId { get; set; }
 		public bool CompleteCare { get; set; }
+		public Season Season { get; set; }
 
 		#region remove after migration
 

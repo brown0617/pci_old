@@ -20,5 +20,7 @@ namespace Backend.Domain.Migration
 		public decimal? ExtendedAmount { get; set; }
 		public string Description { get; set; }
 		public decimal? ManualDiscountAmount { get; set; }
+		public DateTime? CreatedOn { get; set; }
+		public DateTime? ModifiedOn { get; set; }
 	}
 }

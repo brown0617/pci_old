@@ -15,6 +15,7 @@ function QuoteItemModalCtrl($q, $uibModalInstance, serviceData, optionData, mate
 
 	self.serviceChanged = function() {
 		self.item.ServiceId = self.item.Service.Id;
+		self.item.Description = self.item.Service.Description;
 		this.updatePrice();
 	}
 

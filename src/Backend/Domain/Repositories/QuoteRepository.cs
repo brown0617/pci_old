@@ -19,17 +19,26 @@ namespace Backend.Domain.Repositories
 
 		public IEnumerable<Quote> Get()
 		{
-			return _ctx.Quotes.Include("Property").Include("Customer").ToList();
+			return
+				_ctx.Quotes.Where(w => w.DeletedOn == null).Include("Property").Include("Customer").ToList();
 		}
 
 		public Quote Get(int id)
 		{
-			return _ctx.Quotes.Include(c => c.Property).Include(i => i.Items).FirstOrDefault(x => x.Id == id);
+			var quote =
+				_ctx.Quotes.Where(x => x.Id == id).Include(c => c.Property)
+					.Select(q => new
+					{
+						quote = q,
+						items = q.Items.Where(w => w.DeletedOn == null)
+					});
+
+			return quote.AsEnumerable().Select(s => s.quote).FirstOrDefault();
 		}
 
 		public Quote New()
 		{
-			return new Quote();
+			return new Quote {CreatedOn = DateTime.UtcNow};
 		}
 
 		public Quote Save(Quote entity)
@@ -39,7 +48,7 @@ namespace Backend.Domain.Repositories
 			_ctx.SaveChanges();
 
 			// add/update quote items
-			if (entity.Type == QuoteType.Installment)
+			if (entity.Type == QuoteType.Installment && !entity.Items.Any())
 			{
 				_ctx.Services.Where(w => w.CompleteCare).ToList().ForEach(service => _ctx.QuoteItems.Add(new QuoteItem
 				{
@@ -49,7 +58,8 @@ namespace Backend.Domain.Repositories
 					ServicePrice = service.Price,
 					ServiceQuantity = 1,
 					ServiceUnitCost = service.Cost,
-					ServiceUnitPrice = service.Price
+					ServiceUnitPrice = service.Price,
+					Description = service.Description
 				}));
 			}
 			else

@@ -19,6 +19,7 @@ function QuoteCtrl($state, $filter, $uibModal, quoteData) {
 			{ field: 'ContractYear', displayName: 'Year', width: '7%' },
 			{ field: 'TypeDesc', displayName: 'Type', width: '13%' },
 			{ field: 'SeasonDesc', displayName: 'Season', width: '10%' },
+			{ field: 'StatusDesc', displayName: 'Status', width: '7%' },
 			{ name: 'edit', displayName: '', cellTemplate: '<a class="btn" ui-sref="pci.quoteDetail({id: row.entity.Id})"><i class="fa fa-pencil-square-o"></i></a>', width: '5%' }
 		]
 	};

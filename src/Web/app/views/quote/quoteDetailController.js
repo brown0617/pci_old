@@ -100,6 +100,19 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 		});
 	};
 
+	self.deleteItem = function(item) {
+		var index = self.quoteItems.indexOf(item);
+		self.quoteItems[index].DeletedOn = new Date();
+
+		self.quoteItems = $filter('filter')(self.quote.Items, { DeletedOn: null });
+
+		// recalculate totals
+		self.calculateTotals();
+
+		// set form dirty
+		self.form.$setDirty();
+	};
+
 	self.gridConfig = {
 		data: 'quoteDtl.quoteItems',
 		multiSelect: false,
@@ -107,12 +120,23 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 			{ field: 'Service.Name', displayName: 'Service', width: '20%' },
 			{ field: 'Description', displayName: 'Description' },
 			{ field: 'ServiceQuantity', displayName: 'Man Hours', width: '10%', cellClass: 'text-right' },
-			{ name: 'edit', displayName: '', cellTemplate: '<a class="btn" ng-click="grid.appScope.quoteDtl.editItem(row.entity)"><i class="fa fa-pencil-square-o"></i></a>', width: '5%' }
+			{
+				name: 'edit',
+				displayName: '',
+				cellTemplate: '<a class="btn btn-sm" ng-click="grid.appScope.quoteDtl.editItem(row.entity)"><i class="fa fa-pencil-square-o"></i></a><a class="btn btn-sm" ng-click="grid.appScope.quoteDtl.deleteItem(row.entity)"><i class="fa fa-trash-o"></i></a>',
+				width: '7%',
+				enableSorting: false,
+				enableHiding: false
+			}
 		]
 	};
 
 	this.cancel = function() {
-		return quoteData.get($stateParams.id);
+
+		return quoteData.get($stateParams.id).then(function(response) {
+			self.quote = response.data;
+			self.quoteItems = $filter('orderBy')(self.quote.Items, 'Service.Name');
+		});
 	};
 
 	this.save = function() {
