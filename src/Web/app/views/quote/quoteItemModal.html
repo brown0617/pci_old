@@ -6,7 +6,12 @@
 		<div class="col-md-12">
 			<div class="col-md-4">
 				<label>Labor</label>
-				<select class="form-control" ng-model="ctrl.item.Service" ng-options="service as service.Name for service in ctrl.services track by service.Id" ng-change="ctrl.serviceChanged()"></select>
+				<ui-select ng-model="ctrl.item.Service" theme="bootstrap" ng-change="ctrl.serviceChanged()">
+					<ui-select-match placeholder="Select a service">{{$select.selected.Name}}</ui-select-match>
+					<ui-select-choices repeat="service in ctrl.services | filter: $select.search ">
+						<span ng-bind-html="service.Name | highlight: $select.search"></span>
+					</ui-select-choices>
+				</ui-select>
 			</div>
 			<div class="col-md-2">
 				<label>Unit Cost</label>

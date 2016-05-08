@@ -22,19 +22,34 @@
 				<div class="form-group">
 					<label class="col-md-4" for="type">Type</label>
 					<div class="col-md-8">
-						<select id="type" class="form-control" ng-model="quoteDtl.quote.Type" ng-options="type.Id as type.Name for type in quoteDtl.types"></select>
+						<ui-select ng-model="quoteDtl.quote.Type" theme="bootstrap">
+							<ui-select-match placeholder="Select a type">{{$select.selected.Name}}</ui-select-match>
+							<ui-select-choices repeat="type.Id as type in quoteDtl.types | filter: $select.search ">
+								<span ng-bind-html="type.Name | highlight: $select.search"></span>
+							</ui-select-choices>
+						</ui-select>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-md-4" for="season">Season</label>
 					<div class="col-md-8">
-						<select id="season" class="form-control" ng-model="quoteDtl.quote.Season" ng-options="season.Id as season.Name for season in quoteDtl.seasons"></select>
+						<ui-select ng-model="quoteDtl.quote.Season" theme="bootstrap">
+							<ui-select-match placeholder="Select a season">{{$select.selected.Name}}</ui-select-match>
+							<ui-select-choices repeat="season.Id as season in quoteDtl.seasons | filter: $select.search ">
+								<span ng-bind-html="season.Name | highlight: $select.search"></span>
+							</ui-select-choices>
+						</ui-select>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-4" for="contractTermYears">Status</label>
-					<div class="col-md-8">
-						<select id="status" class="form-control" ng-model="quoteDtl.quote.Status" ng-options="status.Id as status.Name for status in quoteDtl.statuses"></select>
+					<label class="col-md-4" for="status">Status</label>
+					<div ng-class="quoteDtl.quote.StatusDesc === 'Open' ? 'col-md-6' : 'col-md-8'">
+						<input id="status" type="text" class="form-control" ng-model="quoteDtl.quote.StatusDesc" readonly/>
+					</div>
+					<div ng-if="quoteDtl.quote.StatusDesc === 'Open'" class="input-group-btn">
+						<a class="btn" ng-click="quoteDtl.closeQuote()">
+							<i class="fa fa-sign-out fa-1x"></i>
+						</a>
 					</div>
 				</div>
 			</div>
@@ -74,13 +89,23 @@
 				<div class="form-group">
 					<label class="col-md-5">Billing Starts</label>
 					<div class="col-md-7">
-						<select id="billingStart" class="form-control" ng-model="quoteDtl.quote.BillingStart" ng-options="month.Id as month.Name for month in quoteDtl.months"></select>
+						<ui-select ng-model="quoteDtl.quote.BillingStart" theme="bootstrap">
+							<ui-select-match placeholder="Select a month">{{$select.selected.Name}}</ui-select-match>
+							<ui-select-choices repeat="month.Id as month in quoteDtl.months | filter: $select.search ">
+								<span ng-bind-html="month.Name | highlight: $select.search"></span>
+							</ui-select-choices>
+						</ui-select>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-md-5">Billing Day</label>
 					<div class="col-md-7">
-						<select id="billingDay" class="form-control" ng-model="quoteDtl.quote.BillingDay" ng-options="billingDay.Id as billingDay.Name for billingDay in quoteDtl.billingDays"></select>
+						<ui-select ng-model="quoteDtl.quote.BillingDay" theme="bootstrap">
+							<ui-select-match placeholder="Select a day">{{$select.selected.Name}}</ui-select-match>
+							<ui-select-choices repeat="billingDay.Id as billingDay in quoteDtl.billingDays | filter: $select.search ">
+								<span ng-bind-html="billingDay.Name | highlight: $select.search"></span>
+							</ui-select-choices>
+						</ui-select>
 					</div>
 				</div>
 			</div>

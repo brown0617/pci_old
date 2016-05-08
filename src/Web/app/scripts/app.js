@@ -5,7 +5,9 @@ var app = angular.module('PCI', [
 	'ui.router',
 	'ui.bootstrap',
 	'ui.grid',
-	'ui.grid.edit'
+	'ui.grid.edit',
+	'ui.select',
+	'ngSanitize'
 ]);
 
 app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {

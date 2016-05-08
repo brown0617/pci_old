@@ -33,7 +33,7 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 		self.quoteItems = $filter('orderBy')(self.quote.Items, 'Service.Name');
 		self.billingDays = results[1].data;
 		self.months = results[2].data;
-		self.statuses = results[3].data;
+		self.statusOptions = results[3].data;
 		self.types = results[4].data;
 		self.seasons = results[5].data;
 	});
