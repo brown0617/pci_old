@@ -27,6 +27,11 @@ function quoteData($http) {
 	this.save = function(quote) {
 		return $http.put(uri, quote);
 	};
+
+	// close a quote
+	this.close = function (quote, createOrder) {
+		return $http.put(uri + '/close/?createOrder=' + createOrder, quote);
+	};
 };
 
 quoteData.$inject = ['$http'];

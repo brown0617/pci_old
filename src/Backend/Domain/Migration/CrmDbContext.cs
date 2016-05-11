@@ -17,12 +17,17 @@ namespace Backend.Domain.Migration
 		public IDbSet<CountySalesTaxExtensionBase> CountySalesTax { get; set; }
 		public IDbSet<CustomerAddressBase> CustomerAddresses { get; set; }
 		public IDbSet<GlItemBase> GlItems { get; set; }
+		public IDbSet<SalesOrderBase> SalesOrders { get; set; }
+		public IDbSet<SalesOrderExtensionBase> SalesOrdersExtension { get; set; }
+		public IDbSet<SalesOrderDetailBase> SalesOrderDetails { get; set; }
+		public IDbSet<SalesOrderDetailExtensionBase> SalesOrderDetailsExtension { get; set; }
 		public IDbSet<ProductBase> Products { get; set; }
 		public IDbSet<ProductExtensionBase> ProductsExtension { get; set; }
 		public IDbSet<QuoteBase> Quotes { get; set; }
 		public IDbSet<QuoteExtensionBase> QuotesExtension { get; set; }
 		public IDbSet<QuoteDetailBase> QuoteDetails { get; set; }
 		public IDbSet<QuoteDetailExtensionBase> QuoteDetailsExtension { get; set; }
+		public IDbSet<WorkOrderBase> WorkOrderBase { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{

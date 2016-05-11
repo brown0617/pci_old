@@ -155,7 +155,9 @@
     <Compile Include="Domain\Entities\Person.cs" />
     <Compile Include="Domain\Entities\Property.cs" />
     <Compile Include="Domain\Entities\Customer.cs" />
+    <Compile Include="Domain\Entities\Order.cs" />
     <Compile Include="Domain\Entities\Quote.cs" />
+    <Compile Include="Domain\Entities\OrderItem.cs" />
     <Compile Include="Domain\Entities\QuoteItem.cs" />
     <Compile Include="Domain\Entities\Service.cs" />
     <Compile Include="API\Models\ServiceData.cs" />
@@ -179,6 +181,11 @@
     <Compile Include="Domain\Migration\GlItemBase.cs" />
     <Compile Include="Domain\Migration\ProductBase.cs" />
     <Compile Include="Domain\Migration\ProductExtensionBase.cs" />
+    <Compile Include="Domain\Migration\WorkOrderBase.cs" />
+    <Compile Include="Domain\Migration\SalesOrderExtensionBase.cs" />
+    <Compile Include="Domain\Migration\SalesOrderDetailExtensionBase.cs" />
+    <Compile Include="Domain\Migration\SalesOrderDetailBase.cs" />
+    <Compile Include="Domain\Migration\SalesOrderBase.cs" />
     <Compile Include="Domain\Migration\QuoteDetailBase.cs" />
     <Compile Include="Domain\Migration\QuoteDetailExtensionBase.cs" />
     <Compile Include="Domain\Migration\QuoteExtensionBase.cs" />

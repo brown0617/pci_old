@@ -22,12 +22,14 @@ namespace Backend.Domain
 		public IDbSet<Customer> Customers { get; set; }
 		public IDbSet<GlItem> GlItems { get; set; }
 		public IDbSet<Material> Materials { get; set; }
+		public IDbSet<Order> Orders { get; set; }
+		public IDbSet<OrderItem> OrderItems { get; set; }
 		public IDbSet<Person> People { get; set; }
 		public IDbSet<Property> Properties { get; set; }
-		public IDbSet<Service> Services { get; set; }
-		public IDbSet<State> States { get; set; }
 		public IDbSet<Quote> Quotes { get; set; }
 		public IDbSet<QuoteItem> QuoteItems { get; set; }
+		public IDbSet<Service> Services { get; set; }
+		public IDbSet<State> States { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
@@ -36,7 +38,7 @@ namespace Backend.Domain
 
 		public override int SaveChanges()
 		{
-			var context = ((IObjectContextAdapter)this).ObjectContext;
+			var context = ((IObjectContextAdapter) this).ObjectContext;
 			foreach (var entry in context.ObjectStateManager.GetObjectStateEntries(EntityState.Added | EntityState.Modified))
 			{
 				var entity = entry.Entity as IRowState;
@@ -218,14 +220,18 @@ namespace Backend.Domain
 							break;
 					}
 
+					var crmQuoteId = quote.quote.QuoteId;
+					var contractTermYears = (quote.quoteExt.New_ContractTermYears ?? 1);
+					var annualIncreasePercentage = quote.quoteExt.New_AnnualIncrease ?? 0;
+
 					var newQuote = new Quote
 					{
-						AnnualIncreasePercentage = quote.quoteExt.New_AnnualIncrease ?? 0,
+						AnnualIncreasePercentage = annualIncreasePercentage,
 						BillingDay = (BillingDay) (quote.quoteExt.New_BillingDay ?? 1),
 						BillingStart = (Month) (quote.quoteExt.New_BillingStart ?? 1),
-						ContractTermYears = (quote.quoteExt.New_ContractTermYears ?? 1),
+						ContractTermYears = contractTermYears,
 						ContractYear = quote.quoteExt.New_ContractYear,
-						CrmQuoteId = quote.quote.QuoteId,
+						CrmQuoteId = crmQuoteId,
 						PropertyId = property.Id,
 						CustomerId = (int) customerId,
 						NumberOfPayments = (quote.quoteExt.New_NumPayments ?? 1),
@@ -247,9 +253,51 @@ namespace Backend.Domain
 
 					pciContext.Quotes.Add(newQuote);
 					pciContext.SaveChanges();
+
+					// SalesOrderBase/SalesOrderExtensionBase ==> Order
+					var orders =
+						crmContext.SalesOrders.Join(crmContext.SalesOrdersExtension, order => order.SalesOrderId,
+							orderExt => orderExt.SalesOrderId,
+							(order, orderExt) => new {order, orderExt})
+							.Where(w => w.order.QuoteId == crmQuoteId)
+							.ToList();
+
+					foreach (var order in orders)
+					{
+						if (property == null) continue;
+
+						var newOrder = new Order
+						{
+							AnnualIncreasePercentage = annualIncreasePercentage,
+							BillingDay = (BillingDay) (order.orderExt.New_BillingDay ?? 1),
+							BillingStart = (Month) (order.orderExt.New_BillingStart ?? 1),
+							ContractTermYears = contractTermYears,
+							ContractYear = order.orderExt.New_ContractYear,
+							QuoteId = newQuote.Id,
+							PropertyId = property.Id,
+							CustomerId = (int) customerId,
+							NumberOfPayments = (order.orderExt.New_NumPayments ?? 1),
+							SalesTaxAmount = (order.orderExt.New_SalesTaxAmount ?? 0),
+							SalesTaxRate = property.County.SalesTaxRate,
+							Season = (Season) (order.orderExt.New_Season ?? 1),
+							Taxable = (order.orderExt.New_Taxable ?? true),
+							Title = order.order.Name,
+							TotalLaborPrice = (order.orderExt.New_TotalAmountLabor ?? 0),
+							TotalMaterialPrice = (order.orderExt.New_TotalAmountMaterials ?? 0),
+							TotalPricePretax = (order.orderExt.New_TotalAmountPretax ?? 0),
+							TotalPrice = (order.orderExt.New_TotalAmountOrder ?? 0),
+							TotalEstimatedManHours = (order.orderExt.New_TotalManHoursEst ?? 0),
+							Type = (QuoteType) (order.orderExt.New_OrderType ?? 0),
+							CreatedOn = (order.order.CreatedOn ?? DateTime.UtcNow),
+							ModifiedOn = (order.order.ModifiedOn ?? DateTime.UtcNow),
+							CrmSalesOrderId = order.order.SalesOrderId
+						};
+
+						pciContext.Orders.Add(newOrder);
+						pciContext.SaveChanges();
+					}
 				}
 			}
-
 
 			// GlItemBase ==> GlItem
 			crmContext.GlItems.ToList().ForEach(x => pciContext.GlItems.Add(new GlItem
@@ -395,30 +443,6 @@ namespace Backend.Domain
 			newProductName = newProductName.Replace("Labor, ", "");
 			return newProductName;
 		}
-
-		//private int? GetCustomerId(Guid? crmAccountId)
-		//{
-		//	if (crmAccountId == null)
-		//	{
-		//		return null;
-		//	}
-
-		//	return _customers.Where(w => w.CrmAccountId == crmAccountId).Select(x => x.Id).FirstOrDefault();
-		//}
-
-		//private bool IsCommercialCustomer(Guid? crmAccountId)
-		//{
-		//	var crmContext = new CrmDbContext();
-
-		//	if (crmAccountId == null)
-		//	{
-		//		return false;
-		//	}
-
-		//	var account = crmContext.Accounts.FirstOrDefault(w => w.AccountId == crmAccountId);
-
-		//	return (account != null && allCrmAccounts.Any(w => w.ParentAccountId == account.AccountId));
-		//}
 
 		private bool IsCommercialProperty(Guid? crmAccountId)
 		{

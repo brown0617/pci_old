@@ -1,59 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using Backend.Domain.Enums;
 
-namespace Backend.API.Models
+namespace Backend.Domain.Entities
 {
-	public class QuoteData
+	public class Order:IRowState
 	{
 		/// <summary>
-		///     Identifier for the quote
+		///     Identifier for the order
 		/// </summary>
 		public int Id { get; set; }
 
 		/// <summary>
-		///     The title of the quote
+		///     Identifier for the quote that the order originated from
+		/// </summary>
+		public int QuoteId { get; set; }
+
+		/// <summary>
+		///     The title of the order
 		/// </summary>
 		public string Title { get; set; }
 
 		/// <summary>
-		///     Identifier of the customer that the quote is for
+		///     Identifier of the customer whom the order is for
 		/// </summary>
 		public int CustomerId { get; set; }
 
 		/// <summary>
-		///     Name of Customer whom the quote is for
+		///     Foreign key relationship to Customer
 		/// </summary>
-		public string CustomerName { get; set; }
+		[ForeignKey("CustomerId")]
+		public virtual Customer Customer { get; set; }
 
 		/// <summary>
-		///     Identifier of Property whom the quote is for
+		///     Identifier of the property whom the order is for
 		/// </summary>
 		public int PropertyId { get; set; }
 
 		/// <summary>
-		///     Name of Property whom the quote is for
+		///     Foreign key relationship to Property
 		/// </summary>
-		public string PropertyName { get; set; }
+		[ForeignKey("PropertyId")]
+		public virtual Property Property { get; set; }
 
 		/// <summary>
-		///     Int representing the status of the quote
+		///     Enum representing the type of order
 		/// </summary>
-		public int Status { get; set; }
+		public QuoteType Type { get; set; }
 
 		/// <summary>
-		///     Status description of the quote
+		///     Type description of order
 		/// </summary>
-		public string StatusDesc { get; set; }
-
-		/// <summary>
-		///     Int representing the type of quote
-		/// </summary>
-		public int Type { get; set; }
-
-		/// <summary>
-		///     Type description of quote
-		/// </summary>
-		public string TypeDesc { get; set; }
+		public virtual string TypeDesc
+		{
+			get { return Type.ToDescription(); }
+		}
 
 		/// <summary>
 		///     Base year of the Contract
@@ -68,40 +70,43 @@ namespace Backend.API.Models
 		/// <summary>
 		///     Month that billing starts
 		/// </summary>
-		public int BillingStart { get; set; }
+		public Month BillingStart { get; set; }
 
 		/// <summary>
 		///     Month description that billing starts
 		/// </summary>
-		public string BillingStartDesc { get; set; }
+		public virtual string BillingStartDesc
+		{
+			get { return BillingStart.ToDescription(); }
+		}
 
 		/// <summary>
-		///     The sales tax for the property at the time the quote was added
+		///     The sales tax for the property at the time the order was added
 		/// </summary>
 		public decimal SalesTaxRate { get; set; }
 
 		/// <summary>
-		///     The total amount for labor
-		/// </summary>
-		public decimal TotalPriceLabor { get; set; }
-
-		/// <summary>
-		///     The total amount for materials
-		/// </summary>
-		public decimal TotalPriceMaterials { get; set; }
-
-		/// <summary>
-		///     The total pre-tax amount for the quote
-		/// </summary>
-		public decimal TotalPricePretax { get; set; }
-
-		/// <summary>
-		///     The total sales tax for the quote
+		///     The total sales tax for the order
 		/// </summary>
 		public decimal SalesTaxAmount { get; set; }
 
 		/// <summary>
-		///     The total amount for the quote
+		///     The total amount for labor
+		/// </summary>
+		public decimal TotalLaborPrice { get; set; }
+
+		/// <summary>
+		///     The total amount for materials
+		/// </summary>
+		public decimal TotalMaterialPrice { get; set; }
+
+		/// <summary>
+		///     The total pre-tax amount for the order
+		/// </summary>
+		public decimal TotalPricePretax { get; set; }
+
+		/// <summary>
+		///     The total cost for the order
 		/// </summary>
 		public decimal TotalPrice { get; set; }
 
@@ -116,7 +121,7 @@ namespace Backend.API.Models
 		public decimal TotalCostMaterials { get; set; }
 
 		/// <summary>
-		///     The total cost for the quote
+		///     The total cost for the order
 		/// </summary>
 		public decimal TotalCost { get; set; }
 
@@ -126,7 +131,7 @@ namespace Backend.API.Models
 		public decimal TotalEstimatedManHours { get; set; }
 
 		/// <summary>
-		///     Indicates if quote should include sales tax
+		///     Indicates if order should include sales tax
 		/// </summary>
 		public bool Taxable { get; set; }
 
@@ -138,12 +143,12 @@ namespace Backend.API.Models
 		/// <summary>
 		///     Billing day (i.e. 1, 15, 30)
 		/// </summary>
-		public int BillingDay { get; set; }
+		public BillingDay BillingDay { get; set; }
 
 		/// <summary>
 		///     Billing day description (i.e. First, Fifteenth, Thirtieth)
 		/// </summary>
-		public string BillingDayDesc { get; set; }
+		public virtual string BillingDayDesc { get; set; }
 
 		/// <summary>
 		///     Percentage increase per year
@@ -151,19 +156,29 @@ namespace Backend.API.Models
 		public decimal AnnualIncreasePercentage { get; set; }
 
 		/// <summary>
-		///     Int representing Season (1 or 2)
+		///     Enum representing Season (1 or 2)
 		/// </summary>
-		public int Season { get; set; }
+		public Season Season { get; set; }
 
 		/// <summary>
 		///     Season description (Summer or Winter)
 		/// </summary>
-		public string SeasonDesc { get; set; }
+		public virtual string SeasonDesc
+		{
+			get { return Season.ToDescription(); }
+		}
 
 		/// <summary>
-		///     Collection of items related to quote
+		///     Collection of items related to order
 		/// </summary>
-		public List<QuoteItemData> Items { get; set; }
+		public ICollection<QuoteItem> Items { get; set; }
+
+		#region Remove after Migration
+
+		[Column("SalesOrderId")]
+		public Guid CrmSalesOrderId { get; set; }
+
+		#endregion
 
 		/// <summary>
 		///     Date the row was created

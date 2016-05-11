@@ -48,5 +48,16 @@ namespace Backend.API.Controllers
 			_mapper.Map(_repository.New(), quoteData);
 			return quoteData;
 		}
+
+		[Route("close")]
+		public QuoteData Close([FromBody] QuoteData quoteData, [FromUri] bool createOrder)
+		{
+			if (createOrder)
+			{
+				// create order with work orders
+			}
+			var quote = _mapper.Map(quoteData, new Quote());
+			return _mapper.Map(_repository.Save(quote), quoteData);
+		}
 	}
 }

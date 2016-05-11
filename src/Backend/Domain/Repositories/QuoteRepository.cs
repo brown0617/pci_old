@@ -76,5 +76,10 @@ namespace Backend.Domain.Repositories
 		{
 			throw new NotImplementedException();
 		}
+
+		public Quote Close(Quote quote, bool createOrder)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
