@@ -1,10 +1,10 @@
 ﻿'use strict';
 
-function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optionData, quoteData) {
+function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, dialogService, previousState, optionData, quoteData) {
 	var self = this;
 	self.previousState = previousState;
 
-	function getModalInstance(itemModel) {
+	function getItemModalInstance(itemModel) {
 		return $uibModal.open({
 			templateUrl: '../views/quote/quoteItemModal.html',
 			backdrop: 'static',
@@ -70,7 +70,7 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 
 	self.editItem = function(item) {
 		var itemToEdit = { quoteType: self.quote.Type, item: angular.copy(item) };
-		var modalInstance = getModalInstance(itemToEdit);
+		var modalInstance = getItemModalInstance(itemToEdit);
 		modalInstance.result.then(function(editedItem) {
 			// update item in model
 			var index = self.quoteItems.indexOf(item);
@@ -84,10 +84,9 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 		});
 	};
 
-
 	self.addItem = function() {
 		var itemToAdd = { quoteType: self.quote.Type, item: { QuoteId: self.quote.Id } };
-		var modalInstance = getModalInstance(itemToAdd);
+		var modalInstance = getItemModalInstance(itemToAdd);
 		modalInstance.result.then(function(newItem) {
 			// add item to model
 			self.quoteItems.push(newItem);
@@ -111,6 +110,18 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 
 		// set form dirty
 		self.form.$setDirty();
+	};
+
+	self.closeQuote = function() {
+		dialogService.message = 'Did you win?';
+		dialogService.title = 'Close Quote';
+		dialogService.btnYesNo = true;
+		dialogService.open().then(function(response) {
+			var createOrder = response === 'Yes';
+			quoteData.close(self.quote, createOrder).then(function(results) {
+				self.quote = results.data;
+			});
+		});
 	};
 
 	self.gridConfig = {
@@ -150,5 +161,5 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, previousState, optio
 
 }
 
-QuoteDtlCtrl.$inject = ['$stateParams', '$q', '$filter', '$uibModal', 'previousState', 'optionData', 'quoteData'];
+QuoteDtlCtrl.$inject = ['$stateParams', '$q', '$filter', '$uibModal', 'dialogService', 'previousState', 'optionData', 'quoteData'];
 app.controller('QuoteDtlCtrl', QuoteDtlCtrl);

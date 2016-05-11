@@ -33,17 +33,32 @@
 			<div class="row">
 				<div class="col-md-12">
 					<label>Customer</label>
-					<select class="form-control" ng-model="ctrl.quote.CustomerId" ng-disabled="!ctrl.quote.PropertyId" ng-options="customer.Id as customer.Name for customer in ctrl.customers"></select>
+					<ui-select ng-model="ctrl.quote.CustomerId" theme="bootstrap" ng-disabled="!ctrl.quote.PropertyId">
+						<ui-select-match placeholder="Select a customer">{{$select.selected.Name}}</ui-select-match>
+						<ui-select-choices repeat="customer.Id as customer in ctrl.customers | filter: $select.search ">
+							<span ng-bind-html="customer.Name | highlight: $select.search"></span>
+						</ui-select-choices>
+					</ui-select>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-4">
 					<label>Type</label>
-					<select class="form-control" ng-model="ctrl.quote.Type" ng-disabled="!ctrl.quote.PropertyId || !ctrl.quote.CustomerId" ng-options="quoteType.Id as quoteType.Name for quoteType in ctrl.quoteTypes"></select>
+					<ui-select ng-model="ctrl.quote.Type" theme="bootstrap" ng-disabled="!ctrl.quote.PropertyId || !ctrl.quote.CustomerId">
+						<ui-select-match placeholder="Select a type">{{$select.selected.Name}}</ui-select-match>
+						<ui-select-choices repeat="quoteType.Id as quoteType in ctrl.quoteTypes | filter: $select.search ">
+							<span ng-bind-html="quoteType.Name | highlight: $select.search"></span>
+						</ui-select-choices>
+					</ui-select>
 				</div>
 				<div class="col-md-4">
 					<label>Season</label>
-					<select class="form-control" ng-model="ctrl.quote.Season" ng-disabled="!ctrl.quote.PropertyId || !ctrl.quote.CustomerId" ng-options="season.Id as season.Name for season in ctrl.seasons"></select>
+					<ui-select ng-model="ctrl.quote.Season" theme="bootstrap" ng-disabled="!ctrl.quote.PropertyId || !ctrl.quote.CustomerId">
+						<ui-select-match placeholder="Select a season">{{$select.selected.Name}}</ui-select-match>
+						<ui-select-choices repeat="season.Id as season in ctrl.seasons | filter: $select.search ">
+							<span ng-bind-html="season.Name | highlight: $select.search"></span>
+						</ui-select-choices>
+					</ui-select>
 				</div>
 				<div class="col-md-4">
 					<label>Year</label>

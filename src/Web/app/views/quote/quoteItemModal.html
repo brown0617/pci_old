@@ -88,7 +88,12 @@
 			</div>
 			<div class="col-md-4">
 				<label>Frequency</label>
-				<select class="form-control text-right" ng-model="ctrl.item.ServiceFrequency" ng-options="option.Id as option.Name for option in ctrl.serviceFrequencyOptions"></select>
+				<ui-select ng-model="ctrl.item.ServiceFrequency" theme="bootstrap">
+					<ui-select-match placeholder="Select a frequency">{{$select.selected.Name}}</ui-select-match>
+					<ui-select-choices repeat="option.Id as option in ctrl.serviceFrequencyOptions | filter: $select.search ">
+						<span ng-bind-html="option.Name | highlight: $select.search"></span>
+					</ui-select-choices>
+				</ui-select>
 			</div>
 			<div class="col-md-4">
 				<label>Deadline</label>
@@ -105,7 +110,13 @@
 		<div class="col-md-12">
 			<div class="col-md-4">
 				<label>Billing Method</label>
-				<select class="form-control" ng-model="ctrl.item.BillingMethod" ng-options="option.Id as option.Name for option in ctrl.billingMethodOptions"></select>
+				<ui-select ng-model="ctrl.item.BillingMethod" theme="bootstrap">
+					<ui-select-match placeholder="Select a option">{{$select.selected.Name}}</ui-select-match>
+					<ui-select-choices repeat="option.Id as option in ctrl.billingMethodOptions | filter: $select.search ">
+						<span ng-bind-html="option.Name | highlight: $select.search"></span>
+					</ui-select-choices>
+				</ui-select>
+
 			</div>
 			<div class="col-md-4">
 				<label># of Payments</label>
@@ -114,7 +125,13 @@
 			<div class="col-md-4">
 				{{ctrl.item.BillingStart}}
 				<label>Billing Starts</label>
-				<select class="form-control" ng-model="ctrl.item.BillingStart" ng-options="option.Id as option.Name for option in ctrl.monthOptions"></select>
+				<select class="form-control" ng-model="" ng-options=""></select>
+				<ui-select ng-model="ctrl.item.BillingStart" theme="bootstrap">
+					<ui-select-match placeholder="Select a month">{{$select.selected.Name}}</ui-select-match>
+					<ui-select-choices repeat="option.Id as option in ctrl.monthOptions| filter: $select.search ">
+						<span ng-bind-html="option.Name | highlight: $select.search"></span>
+					</ui-select-choices>
+				</ui-select>
 			</div>
 		</div>
 	</div>
