@@ -147,6 +147,7 @@
     <Compile Include="API\Models\QuoteData.cs" />
     <Compile Include="API\Models\QuoteItemData.cs" />
     <Compile Include="Domain\AppDbContext.cs" />
+    <Compile Include="Domain\Entities\Employee.cs" />
     <Compile Include="Domain\Entities\County.cs" />
     <Compile Include="Domain\Entities\GlItem.cs" />
     <Compile Include="Domain\Entities\IRowState.cs" />
@@ -162,6 +163,8 @@
     <Compile Include="Domain\Entities\Service.cs" />
     <Compile Include="API\Models\ServiceData.cs" />
     <Compile Include="Domain\Entities\State.cs" />
+    <Compile Include="Domain\Entities\WorkOrder.cs" />
+    <Compile Include="Domain\Entities\WorkOrderTime.cs" />
     <Compile Include="Domain\Enums\BillingMethod.cs" />
     <Compile Include="Domain\Enums\BillingDay.cs" />
     <Compile Include="Domain\Enums\EnumDescription.cs" />
@@ -181,6 +184,8 @@
     <Compile Include="Domain\Migration\GlItemBase.cs" />
     <Compile Include="Domain\Migration\ProductBase.cs" />
     <Compile Include="Domain\Migration\ProductExtensionBase.cs" />
+    <Compile Include="Domain\Migration\EmployeeBase.cs" />
+    <Compile Include="Domain\Migration\WorkOrderFulfillmentBase.cs" />
     <Compile Include="Domain\Migration\WorkOrderBase.cs" />
     <Compile Include="Domain\Migration\SalesOrderExtensionBase.cs" />
     <Compile Include="Domain\Migration\SalesOrderDetailExtensionBase.cs" />

@@ -21,6 +21,7 @@ namespace Backend.Domain
 		public IDbSet<County> Counties { get; set; }
 		public IDbSet<Customer> Customers { get; set; }
 		public IDbSet<GlItem> GlItems { get; set; }
+		public IDbSet<Employee> Employees { get; set; }
 		public IDbSet<Material> Materials { get; set; }
 		public IDbSet<Order> Orders { get; set; }
 		public IDbSet<OrderItem> OrderItems { get; set; }
@@ -30,6 +31,8 @@ namespace Backend.Domain
 		public IDbSet<QuoteItem> QuoteItems { get; set; }
 		public IDbSet<Service> Services { get; set; }
 		public IDbSet<State> States { get; set; }
+		public IDbSet<WorkOrder> WorkOrders { get; set; }
+		public IDbSet<WorkOrderTime> WorkOrderTimes { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
@@ -55,6 +58,7 @@ namespace Backend.Domain
 	public class AppDbInitializer : DropCreateDatabaseIfModelChanges<AppDbContext>
 	{
 		private IEnumerable<County> _counties;
+		private IEnumerable<Employee> _employees;
 		// seed data from MS Dynamics CRM extract
 		private IEnumerable<Person> _people;
 
@@ -63,6 +67,81 @@ namespace Backend.Domain
 			base.Seed(pciContext);
 
 			var crmContext = new CrmDbContext();
+
+			// EmployeeBase ==> Employee
+			crmContext.Employees.ToList().ForEach(x => pciContext.Employees.Add(new Employee
+			{
+				Name = x.New_employeename,
+				CrmEmployeeId = x.EmployeeId,
+				DateHired = x.New_DateHired,
+				DateTerminated = x.New_DateTerminated,
+				MobilePhone = x.New_MobilePhone
+			}));
+			pciContext.SaveChanges();
+			_employees = pciContext.Employees.ToList();
+
+			// GlItemBase ==> GlItem
+			crmContext.GlItems.ToList().ForEach(x => pciContext.GlItems.Add(new GlItem
+			{
+				Name = x.New_itemname,
+				SubitemOf = x.New_Subitemof,
+				CrmGlItemId = x.GlItemId
+			}));
+			pciContext.SaveChanges();
+
+			// ProductBase/Extension ==> Service
+			var products = crmContext.Products.Join(crmContext.ProductsExtension, p => p.ProductId, pe => pe.ProductId,
+				(p, pe) => new {p, pe})
+				.Where(w => w.p.Name.StartsWith("Service") || w.p.Name.StartsWith("Maintenance") || w.p.Name.StartsWith("Labor"))
+				.ToList();
+
+			foreach (var product in products)
+			{
+				int? glItemId = null;
+				var crmGlItemId = product.pe.New_GLItemId;
+				if (crmGlItemId.HasValue)
+				{
+					glItemId = pciContext.GlItems.Where(w => w.CrmGlItemId == crmGlItemId).Select(s => s.Id).FirstOrDefault();
+				}
+				pciContext.Services.Add(new Service
+				{
+					Name = CleanProductName(product.p.Name),
+					Description = product.pe.New_Description,
+					Cost = (product.p.CurrentCost ?? 0),
+					Price = (product.p.Price ?? 0),
+					GlItemId = glItemId,
+					CrmProductId = product.p.ProductId,
+					CompleteCare = product.pe.New_Description != null,
+					Season = Season.Summer
+				});
+			}
+			pciContext.SaveChanges();
+
+			// ProductBase/Extension ==> Material
+			var materials = crmContext.Products.Join(crmContext.ProductsExtension, p => p.ProductId, pe => pe.ProductId,
+				(p, pe) => new {p, pe})
+				.Where(w => !(w.p.Name.StartsWith("Service") || w.p.Name.StartsWith("Maintenance") || w.p.Name.StartsWith("Labor")))
+				.ToList();
+
+			foreach (var material in materials)
+			{
+				int? glItemId = null;
+				var crmGlItemId = material.pe.New_GLItemId;
+				if (crmGlItemId.HasValue)
+				{
+					glItemId = pciContext.GlItems.Where(w => w.CrmGlItemId == crmGlItemId).Select(s => s.Id).FirstOrDefault();
+				}
+				pciContext.Materials.Add(new Material
+				{
+					Name = material.p.Name,
+					Description = material.p.Description,
+					Cost = (material.p.CurrentCost ?? 0),
+					Price = (material.p.Price ?? 0),
+					GlItemId = glItemId,
+					CrmProductId = material.p.ProductId
+				});
+			}
+			pciContext.SaveChanges();
 
 			// Contacts ==> People
 			crmContext.Contacts.ToList().ForEach(
@@ -207,19 +286,6 @@ namespace Backend.Domain
 					if (property == null) continue;
 
 					var statusCode = 0;
-					switch (quote.quote.StatusCode)
-					{
-						case 0:
-							statusCode = 0;
-							break;
-						case 1:
-							statusCode = 0;
-							break;
-						case 2:
-							statusCode = 1;
-							break;
-					}
-
 					var crmQuoteId = quote.quote.QuoteId;
 					var contractTermYears = (quote.quoteExt.New_ContractTermYears ?? 1);
 					var annualIncreasePercentage = quote.quoteExt.New_AnnualIncrease ?? 0;
@@ -255,112 +321,122 @@ namespace Backend.Domain
 					pciContext.SaveChanges();
 
 					// SalesOrderBase/SalesOrderExtensionBase ==> Order
-					var orders =
-						crmContext.SalesOrders.Join(crmContext.SalesOrdersExtension, order => order.SalesOrderId,
-							orderExt => orderExt.SalesOrderId,
-							(order, orderExt) => new {order, orderExt})
-							.Where(w => w.order.QuoteId == crmQuoteId)
-							.ToList();
+					var crmOrder =
+						crmContext.SalesOrders
+							.Join(crmContext.SalesOrdersExtension, order => order.SalesOrderId,
+								orderExt => orderExt.SalesOrderId,
+								(order, orderExt) => new {order, orderExt})
+							.FirstOrDefault(w => w.order.QuoteId == crmQuoteId);
 
-					foreach (var order in orders)
+					if (crmOrder == null)
 					{
-						if (property == null) continue;
-
-						var newOrder = new Order
+						// no order
+						if (newQuote.ContractYear != "2016")
 						{
-							AnnualIncreasePercentage = annualIncreasePercentage,
-							BillingDay = (BillingDay) (order.orderExt.New_BillingDay ?? 1),
-							BillingStart = (Month) (order.orderExt.New_BillingStart ?? 1),
-							ContractTermYears = contractTermYears,
-							ContractYear = order.orderExt.New_ContractYear,
-							QuoteId = newQuote.Id,
-							PropertyId = property.Id,
-							CustomerId = (int) customerId,
-							NumberOfPayments = (order.orderExt.New_NumPayments ?? 1),
-							SalesTaxAmount = (order.orderExt.New_SalesTaxAmount ?? 0),
-							SalesTaxRate = property.County.SalesTaxRate,
-							Season = (Season) (order.orderExt.New_Season ?? 1),
-							Taxable = (order.orderExt.New_Taxable ?? true),
-							Title = order.order.Name,
-							TotalLaborPrice = (order.orderExt.New_TotalAmountLabor ?? 0),
-							TotalMaterialPrice = (order.orderExt.New_TotalAmountMaterials ?? 0),
-							TotalPricePretax = (order.orderExt.New_TotalAmountPretax ?? 0),
-							TotalPrice = (order.orderExt.New_TotalAmountOrder ?? 0),
-							TotalEstimatedManHours = (order.orderExt.New_TotalManHoursEst ?? 0),
-							Type = (QuoteType) (order.orderExt.New_OrderType ?? 0),
-							CreatedOn = (order.order.CreatedOn ?? DateTime.UtcNow),
-							ModifiedOn = (order.order.ModifiedOn ?? DateTime.UtcNow),
-							CrmSalesOrderId = order.order.SalesOrderId
-						};
+							// prior year quotes, mark them as lost
+							newQuote.Status = QuoteStatus.Lost;
+							pciContext.Quotes.AddOrUpdate(newQuote);
+							pciContext.SaveChanges();
+						}
+						continue;
+					}
+					var crmSalesOrderId = crmOrder.order.SalesOrderId;
 
-						pciContext.Orders.Add(newOrder);
+					var newOrder = new Order
+					{
+						AnnualIncreasePercentage = annualIncreasePercentage,
+						BillingDay = (BillingDay) (crmOrder.orderExt.New_BillingDay ?? 1),
+						BillingStart = (Month) (crmOrder.orderExt.New_BillingStart ?? 1),
+						ContractTermYears = contractTermYears,
+						ContractYear = crmOrder.orderExt.New_ContractYear,
+						QuoteId = newQuote.Id,
+						PropertyId = property.Id,
+						CustomerId = (int) customerId,
+						NumberOfPayments = (crmOrder.orderExt.New_NumPayments ?? 1),
+						SalesTaxAmount = (crmOrder.orderExt.New_SalesTaxAmount ?? 0),
+						SalesTaxRate = property.County.SalesTaxRate,
+						Season = (Season) (crmOrder.orderExt.New_Season ?? 1),
+						Taxable = (crmOrder.orderExt.New_Taxable ?? true),
+						Title = crmOrder.order.Name,
+						TotalLaborPrice = (crmOrder.orderExt.New_TotalAmountLabor ?? 0),
+						TotalMaterialPrice = (crmOrder.orderExt.New_TotalAmountMaterials ?? 0),
+						TotalPricePretax = (crmOrder.orderExt.New_TotalAmountPretax ?? 0),
+						TotalPrice = (crmOrder.orderExt.New_TotalAmountOrder ?? 0),
+						TotalEstimatedManHours = (crmOrder.orderExt.New_TotalManHoursEst ?? 0),
+						Type = (QuoteType) (crmOrder.orderExt.New_OrderType ?? 0),
+						CreatedOn = (crmOrder.order.CreatedOn ?? DateTime.UtcNow),
+						ModifiedOn = (crmOrder.order.ModifiedOn ?? DateTime.UtcNow),
+						CrmSalesOrderId = crmSalesOrderId
+					};
+
+					pciContext.Orders.Add(newOrder);
+					pciContext.SaveChanges();
+
+					// order created, mark quote as Won
+					newQuote.Status = QuoteStatus.Won;
+					pciContext.Quotes.AddOrUpdate(newQuote);
+					pciContext.SaveChanges();
+
+					// WorkOrderBase ==> WorkOrder
+					var workOrders = crmContext.WorkOrders.Where(w => w.New_SalesOrder_WorkOrderId == crmSalesOrderId).ToList();
+
+					if (workOrders == null) continue;
+
+					foreach (var workOrder in workOrders)
+					{
+						var crmWorkOrderId = workOrder.WorkOrderId;
+
+						var newWorkOrder = new WorkOrder
+						{
+							ActualCompletion = workOrder.New_ActualCompletion,
+							ActualCrewSize = workOrder.New_ActualCrewSize,
+							ActualManHours = workOrder.New_ActualManHours,
+							ActualStart = workOrder.New_ActualStart,
+							BillingComments = workOrder.New_BillingComments,
+							Details = workOrder.New_Details,
+							ForemanId = GetEmployeeId(workOrder.New_ForemanId),
+							InvoiceNumber = workOrder.New_InvoiceNumber,
+							ManHourVariance = workOrder.New_ManHourVariance,
+							ProjectedCompletion = workOrder.New_ProjectedCompletion,
+							ProjectedStart = workOrder.New_ProjectedStart,
+							ScheduledCompletion = workOrder.New_ScheduledCompletion,
+							ScheduledCrewSize = workOrder.New_ScheduledCrewSize,
+							ScheduledStart = workOrder.New_ScheduledStart,
+							VarianceExplanation = workOrder.New_VarianceExplanation,
+							VisitNumber = workOrder.New_VisitNumber,
+							CrmWorkOrderId = crmWorkOrderId
+						};
+						pciContext.WorkOrders.AddOrUpdate(newWorkOrder);
 						pciContext.SaveChanges();
+
+						var workOrderTimes = crmContext.WorkOrderFulfillment.Where(w => w.WorkOrderId == crmWorkOrderId).ToList();
+
+						if (workOrderTimes == null) continue;
+
+						foreach (var workOrderTime in workOrderTimes)
+						{
+							var newWorkOrderTime = new WorkOrderTime
+							{
+								ActualManHours = workOrderTime.New_ActualManHours,
+								Arrival = workOrderTime.New_Arrival,
+								Break1Finish = workOrderTime.New_Break1Finish,
+								Break1Start = workOrderTime.New_Break1Start,
+								Break2Finish = workOrderTime.New_Break2Finish,
+								Break2Start = workOrderTime.New_Break2Start,
+								CrewSize = (workOrderTime.New_CrewSize ?? 0),
+								Departure = workOrderTime.New_Departure,
+								ForemanId = GetEmployeeId(workOrderTime.New_CrewForemanId),
+								JobComplete = (workOrderTime.New_JobComplete ?? false),
+								LunchFinish = workOrderTime.New_LunchFinish,
+								LunchStart = workOrderTime.New_LunchStart,
+								WorkOrderId = newWorkOrder.Id
+							};
+							pciContext.WorkOrderTimes.AddOrUpdate(newWorkOrderTime);
+							pciContext.SaveChanges();
+						}
 					}
 				}
 			}
-
-			// GlItemBase ==> GlItem
-			crmContext.GlItems.ToList().ForEach(x => pciContext.GlItems.Add(new GlItem
-			{
-				Name = x.New_itemname,
-				SubitemOf = x.New_Subitemof,
-				CrmGlItemId = x.GlItemId
-			}));
-			pciContext.SaveChanges();
-
-			// ProductBase/Extension ==> Service
-			var products = crmContext.Products.Join(crmContext.ProductsExtension, p => p.ProductId, pe => pe.ProductId,
-				(p, pe) => new {p, pe})
-				.Where(w => w.p.Name.StartsWith("Service") || w.p.Name.StartsWith("Maintenance") || w.p.Name.StartsWith("Labor"))
-				.ToList();
-
-			foreach (var product in products)
-			{
-				int? glItemId = null;
-				var crmGlItemId = product.pe.New_GLItemId;
-				if (crmGlItemId.HasValue)
-				{
-					glItemId = pciContext.GlItems.Where(w => w.CrmGlItemId == crmGlItemId).Select(s => s.Id).FirstOrDefault();
-				}
-				pciContext.Services.Add(new Service
-				{
-					Name = CleanProductName(product.p.Name),
-					Description = product.pe.New_Description,
-					Cost = (product.p.CurrentCost ?? 0),
-					Price = (product.p.Price ?? 0),
-					GlItemId = glItemId,
-					CrmProductId = product.p.ProductId,
-					CompleteCare = product.pe.New_Description != null,
-					Season = Season.Summer
-				});
-			}
-			pciContext.SaveChanges();
-
-			// ProductBase/Extension ==> Material
-			var materials = crmContext.Products.Join(crmContext.ProductsExtension, p => p.ProductId, pe => pe.ProductId,
-				(p, pe) => new {p, pe})
-				.Where(w => !(w.p.Name.StartsWith("Service") || w.p.Name.StartsWith("Maintenance") || w.p.Name.StartsWith("Labor")))
-				.ToList();
-
-			foreach (var material in materials)
-			{
-				int? glItemId = null;
-				var crmGlItemId = material.pe.New_GLItemId;
-				if (crmGlItemId.HasValue)
-				{
-					glItemId = pciContext.GlItems.Where(w => w.CrmGlItemId == crmGlItemId).Select(s => s.Id).FirstOrDefault();
-				}
-				pciContext.Materials.Add(new Material
-				{
-					Name = material.p.Name,
-					Description = material.p.Description,
-					Cost = (material.p.CurrentCost ?? 0),
-					Price = (material.p.Price ?? 0),
-					GlItemId = glItemId,
-					CrmProductId = material.p.ProductId
-				});
-			}
-			pciContext.SaveChanges();
 
 			// QuoteDetailBase/Extension ==> QuoteItem
 			var quoteItems =
@@ -413,6 +489,61 @@ namespace Backend.Domain
 				pciContext.QuoteItems.Add(newQuoteItem);
 				pciContext.SaveChanges();
 			}
+
+			// SalesOrderDetailBase/Extension ==> OrderItem
+			var orderItems =
+				crmContext.SalesOrderDetails.Join(crmContext.SalesOrderDetailsExtension, sod => sod.SalesOrderDetailId,
+					sode => sode.SalesOrderDetailId,
+					(sod, sode) => new {sod, sode})
+					.ToList();
+
+			foreach (var orderItem in orderItems)
+			{
+				var orderId =
+					pciContext.Orders.Where(w => w.CrmSalesOrderId == orderItem.sod.SalesOrderId).Select(s => s.Id).FirstOrDefault();
+				if (orderId == 0) continue;
+
+				int? serviceId = null;
+				var serviceProductId = orderItem.sod.ProductId;
+				if (serviceProductId != null)
+				{
+					serviceId = pciContext.Services.Where(w => w.CrmProductId == serviceProductId).Select(s => s.Id).FirstOrDefault();
+					serviceId = serviceId == 0 ? null : serviceId;
+				}
+				int? materialId = null;
+				var materialProductId = orderItem.sode.New_MaterialsId;
+				if (materialProductId != null)
+				{
+					materialId =
+						pciContext.Materials.Where(w => w.CrmProductId == materialProductId).Select(s => s.Id).FirstOrDefault();
+					materialId = materialId == 0 ? null : materialId;
+				}
+
+				var newOrderItem = new OrderItem
+				{
+					BillingMethod = orderItem.sode.New_BillingMethod,
+					BillingStart = orderItem.sode.New_BillingStart,
+					Description = orderItem.sode.New_Details,
+					ManualDiscountAmount = (orderItem.sod.ManualDiscountAmount ?? 0),
+					MaterialId = materialId,
+					MaterialPrice = (orderItem.sode.New_PricePerUnitMaterials ?? 0)*(orderItem.sode.New_QuantityMaterials ?? 0),
+					MaterialQuantity = (orderItem.sode.New_QuantityMaterials ?? 0),
+					MaterialUnitPrice = (orderItem.sode.New_PricePerUnitMaterials ?? 0),
+					NumberOfPayments = (orderItem.sode.New_NumPayments ?? 0),
+					OrderId = orderId,
+					ServiceDeadline = orderItem.sode.New_ServiceDeadline,
+					ServiceFrequency = orderItem.sode.New_ServiceFrequency,
+					ServiceId = serviceId,
+					ServicePrice = (orderItem.sod.ExtendedAmount ?? 0),
+					ServiceQuantity = (orderItem.sod.Quantity ?? 0),
+					ServiceUnitPrice = (orderItem.sod.PricePerUnit ?? 0),
+					Visits = (orderItem.sode.New_visits ?? 0),
+					CreatedOn = (orderItem.sod.CreatedOn ?? DateTime.UtcNow),
+					ModifiedOn = (orderItem.sod.ModifiedOn ?? DateTime.UtcNow)
+				};
+				pciContext.OrderItems.Add(newOrderItem);
+				pciContext.SaveChanges();
+			}
 		}
 
 		private int GetCountyId(Guid? countyId)
@@ -434,6 +565,18 @@ namespace Backend.Domain
 			}
 
 			return _people.Where(w => w.CrmContactId == crmContactId).Select(x => x.Id).FirstOrDefault();
+		}
+
+		private int? GetEmployeeId(Guid? crmEmployeeId)
+		{
+			if (crmEmployeeId == null)
+			{
+				return null;
+			}
+
+			var employeeId = _employees.Where(w => w.CrmEmployeeId == crmEmployeeId).Select(x => x.Id).FirstOrDefault();
+
+			return employeeId == 0 ? (int?) null : employeeId;
 		}
 
 		private string CleanProductName(string productName)

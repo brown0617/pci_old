@@ -3,6 +3,7 @@
 	public enum QuoteStatus
 	{
 		[EnumDescription("Open")] Open = 0,
-		[EnumDescription("Closed")] Closed = 1
+		[EnumDescription("Won")] Won = 1,
+		[EnumDescription("Lost")] Lost = 2
 	}
 }

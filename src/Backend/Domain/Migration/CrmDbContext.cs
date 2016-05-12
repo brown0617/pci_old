@@ -16,6 +16,7 @@ namespace Backend.Domain.Migration
 		public IDbSet<CountyExtensionBase> Counties { get; set; }
 		public IDbSet<CountySalesTaxExtensionBase> CountySalesTax { get; set; }
 		public IDbSet<CustomerAddressBase> CustomerAddresses { get; set; }
+		public IDbSet<EmployeeBase> Employees { get; set; }
 		public IDbSet<GlItemBase> GlItems { get; set; }
 		public IDbSet<SalesOrderBase> SalesOrders { get; set; }
 		public IDbSet<SalesOrderExtensionBase> SalesOrdersExtension { get; set; }
@@ -27,7 +28,8 @@ namespace Backend.Domain.Migration
 		public IDbSet<QuoteExtensionBase> QuotesExtension { get; set; }
 		public IDbSet<QuoteDetailBase> QuoteDetails { get; set; }
 		public IDbSet<QuoteDetailExtensionBase> QuoteDetailsExtension { get; set; }
-		public IDbSet<WorkOrderBase> WorkOrderBase { get; set; }
+		public IDbSet<WorkOrderBase> WorkOrders { get; set; }
+		public IDbSet<WorkOrderFulfillmentBase> WorkOrderFulfillment { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
