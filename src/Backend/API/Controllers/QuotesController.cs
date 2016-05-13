@@ -14,10 +14,12 @@ namespace Backend.API.Controllers
 	{
 		private readonly IMapper _mapper;
 		private readonly IQuoteRepository _repository;
+		private readonly IOrderRepository _orderRepository;
 
-		public QuotesController(IQuoteRepository quoteRepository, IMapper mapper)
+		public QuotesController(IQuoteRepository quoteRepository, IOrderRepository orderRepository, IMapper mapper)
 		{
 			_repository = quoteRepository;
+			_orderRepository = orderRepository;
 			_mapper = mapper;
 		}
 
@@ -55,6 +57,7 @@ namespace Backend.API.Controllers
 			if (createOrder)
 			{
 				// create order with work orders
+				var newOrder = _orderRepository.New();
 			}
 			var quote = _mapper.Map(quoteData, new Quote());
 			return _mapper.Map(_repository.Save(quote), quoteData);

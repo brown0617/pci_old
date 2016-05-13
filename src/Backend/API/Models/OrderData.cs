@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Backend.Domain.Enums;
 
-namespace Backend.Domain.Entities
+namespace Backend.API.Models
 {
-	public class Order:IRowState
+	public class OrderData
 	{
 		/// <summary>
 		///     Identifier for the order
@@ -31,7 +31,7 @@ namespace Backend.Domain.Entities
 		///     Foreign key relationship to Customer
 		/// </summary>
 		[ForeignKey("CustomerId")]
-		public virtual Customer Customer { get; set; }
+		public virtual CustomerData Customer { get; set; }
 
 		/// <summary>
 		///     Identifier of the property whom the order is for
@@ -42,7 +42,7 @@ namespace Backend.Domain.Entities
 		///     Foreign key relationship to Property
 		/// </summary>
 		[ForeignKey("PropertyId")]
-		public virtual Property Property { get; set; }
+		public virtual PropertyData Property { get; set; }
 
 		/// <summary>
 		///     Enum representing the type of order
@@ -171,14 +171,7 @@ namespace Backend.Domain.Entities
 		/// <summary>
 		///     Collection of items related to order
 		/// </summary>
-		public ICollection<OrderItem> Items { get; set; }
-
-		#region Remove after Migration
-
-		[Column("SalesOrderId")]
-		public Guid CrmSalesOrderId { get; set; }
-
-		#endregion
+		public ICollection<OrderItemData> Items { get; set; }
 
 		/// <summary>
 		///     Date the row was created

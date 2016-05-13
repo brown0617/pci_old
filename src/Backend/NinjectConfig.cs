@@ -15,6 +15,7 @@ namespace Backend
 			kernel.Bind<ICustomerRepository>().To<CustomerRepository>();
 			kernel.Bind<IMaterialRepository>().To<MaterialRepository>();
 			kernel.Bind<IOptionRepository>().To<OptionRepository>();
+			kernel.Bind<IOrderRepository>().To<OrderRepository>();
 			kernel.Bind<IPersonRepository>().To<PersonRepository>();
 			kernel.Bind<IPropertyRepository>().To<PropertyRepository>();
 			kernel.Bind<IQuoteRepository>().To<QuoteRepository>();

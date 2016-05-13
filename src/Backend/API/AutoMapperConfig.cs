@@ -20,6 +20,10 @@ namespace Backend.API
 			// Option
 			CreateMap<Option, OptionData>();
 
+			// Order
+			CreateMap<Order, OrderData>();
+			CreateMap<OrderData, Order>();
+
 			// Person
 			CreateMap<Person, PersonData>();
 			CreateMap<PersonData, Person>();
