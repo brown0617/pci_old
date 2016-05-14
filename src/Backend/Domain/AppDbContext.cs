@@ -320,6 +320,60 @@ namespace Backend.Domain
 					pciContext.Quotes.Add(newQuote);
 					pciContext.SaveChanges();
 
+					// QuoteDetailBase/Extension ==> QuoteItem
+					var quoteItems =
+						crmContext.QuoteDetails.Join(crmContext.QuoteDetailsExtension, qd => qd.QuoteDetailId, qde => qde.QuoteDetailId,
+							(qd, qde) => new {qd, qde})
+							.Where(w => w.qd.QuoteId == crmQuoteId)
+							.ToList();
+					foreach (var quoteItem in quoteItems)
+					{
+						var quoteId =
+							pciContext.Quotes.Where(w => w.CrmQuoteId == quoteItem.qd.QuoteId).Select(s => s.Id).FirstOrDefault();
+						if (quoteId == 0) continue;
+
+						int? serviceId = null;
+						var serviceProductId = quoteItem.qd.ProductId;
+						if (serviceProductId != null)
+						{
+							serviceId = pciContext.Services.Where(w => w.CrmProductId == serviceProductId).Select(s => s.Id).FirstOrDefault();
+							serviceId = serviceId == 0 ? null : serviceId;
+						}
+						int? materialId = null;
+						var materialProductId = quoteItem.qde.New_MaterialsId;
+						if (materialProductId != null)
+						{
+							materialId =
+								pciContext.Materials.Where(w => w.CrmProductId == materialProductId).Select(s => s.Id).FirstOrDefault();
+							materialId = materialId == 0 ? null : materialId;
+						}
+
+						var newQuoteItem = new QuoteItem
+						{
+							BillingMethod = quoteItem.qde.New_BillingMethod,
+							BillingStart = quoteItem.qde.New_BillingStart,
+							Description = quoteItem.qde.New_Details,
+							ManualDiscountAmount = (quoteItem.qd.ManualDiscountAmount ?? 0),
+							MaterialId = materialId,
+							MaterialPrice = (quoteItem.qde.New_PricePerUnit_Materials ?? 0)*(quoteItem.qde.New_QuantityMaterials ?? 0),
+							MaterialQuantity = (quoteItem.qde.New_QuantityMaterials ?? 0),
+							MaterialUnitPrice = (quoteItem.qde.New_PricePerUnit_Materials ?? 0),
+							NumberOfPayments = (quoteItem.qde.New_NumPayments ?? 0),
+							QuoteId = quoteId,
+							ServiceDeadline = quoteItem.qde.New_ServiceDeadline,
+							ServiceFrequency = quoteItem.qde.New_ServiceFrequency,
+							ServiceId = serviceId,
+							ServicePrice = (quoteItem.qd.ExtendedAmount ?? 0),
+							ServiceQuantity = (quoteItem.qd.Quantity ?? 0),
+							ServiceUnitPrice = (quoteItem.qd.PricePerUnit ?? 0),
+							Visits = (quoteItem.qde.New_Visits ?? 0),
+							CreatedOn = (quoteItem.qd.CreatedOn ?? DateTime.UtcNow),
+							ModifiedOn = (quoteItem.qd.ModifiedOn ?? DateTime.UtcNow)
+						};
+						pciContext.QuoteItems.Add(newQuoteItem);
+						pciContext.SaveChanges();
+					}
+
 					// SalesOrderBase/SalesOrderExtensionBase ==> Order
 					var crmOrder =
 						crmContext.SalesOrders
@@ -377,172 +431,124 @@ namespace Backend.Domain
 					pciContext.Quotes.AddOrUpdate(newQuote);
 					pciContext.SaveChanges();
 
-					// WorkOrderBase ==> WorkOrder
-					var workOrders = crmContext.WorkOrders.Where(w => w.New_SalesOrder_WorkOrderId == crmSalesOrderId).ToList();
+					// SalesOrderDetailBase/Extension ==> OrderItem
+					var orderItems =
+						crmContext.SalesOrderDetails.Join(crmContext.SalesOrderDetailsExtension, sod => sod.SalesOrderDetailId,
+							sode => sode.SalesOrderDetailId,
+							(sod, sode) => new {sod, sode})
+							.Where(w => w.sod.SalesOrderId == crmSalesOrderId)
+							.ToList();
 
-					if (workOrders == null) continue;
-
-					foreach (var workOrder in workOrders)
+					foreach (var orderItem in orderItems)
 					{
-						var crmWorkOrderId = workOrder.WorkOrderId;
+						var orderId =
+							pciContext.Orders.Where(w => w.CrmSalesOrderId == orderItem.sod.SalesOrderId).Select(s => s.Id).FirstOrDefault();
+						if (orderId == 0) continue;
 
-						var newWorkOrder = new WorkOrder
+						int? serviceId = null;
+						var serviceProductId = orderItem.sod.ProductId;
+						if (serviceProductId != null)
 						{
-							ActualCompletion = workOrder.New_ActualCompletion,
-							ActualCrewSize = workOrder.New_ActualCrewSize,
-							ActualManHours = workOrder.New_ActualManHours,
-							ActualStart = workOrder.New_ActualStart,
-							BillingComments = workOrder.New_BillingComments,
-							Details = workOrder.New_Details,
-							ForemanId = GetEmployeeId(workOrder.New_ForemanId),
-							InvoiceNumber = workOrder.New_InvoiceNumber,
-							ManHourVariance = workOrder.New_ManHourVariance,
-							ProjectedCompletion = workOrder.New_ProjectedCompletion,
-							ProjectedStart = workOrder.New_ProjectedStart,
-							ScheduledCompletion = workOrder.New_ScheduledCompletion,
-							ScheduledCrewSize = workOrder.New_ScheduledCrewSize,
-							ScheduledStart = workOrder.New_ScheduledStart,
-							VarianceExplanation = workOrder.New_VarianceExplanation,
-							VisitNumber = workOrder.New_VisitNumber,
-							CrmWorkOrderId = crmWorkOrderId
+							serviceId = pciContext.Services.Where(w => w.CrmProductId == serviceProductId).Select(s => s.Id).FirstOrDefault();
+							serviceId = serviceId == 0 ? null : serviceId;
+						}
+						int? materialId = null;
+						var materialProductId = orderItem.sode.New_MaterialsId;
+						if (materialProductId != null)
+						{
+							materialId =
+								pciContext.Materials.Where(w => w.CrmProductId == materialProductId).Select(s => s.Id).FirstOrDefault();
+							materialId = materialId == 0 ? null : materialId;
+						}
+
+						var newOrderItem = new OrderItem
+						{
+							BillingMethod = orderItem.sode.New_BillingMethod,
+							BillingStart = orderItem.sode.New_BillingStart,
+							Description = orderItem.sode.New_Details,
+							ManualDiscountAmount = (orderItem.sod.ManualDiscountAmount ?? 0),
+							MaterialId = materialId,
+							MaterialPrice = (orderItem.sode.New_PricePerUnitMaterials ?? 0)*(orderItem.sode.New_QuantityMaterials ?? 0),
+							MaterialQuantity = (orderItem.sode.New_QuantityMaterials ?? 0),
+							MaterialUnitPrice = (orderItem.sode.New_PricePerUnitMaterials ?? 0),
+							NumberOfPayments = (orderItem.sode.New_NumPayments ?? 0),
+							OrderId = orderId,
+							ServiceDeadline = orderItem.sode.New_ServiceDeadline,
+							ServiceFrequency = orderItem.sode.New_ServiceFrequency,
+							ServiceId = serviceId,
+							ServicePrice = (orderItem.sod.ExtendedAmount ?? 0),
+							ServiceQuantity = (orderItem.sod.Quantity ?? 0),
+							ServiceUnitPrice = (orderItem.sod.PricePerUnit ?? 0),
+							Visits = (orderItem.sode.New_visits ?? 0),
+							CreatedOn = (orderItem.sod.CreatedOn ?? DateTime.UtcNow),
+							ModifiedOn = (orderItem.sod.ModifiedOn ?? DateTime.UtcNow)
 						};
-						pciContext.WorkOrders.AddOrUpdate(newWorkOrder);
+						pciContext.OrderItems.Add(newOrderItem);
 						pciContext.SaveChanges();
 
-						var workOrderTimes = crmContext.WorkOrderFulfillment.Where(w => w.WorkOrderId == crmWorkOrderId).ToList();
+						// WorkOrderBase ==> WorkOrder
+						var workOrders =
+							crmContext.WorkOrders.Where(
+								w => w.New_SalesOrder_WorkOrderId == crmSalesOrderId && w.New_Details == newOrderItem.Description).ToList();
 
-						if (workOrderTimes == null) continue;
+						if (workOrders == null) continue;
 
-						foreach (var workOrderTime in workOrderTimes)
+						foreach (var workOrder in workOrders)
 						{
-							var newWorkOrderTime = new WorkOrderTime
+							var crmWorkOrderId = workOrder.WorkOrderId;
+
+							var newWorkOrder = new WorkOrder
 							{
-								ActualManHours = workOrderTime.New_ActualManHours,
-								Arrival = workOrderTime.New_Arrival,
-								Break1Finish = workOrderTime.New_Break1Finish,
-								Break1Start = workOrderTime.New_Break1Start,
-								Break2Finish = workOrderTime.New_Break2Finish,
-								Break2Start = workOrderTime.New_Break2Start,
-								CrewSize = (workOrderTime.New_CrewSize ?? 0),
-								Departure = workOrderTime.New_Departure,
-								ForemanId = GetEmployeeId(workOrderTime.New_CrewForemanId),
-								JobComplete = (workOrderTime.New_JobComplete ?? false),
-								LunchFinish = workOrderTime.New_LunchFinish,
-								LunchStart = workOrderTime.New_LunchStart,
-								WorkOrderId = newWorkOrder.Id
+								ActualCompletion = workOrder.New_ActualCompletion,
+								ActualCrewSize = workOrder.New_ActualCrewSize,
+								ActualManHours = workOrder.New_ActualManHours,
+								ActualStart = workOrder.New_ActualStart,
+								BillingComments = workOrder.New_BillingComments,
+								Details = workOrder.New_Details,
+								ForemanId = GetEmployeeId(workOrder.New_ForemanId),
+								InvoiceNumber = workOrder.New_InvoiceNumber,
+								ManHourVariance = workOrder.New_ManHourVariance,
+								OrderItemId = newOrderItem.Id,
+								ProjectedCompletion = workOrder.New_ProjectedCompletion,
+								ProjectedStart = workOrder.New_ProjectedStart,
+								ScheduledCompletion = workOrder.New_ScheduledCompletion,
+								ScheduledCrewSize = workOrder.New_ScheduledCrewSize,
+								ScheduledStart = workOrder.New_ScheduledStart,
+								VarianceExplanation = workOrder.New_VarianceExplanation,
+								VisitNumber = workOrder.New_VisitNumber,
+								CrmWorkOrderId = crmWorkOrderId
 							};
-							pciContext.WorkOrderTimes.AddOrUpdate(newWorkOrderTime);
+							pciContext.WorkOrders.AddOrUpdate(newWorkOrder);
 							pciContext.SaveChanges();
+
+							var workOrderTimes = crmContext.WorkOrderFulfillment.Where(w => w.WorkOrderId == crmWorkOrderId).ToList();
+
+							if (workOrderTimes == null) continue;
+
+							foreach (var workOrderTime in workOrderTimes)
+							{
+								var newWorkOrderTime = new WorkOrderTime
+								{
+									ActualManHours = workOrderTime.New_ActualManHours,
+									Arrival = workOrderTime.New_Arrival,
+									Break1Finish = workOrderTime.New_Break1Finish,
+									Break1Start = workOrderTime.New_Break1Start,
+									Break2Finish = workOrderTime.New_Break2Finish,
+									Break2Start = workOrderTime.New_Break2Start,
+									CrewSize = (workOrderTime.New_CrewSize ?? 0),
+									Departure = workOrderTime.New_Departure,
+									ForemanId = GetEmployeeId(workOrderTime.New_CrewForemanId),
+									JobComplete = (workOrderTime.New_JobComplete ?? false),
+									LunchFinish = workOrderTime.New_LunchFinish,
+									LunchStart = workOrderTime.New_LunchStart,
+									WorkOrderId = newWorkOrder.Id
+								};
+								pciContext.WorkOrderTimes.AddOrUpdate(newWorkOrderTime);
+								pciContext.SaveChanges();
+							}
 						}
 					}
 				}
-			}
-
-			// QuoteDetailBase/Extension ==> QuoteItem
-			var quoteItems =
-				crmContext.QuoteDetails.Join(crmContext.QuoteDetailsExtension, qd => qd.QuoteDetailId, qde => qde.QuoteDetailId,
-					(qd, qde) => new {qd, qde})
-					.ToList();
-			foreach (var quoteItem in quoteItems)
-			{
-				var quoteId = pciContext.Quotes.Where(w => w.CrmQuoteId == quoteItem.qd.QuoteId).Select(s => s.Id).FirstOrDefault();
-				if (quoteId == 0) continue;
-
-				int? serviceId = null;
-				var serviceProductId = quoteItem.qd.ProductId;
-				if (serviceProductId != null)
-				{
-					serviceId = pciContext.Services.Where(w => w.CrmProductId == serviceProductId).Select(s => s.Id).FirstOrDefault();
-					serviceId = serviceId == 0 ? null : serviceId;
-				}
-				int? materialId = null;
-				var materialProductId = quoteItem.qde.New_MaterialsId;
-				if (materialProductId != null)
-				{
-					materialId =
-						pciContext.Materials.Where(w => w.CrmProductId == materialProductId).Select(s => s.Id).FirstOrDefault();
-					materialId = materialId == 0 ? null : materialId;
-				}
-
-				var newQuoteItem = new QuoteItem
-				{
-					BillingMethod = quoteItem.qde.New_BillingMethod,
-					BillingStart = quoteItem.qde.New_BillingStart,
-					Description = quoteItem.qde.New_Details,
-					ManualDiscountAmount = (quoteItem.qd.ManualDiscountAmount ?? 0),
-					MaterialId = materialId,
-					MaterialPrice = (quoteItem.qde.New_PricePerUnit_Materials ?? 0)*(quoteItem.qde.New_QuantityMaterials ?? 0),
-					MaterialQuantity = (quoteItem.qde.New_QuantityMaterials ?? 0),
-					MaterialUnitPrice = (quoteItem.qde.New_PricePerUnit_Materials ?? 0),
-					NumberOfPayments = (quoteItem.qde.New_NumPayments ?? 0),
-					QuoteId = quoteId,
-					ServiceDeadline = quoteItem.qde.New_ServiceDeadline,
-					ServiceFrequency = quoteItem.qde.New_ServiceFrequency,
-					ServiceId = serviceId,
-					ServicePrice = (quoteItem.qd.ExtendedAmount ?? 0),
-					ServiceQuantity = (quoteItem.qd.Quantity ?? 0),
-					ServiceUnitPrice = (quoteItem.qd.PricePerUnit ?? 0),
-					Visits = (quoteItem.qde.New_Visits ?? 0),
-					CreatedOn = (quoteItem.qd.CreatedOn ?? DateTime.UtcNow),
-					ModifiedOn = (quoteItem.qd.ModifiedOn ?? DateTime.UtcNow)
-				};
-				pciContext.QuoteItems.Add(newQuoteItem);
-				pciContext.SaveChanges();
-			}
-
-			// SalesOrderDetailBase/Extension ==> OrderItem
-			var orderItems =
-				crmContext.SalesOrderDetails.Join(crmContext.SalesOrderDetailsExtension, sod => sod.SalesOrderDetailId,
-					sode => sode.SalesOrderDetailId,
-					(sod, sode) => new {sod, sode})
-					.ToList();
-
-			foreach (var orderItem in orderItems)
-			{
-				var orderId =
-					pciContext.Orders.Where(w => w.CrmSalesOrderId == orderItem.sod.SalesOrderId).Select(s => s.Id).FirstOrDefault();
-				if (orderId == 0) continue;
-
-				int? serviceId = null;
-				var serviceProductId = orderItem.sod.ProductId;
-				if (serviceProductId != null)
-				{
-					serviceId = pciContext.Services.Where(w => w.CrmProductId == serviceProductId).Select(s => s.Id).FirstOrDefault();
-					serviceId = serviceId == 0 ? null : serviceId;
-				}
-				int? materialId = null;
-				var materialProductId = orderItem.sode.New_MaterialsId;
-				if (materialProductId != null)
-				{
-					materialId =
-						pciContext.Materials.Where(w => w.CrmProductId == materialProductId).Select(s => s.Id).FirstOrDefault();
-					materialId = materialId == 0 ? null : materialId;
-				}
-
-				var newOrderItem = new OrderItem
-				{
-					BillingMethod = orderItem.sode.New_BillingMethod,
-					BillingStart = orderItem.sode.New_BillingStart,
-					Description = orderItem.sode.New_Details,
-					ManualDiscountAmount = (orderItem.sod.ManualDiscountAmount ?? 0),
-					MaterialId = materialId,
-					MaterialPrice = (orderItem.sode.New_PricePerUnitMaterials ?? 0)*(orderItem.sode.New_QuantityMaterials ?? 0),
-					MaterialQuantity = (orderItem.sode.New_QuantityMaterials ?? 0),
-					MaterialUnitPrice = (orderItem.sode.New_PricePerUnitMaterials ?? 0),
-					NumberOfPayments = (orderItem.sode.New_NumPayments ?? 0),
-					OrderId = orderId,
-					ServiceDeadline = orderItem.sode.New_ServiceDeadline,
-					ServiceFrequency = orderItem.sode.New_ServiceFrequency,
-					ServiceId = serviceId,
-					ServicePrice = (orderItem.sod.ExtendedAmount ?? 0),
-					ServiceQuantity = (orderItem.sod.Quantity ?? 0),
-					ServiceUnitPrice = (orderItem.sod.PricePerUnit ?? 0),
-					Visits = (orderItem.sode.New_visits ?? 0),
-					CreatedOn = (orderItem.sod.CreatedOn ?? DateTime.UtcNow),
-					ModifiedOn = (orderItem.sod.ModifiedOn ?? DateTime.UtcNow)
-				};
-				pciContext.OrderItems.Add(newOrderItem);
-				pciContext.SaveChanges();
 			}
 		}
 

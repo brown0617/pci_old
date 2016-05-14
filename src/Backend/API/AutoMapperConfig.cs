@@ -50,6 +50,18 @@ namespace Backend.API
 				.ForMember(ent => ent.BillingStartDesc, opts => opts.Ignore())
 				.ForMember(ent => ent.TypeDesc, opts => opts.Ignore());
 
+			// QuoteItemData to OrderItem
+			CreateMap<QuoteItemData, OrderItem>();
+
+			// QuoteData to Order
+			CreateMap<QuoteData, Order>()
+				.ForMember(ent => ent.BillingDayDesc, opts => opts.Ignore())
+				.ForMember(ent => ent.SeasonDesc, opts => opts.Ignore())
+				.ForMember(ent => ent.BillingStartDesc, opts => opts.Ignore())
+				.ForMember(ent => ent.TypeDesc, opts => opts.Ignore())
+				.ForMember(ent => ent.Id, opts => opts.Ignore())
+				.ForMember(ent => ent.QuoteId, opts => opts.MapFrom(dto => dto.Id));
+
 			// Service
 			CreateMap<Service, ServiceData>();
 			CreateMap<ServiceData, Service>();

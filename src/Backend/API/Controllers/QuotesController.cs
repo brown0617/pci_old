@@ -4,6 +4,7 @@ using System.Web.Http;
 using AutoMapper;
 using Backend.API.Models;
 using Backend.Domain.Entities;
+using Backend.Domain.Enums;
 using Backend.Domain.Repositories;
 
 namespace Backend.API.Controllers
@@ -13,8 +14,8 @@ namespace Backend.API.Controllers
 	public class QuotesController : ApiController
 	{
 		private readonly IMapper _mapper;
-		private readonly IQuoteRepository _repository;
 		private readonly IOrderRepository _orderRepository;
+		private readonly IQuoteRepository _repository;
 
 		public QuotesController(IQuoteRepository quoteRepository, IOrderRepository orderRepository, IMapper mapper)
 		{
@@ -52,14 +53,28 @@ namespace Backend.API.Controllers
 		}
 
 		[Route("close")]
-		public QuoteData Close([FromBody] QuoteData quoteData, [FromUri] bool createOrder)
+		public QuoteData PutClosedOrder([FromBody] QuoteData quoteData, [FromUri] bool createOrder)
 		{
+			var quote = _mapper.Map(quoteData, new Quote());
+
 			if (createOrder)
 			{
-				// create order with work orders
+				// won
 				var newOrder = _orderRepository.New();
+
+				// create order from quote
+				_mapper.Map(quoteData, newOrder);
+				_orderRepository.Save(newOrder);
+
+				// update quote status
+				quote.Status = QuoteStatus.Won;
 			}
-			var quote = _mapper.Map(quoteData, new Quote());
+			else
+			{
+				// lost
+				quote.Status = QuoteStatus.Lost;
+			}
+
 			return _mapper.Map(_repository.Save(quote), quoteData);
 		}
 	}

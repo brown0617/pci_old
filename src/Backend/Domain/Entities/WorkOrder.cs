@@ -6,6 +6,11 @@ namespace Backend.Domain.Entities
 	public class WorkOrder
 	{
 		public int Id { get; set; }
+		public int OrderItemId { get; set; }
+
+		[ForeignKey("OrderItemId")]
+		public virtual OrderItem OrderItem { get; set; }
+
 		public string Details { get; set; }
 		public DateTime? ScheduledStart { get; set; }
 		public DateTime? ScheduledCompletion { get; set; }

@@ -32,7 +32,25 @@ namespace Backend.Domain.Repositories
 
 		public Order Save(Order entity)
 		{
+			var newOrder = entity.Id == 0;
+
 			_ctx.Orders.AddOrUpdate(entity);
+			_ctx.SaveChanges();
+
+			if (newOrder)
+				// create work order records
+				entity.Items.ToList().ForEach(x =>
+					_ctx.WorkOrders.Add(new WorkOrder
+					{
+						OrderItemId = x.Id,
+						Details = x.Description,
+						VisitNumber = 1,
+						ScheduledCompletion = x.ServiceDeadline
+					})
+					);
+
+			_ctx.SaveChanges();
+
 			return entity;
 		}
 
