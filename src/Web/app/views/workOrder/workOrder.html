@@ -1,0 +1,13 @@
+﻿<form role="form" class="form-horizontal">
+	<br />
+	<div class="col-md-12">
+		<div class="form-group">
+			<div class="col-md-8 col-md-offset-2">
+				<input ng-model="workOrder.searchText" class="form-control" ng-change="workOrder.filterGridData()" placeholder="Search...">
+			</div>
+		</div>
+		<div class="col-md-12">
+			<div class="gridStyle" ui-grid="workOrder.gridConfig"></div>
+		</div>
+	</div>
+</form>

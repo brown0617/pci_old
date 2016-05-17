@@ -149,6 +149,7 @@
     <Compile Include="API\Models\PersonData.cs" />
     <Compile Include="API\Models\QuoteData.cs" />
     <Compile Include="API\Models\QuoteItemData.cs" />
+    <Compile Include="API\Models\WorkOrderData.cs" />
     <Compile Include="Domain\AppDbContext.cs" />
     <Compile Include="Domain\Entities\Employee.cs" />
     <Compile Include="Domain\Entities\County.cs" />

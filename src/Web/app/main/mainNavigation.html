@@ -24,26 +24,34 @@
 
 			</li>
 			<li ui-sref-active="active">
-				<a ui-sref="pci.customer" ui-sref-active="active">
-					<i class="fa fa-group"></i> <span class="nav-label">Customers</span>
+				<a ui-sref="pci.sales" ui-sref-active="active">
+					<i class="fa fa-group"></i> <span class="nav-label">Sales</span>
 				</a>
 				<ul class="nav-pills nav-stacked" style="list-style-type: none;">
 					<li ui-sref-active="active">
 						<a ui-sref="pci.quote" ui-sref-active="active">Quotes</a>
 					</li>
 					<li>
-						<a ui-sref="" ui-sref-active="active">Sales Orders</a>
+						<a ui-sref="pci.orders" ui-sref-active="active">Sales Orders</a>
 					</li>
-					<li>
-						<a ui-sref="" ui-sref-active="active">Invoices</a>
+					<li ui-sref-active="active">
+						<a ui-sref="pci.customer" ui-sref-active="active">Customers</a>
 					</li>
 				</ul>
 				<a ui-sref="pci.property" ui-sref-active="active">
-					<i class="fa fa-home"></i> <span class="nav-label">Properties</span>
+					<i class="fa fa-home"></i> <span class="nav-label">Production</span>
 				</a>
 				<ul class="nav-pills nav-stacked" style="list-style-type: none;">
 					<li ui-sref-active="active">
-						<a ui-sref="">Work Orders</a>
+						<a ui-sref="pci.workOrder">Work Orders</a>
+					</li>
+				</ul>
+				<a ui-sref="pci.accounting" ui-sref-active="active">
+					<i class="fa fa-group"></i> <span class="nav-label">Accounting</span>
+				</a>
+				<ul class="nav-pills nav-stacked" style="list-style-type: none;">
+					<li ui-sref-active="active">
+						<a ui-sref="pci.invoices" ui-sref-active="active">Invoices</a>
 					</li>
 				</ul>
 			</li>

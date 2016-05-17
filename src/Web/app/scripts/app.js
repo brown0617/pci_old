@@ -11,7 +11,7 @@ var app = angular.module('PCI', [
 ]);
 
 app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
-	$urlRouterProvider.otherwise('/pci/customer');
+	$urlRouterProvider.otherwise('/pci/quote');
 
 	$stateProvider
 		.state('pci', {
@@ -121,6 +121,15 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 			controllerAs: 'propertyDtl',
 			data: {
 				module: 'Property Detail',
+				tools: [{ name: 'search' }]
+			}
+		}).state('pci.workOrder', {
+			url: '/workOrder',
+			templateUrl: '../views/workOrder/workOrder.html',
+			controller: 'WorkOrderCtrl',
+			controllerAs: 'workOrder',
+			data: {
+				module: 'Work Orders',
 				tools: [{ name: 'search' }]
 			}
 		});
