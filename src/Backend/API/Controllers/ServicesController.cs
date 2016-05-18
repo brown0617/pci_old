@@ -12,9 +12,9 @@ namespace Backend.API.Controllers
 		private readonly IMapper _mapper;
 		private readonly IServiceRepository _repository;
 
-		public ServicesController(IServiceRepository quoteRepository, IMapper mapper)
+		public ServicesController(IServiceRepository serviceRepository, IMapper mapper)
 		{
-			_repository = quoteRepository;
+			_repository = serviceRepository;
 			_mapper = mapper;
 		}
 

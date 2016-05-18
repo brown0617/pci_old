@@ -24,6 +24,13 @@ namespace Backend.API
 			CreateMap<Order, OrderData>();
 			CreateMap<OrderData, Order>();
 
+			// OrderNoItems
+			CreateMap<Order, OrderDataNoItems>();
+
+			// Order
+			CreateMap<OrderItem, OrderItemData>();
+			CreateMap<OrderItemData, OrderItem>();
+
 			// Person
 			CreateMap<Person, PersonData>();
 			CreateMap<PersonData, Person>();
@@ -65,6 +72,10 @@ namespace Backend.API
 			// Service
 			CreateMap<Service, ServiceData>();
 			CreateMap<ServiceData, Service>();
+
+			// WorkOrder
+			CreateMap<WorkOrder, WorkOrderData>();
+			CreateMap<WorkOrderData, WorkOrder>();
 		}
 	}
 }

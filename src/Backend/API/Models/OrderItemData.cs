@@ -9,7 +9,7 @@ namespace Backend.API.Models
 		public int OrderId { get; set; }
 
 		[ForeignKey("OrderId")]
-		public virtual OrderData Order { get; set; }
+		public virtual OrderDataNoItems Order { get; set; }
 
 		public string Description { get; set; }
 		public int? ServiceId { get; set; }

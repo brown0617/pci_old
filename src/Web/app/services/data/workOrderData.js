@@ -5,7 +5,12 @@ function workOrderData($http) {
 
 	//	fetch all work orders
 	this.getAll = function() {
-		return $http.get(uri);
+		return $http.get(uri + '/all');
+	};
+
+	//	fetch all active work orders
+	this.getAll = function() {
+		return $http.get(uri + '/active');
 	};
 
 	//	fetch a work order by id

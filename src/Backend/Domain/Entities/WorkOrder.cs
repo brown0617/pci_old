@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Domain.Entities
 {
-	public class WorkOrder
+	public class WorkOrder :IRowState
 	{
 		public int Id { get; set; }
 		public int OrderItemId { get; set; }
@@ -36,5 +36,20 @@ namespace Backend.Domain.Entities
 		public Guid CrmWorkOrderId { get; set; }
 
 		#endregion
+
+		/// <summary>
+		///     Date the row was created
+		/// </summary>
+		public DateTime CreatedOn { get; set; }
+
+		/// <summary>
+		///     Date the row was deleted
+		/// </summary>
+		public DateTime? DeletedOn { get; set; }
+
+		/// <summary>
+		///     Date the row was modified last
+		/// </summary>
+		public DateTime ModifiedOn { get; set; }
 	}
 }
