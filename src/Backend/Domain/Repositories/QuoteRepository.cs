@@ -50,7 +50,7 @@ namespace Backend.Domain.Repositories
 			// add/update quote items
 			if (entity.Type == QuoteType.Installment && !entity.Items.Any())
 			{
-				_ctx.Services.Where(w => w.CompleteCare).ToList().ForEach(service => _ctx.QuoteItems.Add(new QuoteItem
+				_ctx.Services.Where(w => w.CompleteCare && w.Season == entity.Season).ToList().ForEach(service => _ctx.QuoteItems.Add(new QuoteItem
 				{
 					QuoteId = entity.Id,
 					ServiceId = service.Id,
