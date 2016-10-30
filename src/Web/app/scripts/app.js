@@ -1,6 +1,7 @@
 ﻿'use strict';
 
-var app = angular.module('PCI', [
+var app = angular.module('PCI',
+[
 	'angular-storage',
 	'ui.router',
 	'ui.bootstrap',
@@ -11,26 +12,33 @@ var app = angular.module('PCI', [
 ]);
 
 app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
-	$urlRouterProvider.otherwise('/pci/quote');
+	$urlRouterProvider.otherwise('/pci/home');
 
 	$stateProvider
-		.state('pci', {
+		.state('pci',
+		{
 			abstract: true,
 			url: '/pci',
 			templateUrl: '../main/main.html',
 			controller: 'MainCtrl',
 			controllerAs: 'main'
-		}).state('pci.home', {
+		})
+		.state('pci.home',
+		{
 			url: '/home',
 			templateUrl: '../views/home/home.html'
-		}).state('pci.crm', {
+		})
+		.state('pci.crm',
+		{
 			url: '/crm',
 			templateUrl: '../views/crmDashboard.html',
 			data: {
 				module: 'CRM',
 				tools: [{ name: 'search' }]
 			}
-		}).state('pci.customer', {
+		})
+		.state('pci.customer',
+		{
 			url: '/customer',
 			templateUrl: '../views/customer/customer.html',
 			controller: 'CustomerCtrl',
@@ -39,7 +47,9 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 				module: 'Customers',
 				tools: [{ name: 'search' }]
 			}
-		}).state('pci.customerDetail', {
+		})
+		.state('pci.customerDetail',
+		{
 			url: '/customer/detail/:id',
 			templateUrl: '../views/customer/customerDetail.html',
 			resolve: {
@@ -61,7 +71,9 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 				module: 'Customer Detail',
 				tools: [{ name: 'search' }]
 			}
-		}).state('pci.quote', {
+		})
+		.state('pci.quote',
+		{
 			url: '/quote',
 			templateUrl: '../views/quote/quote.html',
 			controller: 'QuoteCtrl',
@@ -70,7 +82,9 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 				module: 'Quotes',
 				tools: [{ name: 'search' }]
 			}
-		}).state('pci.quoteDetail', {
+		})
+		.state('pci.quoteDetail',
+		{
 			url: '/quote/detail:id',
 			templateUrl: '../views/quote/quoteDetail.html',
 			resolve: {
@@ -92,22 +106,26 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 				module: 'Quote',
 				tools: [{ name: 'search' }]
 			}
-		}).state('pci.property', {
-			url: '/property',
-			templateUrl: '../views/property/property.html',
-			controller: 'PropertyCtrl',
-			controllerAs: 'property',
-			data: {
-				module: 'Properties',
-				tools: [{ name: 'search' }]
-			}
-		}).state('pci.propertyDetail', {
-			url: '/property/detail/:id',
-			templateUrl: '../views/property/propertyDetail.html',
+		})
+		.state('pci.property',
+		{
+			url: '/property/:id',
+			views: {
+				'': {
+					templateUrl: '../views/property/property.html',
+					controller: 'PropertyCtrl',
+					controllerAs: 'property'
+				},
+				'quotes@pci.property': {
+					templateUrl: '../views/quote/quote.html',
+					controller: 'QuoteCtrl',
+					controllerAs: 'quote'
+				}
+			},
 			resolve: {
 				previousState: [
 					'$state',
-					function ($state) {
+					function($state) {
 						var currentStateData = {
 							Name: $state.current.name,
 							Params: $state.params,
@@ -117,13 +135,28 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 					}
 				]
 			},
-			controller: 'PropertyDtlCtrl',
-			controllerAs: 'propertyDtl',
+			onEnter: [
+				'$state', '$stateParams', function($state, $stateParams) {
+					if ($state.transition && !$stateParams.id) {
+						$state.go('pci.propertySearch');
+					}
+				}
+			]
+		})
+		.state('pci.propertySearch',
+		{
+			url: '/propertySearch',
+			templateUrl: '../views/property/propertySearch.html',
+
+			controller: 'PropertySearchCtrl',
+			controllerAs: 'propertySearch',
 			data: {
-				module: 'Property Detail',
+				module: 'Property Search',
 				tools: [{ name: 'search' }]
 			}
-		}).state('pci.workOrder', {
+		})
+		.state('pci.workOrder',
+		{
 			url: '/workOrder',
 			templateUrl: '../views/workOrder/workOrder.html',
 			controller: 'WorkOrderCtrl',

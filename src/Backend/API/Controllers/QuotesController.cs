@@ -38,6 +38,16 @@ namespace Backend.API.Controllers
 			return quoteData;
 		}
 
+		[Route("property/{propertyId}")]
+		public IEnumerable<QuoteData> GetByPropertyId(int propertyId)
+		{
+			var quoteData = new List<QuoteData>();
+			_mapper.Map(_repository.Get(), quoteData);
+			return
+				quoteData.Where(x => x.PropertyId == propertyId).OrderBy(x => x.PropertyName).ThenByDescending(x => x.ContractYear);
+		}
+
+
 		public QuoteData Put([FromBody] QuoteData quoteData)
 		{
 			var quote = _mapper.Map(quoteData, new Quote());

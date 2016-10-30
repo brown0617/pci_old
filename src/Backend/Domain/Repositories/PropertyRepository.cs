@@ -22,6 +22,7 @@ namespace Backend.Domain.Repositories
 					.Include(p => p.Property)
 					//.Include(pc => pc.Property.PrimaryContact)
 					.Select(s => s.Property)
+					.Distinct()
 					.ToList();
 		}
 

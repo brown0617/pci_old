@@ -28,6 +28,13 @@ namespace Backend.API.Controllers
 			return propertyData.OrderBy(x => x.Name);
 		}
 
+		public PropertyData Get(int id)
+		{
+			var propertyData = new PropertyData();
+			_mapper.Map(_repository.Get(id), propertyData);
+			return propertyData;
+		}
+
 		[Route("customer/{customerId}")]
 		public IEnumerable<PropertyData> GetByCustomerId(int customerId)
 		{
@@ -37,21 +44,14 @@ namespace Backend.API.Controllers
 			return propertyData.OrderBy(x => x.Name);
 		}
 
-		[Route("{name}")]
-		public IEnumerable<PropertyData> GetByName(string name)
-		{
-			var propertyData = new List<PropertyData>();
-			var property = _repository.FilterByName(name);
-			_mapper.Map(property, propertyData);
-			return propertyData.OrderBy(x => x.Name);
-		}
-
-		public PropertyData Get(int id)
-		{
-			var propertyData = new PropertyData();
-			_mapper.Map(_repository.Get(id), propertyData);
-			return propertyData;
-		}
+		//[Route("{name}")]
+		//public IEnumerable<PropertyData> GetByName(string name)
+		//{
+		//	var propertyData = new List<PropertyData>();
+		//	var property = _repository.FilterByName(name);
+		//	_mapper.Map(property, propertyData);
+		//	return propertyData.OrderBy(x => x.Name);
+		//}
 
 		public void Put([FromBody] PropertyData propertyData)
 		{

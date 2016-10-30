@@ -1,31 +1,27 @@
 ﻿'use strict';
 
-function PropertyCtrl(propertyData, $filter) {
+function PropertyCtrl($state, $stateParams, $q, $filter, previousState, propertyData) {
 	var self = this;
-	self.properties = {};
+	self.previousState = previousState;
 
-	propertyData.getAll().then(function(results) {
-		self.allProperties = results.data;
-		self.properties = self.allProperties;
-	});
+	propertyData.get($stateParams.id)
+		.then(function(results) {
+			self.property = results.data;
+		});
 
-	self.gridConfig = {
-		data: 'property.properties',
-		multiSelect: false,
-		columnDefs: [
-			{ field: 'Name', displayName: 'Name' },
-			{ field: 'AddressStreet1', displayName: 'Street Address' },
-			{ field: 'AddressCity', displayName: 'City' },
-			{ field: 'AddressState', displayName: 'State' },
-			{ field: 'AddressZip', displayName: 'Zip' },
-			{ name: 'edit', displayName: '', cellTemplate: '<a class="btn" ui-sref="pci.propertyDetail({id: row.entity.Id})"><i class="fa fa-pencil-square-o"></i></a>' }
-		]
+	this.cancel = function() {
+		return propertyData.get($stateParams.id);
 	};
 
-	this.filterGridData = function () {
-		self.properties = $filter('filter')(self.allProperties, self.searchText, undefined);
+	this.save = function() {
+		return propertyData.save(self.property);
 	};
+
+	this.getPreviousState = function() {
+		return $q.when(self.previousState);
+	};
+
 }
 
-PropertyCtrl.$inject = ['propertyData', '$filter'];
+PropertyCtrl.$inject = ['$state', '$stateParams', '$q', '$filter', 'previousState', 'propertyData'];
 app.controller('PropertyCtrl', PropertyCtrl);

@@ -38,12 +38,26 @@
 		public string AddressZip { get; set; }
 
 		/// <summary>
+		///     Street Address for the property
+		/// </summary>
+		public string StreetAddress
+		{
+			get
+			{
+				var streetAddress = string.IsNullOrEmpty(AddressStreet2)
+					? AddressStreet1
+					: string.Concat(AddressStreet1, ",", AddressStreet2);
+				return streetAddress;
+			}
+		}
+
+		/// <summary>
 		///     Foreign key for customer
 		/// </summary>
 		public int CustomerId { get; set; }
 
 		/// <summary>
-		/// Name of the customer
+		///     Name of the customer
 		/// </summary>
 		public string CustomerName { get; set; }
 
@@ -53,8 +67,13 @@
 		public int? PrimaryContactId { get; set; }
 
 		/// <summary>
-		/// Name of the primary contact
+		///     Name of the primary contact
 		/// </summary>
 		public string PrimaryContactName { get; set; }
+
+		/// <summary>
+		///     Name of the primary contact
+		/// </summary>
+		public string PrimaryContactNamePhone { get; set; }
 	}
 }

@@ -1,26 +1,61 @@
 ﻿<!-- Wrapper-->
-<div id="wrapper">
+<div>
 
-	<!-- Navigation -->
-	<div ng-include="'main/mainNavigation.html'"></div>
-	<!-- Page wraper -->
-	<div id="page-wrapper" class="gray-bg {{$state.current.name}}">
+	<!--<div ng-include="'main/mainNavigation.html'"></div>-->
 
-		<ng-form name="mainForm" novalidate save-manager>
-			<save-manager-modal></save-manager-modal>
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">
+					PCI
+				</a>
+			</div>
+			<ul class="nav navbar-nav">
+				<li>
+					<a ui-sref="pci.home" ui-sref-active="active">Home</a>
+				</li>
+				<li>
+					<a ui-sref="pci.property" ui-sref-active="active">Properties</a>
+				</li>
+				<li>
+					<a href="#">Production</a>
+				</li>
+				<li>
+					<a href="#">Accounting</a>
+				</li>
+				<li>
+					<a href="#">Admin</a>
+				</li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+				</li>
+			</ul>
+			<form class="navbar-form navbar-right">
+				<div class="input-group input-group-sm">
+					<input type="text" class="form-control" style="border-top-left-radius: 30px; border-bottom-left-radius: 30px" placeholder="Search">
+					<span type="submit" class="btn btn-default input-group-addon" style="border-top-right-radius: 30px; border-bottom-right-radius: 30px"><i class="glyphicon glyphicon-search"></i></span>
+				</div>
+			</form>
 
-			<!-- Header bar -->
-			<!--<div ng-include="'main/mainHeader.html'"></div>-->
-			<main-header></main-header>
+		</div>
+	</nav>
 
-			<!-- Main view -->
-			<div ui-view></div>
 
-			<!-- Footer -->
-			<!--<div ng-include="'views/common/footer.html'"></div>-->
-		</ng-form>
-	</div>
-	<!-- End page wrapper-->
+	<ng-form name="mainForm" novalidate save-manager>
+		<save-manager-modal></save-manager-modal>
+
+		<!-- Header bar -->
+		<!--<div ng-include="'main/mainHeader.html'"></div>-->
+		<!--<main-header></main-header>-->
+
+		<!-- Main view -->
+		<div ui-view></div>
+
+		<!-- Footer -->
+		<!--<div ng-include="'views/common/footer.html'"></div>-->
+	</ng-form>
 
 </div>
 <!-- End wrapper-->
