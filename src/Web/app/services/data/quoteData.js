@@ -3,9 +3,14 @@
 function quoteData($http) {
 	var uri = 'http://localhost:32150/api/quotes';
 
-	//	fetch all properties
+	//	fetch all quotes
 	this.getAll = function() {
 		return $http.get(uri);
+	};
+
+	//	fetch all active quotes
+	this.getAllActive = function() {
+		return $http.get(uri + '/active');
 	};
 
 	//	fetch a quote by id
@@ -29,7 +34,7 @@ function quoteData($http) {
 	};
 
 	// close a quote
-	this.close = function (quote, createOrder) {
+	this.close = function(quote, createOrder) {
 		return $http.put(uri + '/close/?createOrder=' + createOrder, quote);
 	};
 };

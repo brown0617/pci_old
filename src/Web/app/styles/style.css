@@ -3395,11 +3395,11 @@ table.table-mail tr td { padding: 12px }
 	color: #ffffff
 }
 
-.panel-info { border-color: #23c6c8 }
+.panel-info { border-color:darkorange }
 
 .panel-info > .panel-heading {
-	background-color: #23c6c8;
-	border-color: #23c6c8;
+	background-color: darkorange;
+	border-color: darkorange;
 	color: #ffffff
 }
 

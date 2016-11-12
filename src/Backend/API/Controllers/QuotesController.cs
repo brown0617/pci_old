@@ -31,6 +31,14 @@ namespace Backend.API.Controllers
 			return quoteData.OrderBy(x => x.PropertyName).ThenByDescending(x => x.ContractYear);
 		}
 
+		[Route("active")]
+		public IEnumerable<QuoteData> GetAllActive()
+		{
+			var quoteData = new List<QuoteData>();
+			_mapper.Map(_repository.Get().Where(x => x.Status == QuoteStatus.Active), quoteData);
+			return quoteData.OrderBy(x => x.PropertyName).ThenByDescending(x => x.ContractYear);
+		}
+
 		public QuoteData Get(int id)
 		{
 			var quoteData = new QuoteData();

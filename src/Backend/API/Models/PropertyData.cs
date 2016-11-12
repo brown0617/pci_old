@@ -74,6 +74,11 @@
 		/// <summary>
 		///     Name of the primary contact
 		/// </summary>
-		public string PrimaryContactNamePhone { get; set; }
+		public string PrimaryContactPhone { get; set; }
+
+		/// <summary>
+		///     Email address of the primary contact
+		/// </summary>
+		public string PrimaryContactEMail { get; set; }
 	}
 }

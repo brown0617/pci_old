@@ -24,10 +24,18 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 			controllerAs: 'main'
 		})
 		.state('pci.home',
-		{
-			url: '/home',
-			templateUrl: '../views/home/home.html'
-		})
+			{
+				url: '/home',
+				views: {
+					'': { templateUrl: '../views/home/home.html' },
+					'quotes@pci.home': {
+						templateUrl: '../views/quote/quote.html',
+						controller: 'HomeQuoteCtrl',
+						controllerAs: 'quote'
+					}
+				}
+			}
+		)
 		.state('pci.crm',
 		{
 			url: '/crm',

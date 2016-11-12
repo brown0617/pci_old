@@ -238,6 +238,7 @@ namespace Backend.Domain
 				{
 					// customer exists, add to property
 					customerId = existingCustomer.Id;
+					newProperty.CustomerId = customerId;
 					pciContext.Properties.AddOrUpdate(newProperty);
 				}
 				else
@@ -262,6 +263,7 @@ namespace Backend.Domain
 						pciContext.SaveChanges();
 
 						customerId = newCommercialCustomer.Id;
+						newProperty.CustomerId = customerId;
 						pciContext.Properties.AddOrUpdate(newProperty);
 					}
 				}
