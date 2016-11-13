@@ -9,7 +9,7 @@ function workOrderData($http) {
 	};
 
 	//	fetch all active work orders
-	this.getAll = function() {
+	this.getAllActive = function() {
 		return $http.get(uri + '/active');
 	};
 

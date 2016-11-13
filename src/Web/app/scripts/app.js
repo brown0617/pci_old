@@ -32,6 +32,11 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 						templateUrl: '../views/quote/quote.html',
 						controller: 'HomeQuoteCtrl',
 						controllerAs: 'quote'
+					},
+					'workOrders@pci.home': {
+						templateUrl: '../views/workOrder/workOrder.html',
+						controller: 'HomeWorkOrderCtrl',
+						controllerAs: 'workOrder'
 					}
 				}
 			}

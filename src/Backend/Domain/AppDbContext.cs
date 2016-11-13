@@ -392,14 +392,14 @@ namespace Backend.Domain
 						continue;
 					}
 					var crmSalesOrderId = crmOrder.order.SalesOrderId;
-
+					var orderContractYear = crmOrder.orderExt.New_ContractYear;
 					var newOrder = new Order
 					{
 						AnnualIncreasePercentage = annualIncreasePercentage,
 						BillingDay = (BillingDay) (crmOrder.orderExt.New_BillingDay ?? 1),
 						BillingStart = (Month) (crmOrder.orderExt.New_BillingStart ?? 1),
 						ContractTermYears = contractTermYears,
-						ContractYear = crmOrder.orderExt.New_ContractYear,
+						ContractYear = orderContractYear,
 						QuoteId = newQuote.Id,
 						PropertyId = property.Id,
 						CustomerId = (int) customerId,
@@ -496,7 +496,10 @@ namespace Backend.Domain
 
 							var newWorkOrder = new WorkOrder
 							{
-								ActualCompletion = workOrder.New_ActualCompletion,
+								ActualCompletion =
+									(workOrder.New_ActualCompletion == null) && (orderContractYear != "2016")
+										? Convert.ToDateTime("12/31/" + orderContractYear)
+										: workOrder.New_ActualCompletion,
 								ActualCrewSize = workOrder.New_ActualCrewSize,
 								ActualManHours = workOrder.New_ActualManHours,
 								ActualStart = workOrder.New_ActualStart,

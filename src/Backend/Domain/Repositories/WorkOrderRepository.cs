@@ -15,15 +15,6 @@ namespace Backend.Domain.Repositories
 			_ctx = appDbContext;
 		}
 
-		public IEnumerable<WorkOrder> Get()
-		{
-			return
-				_ctx.WorkOrders.Where(w => w.DeletedOn == null && w.ActualCompletion == null)
-					.OrderBy(o => o.OrderItem.Order.Property.Name)
-					.ThenBy(t => t.OrderItem.Service.Name)
-					.ToList();
-		}
-
 		public WorkOrder Get(int id)
 		{
 			return _ctx.WorkOrders.First(w => w.Id == id);
@@ -46,7 +37,7 @@ namespace Backend.Domain.Repositories
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<WorkOrder> GetAll()
+		public IEnumerable<WorkOrder> Get()
 		{
 			return _ctx.WorkOrders.Where(w => w.DeletedOn == null).ToList();
 		}

@@ -5,6 +5,5 @@ namespace Backend.Domain.Repositories
 {
 	public interface IWorkOrderRepository : IRepository<WorkOrder, int>
 	{
-		IEnumerable<WorkOrder> GetAll();
 	}
 }

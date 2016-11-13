@@ -495,7 +495,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 
 .btn-w-m { min-width: 120px }
 
-.btn-primary.btn-outline { color: #1ab394 }
+.btn-primary.btn-outline { color: darkorange }
 
 .btn-success.btn-outline { color: #1c84c6 }
 
@@ -508,14 +508,14 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .btn-primary.btn-outline:hover, .btn-success.btn-outline:hover, .btn-info.btn-outline:hover, .btn-warning.btn-outline:hover, .btn-danger.btn-outline:hover { color: #fff }
 
 .btn-primary {
-	background-color: #1ab394;
-	border-color: #1ab394;
-	color: #FFFFFF
+	background-color: #2f4050;
+	border-color: #2f4050;
+	color: darkorange
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .uib-dropdown-toggle.btn-primary, .btn-primary:active:focus, .btn-primary:active:hover, .btn-primary.active:hover, .btn-primary.active:focus {
-	background-color: #18a689;
-	border-color: #18a689;
+	background-color: darkorange;
+	border-color: darkorange;
 	color: #FFFFFF
 }
 
@@ -3380,11 +3380,11 @@ table.table-mail tr td { padding: 12px }
 
 .black-bg { background-color: #262626 }
 
-.panel-primary { border-color: #1ab394 }
+.panel-primary { border-color: darkorange }
 
 .panel-primary > .panel-heading {
-	background-color: #1ab394;
-	border-color: #1ab394
+	background-color: darkorange;
+	border-color: darkorange
 }
 
 .panel-success { border-color: #1c84c6 }

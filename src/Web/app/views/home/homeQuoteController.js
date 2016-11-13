@@ -17,12 +17,21 @@ function HomeQuoteCtrl($state, $stateParams, $filter, $uibModal, quoteData) {
 				field: 'PropertyName',
 				displayName: 'Property Name',
 				cellTemplate:
-					'<a ui-sref="pci.quoteDetail({id: row.entity.Id})">{{ COL_FIELD }}</a>'
+					'<a ui-sref="pci.quoteDetail({id: row.entity.Id})">{{ COL_FIELD }}</a>',
+				width: '40%'
 			},
-			{ field: 'CustomerName', displayName: 'Customer Name' },
-			{ field: 'Title', displayName: 'Title' },
-			{ field: 'TypeDesc', displayName: 'Type'},
-			{ field: 'SeasonDesc', displayName: 'Season'}
+			{
+				field: 'Title', displayName: 'Title',
+				width: '25%'
+			},
+			{
+				field: 'TypeDesc', displayName: 'Type',
+				width: '20%'
+			},
+			{
+				field: 'SeasonDesc', displayName: 'Season',
+				width: '15%'
+			}
 		]
 	};
 

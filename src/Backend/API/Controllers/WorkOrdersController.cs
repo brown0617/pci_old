@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using AutoMapper;
 using Backend.API.Models;
@@ -21,18 +22,17 @@ namespace Backend.API.Controllers
 		}
 
 		[Route("active")]
+		public IEnumerable<WorkOrderData> GetAllActive()
+		{
+			var workOrderData = new List<WorkOrderData>();
+			_mapper.Map(_repository.Get().Where(x => x.ActualCompletion == null), workOrderData);
+			return workOrderData;
+		}
+
 		public IEnumerable<WorkOrderData> Get()
 		{
 			var workOrderData = new List<WorkOrderData>();
 			_mapper.Map(_repository.Get(), workOrderData);
-			return workOrderData;
-		}
-
-		[Route("all")]
-		public IEnumerable<WorkOrderData> GetAll()
-		{
-			var workOrderData = new List<WorkOrderData>();
-			_mapper.Map(_repository.GetAll(), workOrderData);
 			return workOrderData;
 		}
 
