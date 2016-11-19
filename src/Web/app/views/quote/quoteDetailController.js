@@ -116,6 +116,7 @@ function QuoteDtlCtrl($stateParams, $q, $filter, $uibModal, dialogService, previ
 		dialogService.message = 'Did you win?';
 		dialogService.title = 'Close Quote';
 		dialogService.btnYesNo = true;
+		dialogService.btnCancel = true;
 		dialogService.open().then(function(response) {
 			var createOrder = response === 'Yes';
 			quoteData.close(self.quote, createOrder).then(function(results) {

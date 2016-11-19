@@ -1,5 +1,9 @@
-﻿<form name="quoteDtl.form" role="form" class="form-horizontal" save-registration>
-	<br/>
+﻿<form name="quoteDtl.form" role="form" class="container form-horizontal" save-registration>
+	<div class="btn btn-group">
+		<button type="button" class="btn btn-primary" ng-click="quoteDtl.addItem()">Print</button>
+		<button type="button" class="btn btn-primary" ng-click="quoteDtl.closeQuote()">Close</button>
+		<button type="button" class="btn btn-primary" ng-click="quoteDtl.addItem()">Back</button>
+	</div>
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<div class="form-group" ng-if="quoteDtl.quote.Type===3">
@@ -16,7 +20,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-md-12 panel panel-default">
+	<div class="panel panel-default">
 		<div class="panel-body">
 			<div class="col-md-4">
 				<div class="form-group">
@@ -111,7 +115,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-md-12 panel panel-default">
+	<div class="panel panel-default">
 		<div class="panel-body">
 			<div class="form-group">
 				<div class="col-md-4"></div>
@@ -147,7 +151,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-md-12">
+	<div>
 		<div id="quoteItemsGrid" class="grid" ui-grid="quoteDtl.gridConfig"></div>
 	</div>
 	<br/>
