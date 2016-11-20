@@ -18,20 +18,13 @@ function HomeWorkOrderCtrl(workOrderData, $filter) {
 				field: 'OrderItem.Order.Property.Name',
 				displayName: 'Property Name',
 				cellTemplate:
-					'<a ui-sref="pci.workOrder({id: row.entity.Id})">{{ COL_FIELD }}</a>',
+					'<a ui-sref="pci.workOrderDetail({id: row.entity.Id})">{{ COL_FIELD }}</a>',
 				width: '40%'
 			},
 			{ field: 'OrderItem.Service.Name', displayName: 'Service' },
 			{ field: 'OrderItem.ServiceDeadline', displayName: 'Deadline' },
 			{ field: 'OrderItem.ScheduledStart', displayName: 'Scheduled Start' },
-			{ field: 'OrderItem.ScheduledCompletion', displayName: 'Scheduled Completion' },
-			{
-				name: 'edit',
-				displayName: '',
-				width: '8%',
-				cellTemplate:
-					'<a class="btn btn-sm" ui-sref="pci.workOrderDetail({id: row.entity.Id})"><i class="fa fa-pencil-square-o"></i></a><a class="btn btn-sm" ui-sref="pci.workOrderDetail({id: row.entity.Id})"><i class="fa fa-clock-o"></i></a>'
-			}
+			{ field: 'OrderItem.ScheduledCompletion', displayName: 'Scheduled Completion' }
 		]
 	};
 

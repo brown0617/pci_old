@@ -98,7 +98,7 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 		})
 		.state('pci.quoteDetail',
 		{
-			url: '/quote/detail:id',
+			url: '/quote/detail/:id',
 			templateUrl: '../views/quote/quoteDetail.html',
 			resolve: {
 				previousState: [
@@ -178,6 +178,26 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 				module: 'Work Orders',
 				tools: [{ name: 'search' }]
 			}
+		})
+		.state('pci.workOrderDetail',
+		{
+			url: '/workOrder/detail/:id',
+			templateUrl: '../views/workOrder/workOrderDetail.html',
+			resolve: {
+				previousState: [
+					'$state',
+					function($state) {
+						var currentStateData = {
+							Name: $state.current.name,
+							Params: $state.params,
+							URL: $state.href($state.current.name, $state.params)
+						};
+						return currentStateData;
+					}
+				]
+			},
+			controller: 'WorkOrderDetailCtrl',
+			controllerAs: 'workOrderDtl'
 		});
 
 	$httpProvider.interceptors.push('apiInterceptor');
