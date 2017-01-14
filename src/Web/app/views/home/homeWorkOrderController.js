@@ -17,11 +17,14 @@ function HomeWorkOrderCtrl(workOrderData, $filter) {
 			{
 				field: 'OrderItem.Order.Property.Name',
 				displayName: 'Property Name',
-				cellTemplate:
-					'<a ui-sref="pci.workOrderDetail({id: row.entity.Id})">{{ COL_FIELD }}</a>',
 				width: '40%'
 			},
-			{ field: 'OrderItem.Service.Name', displayName: 'Service' },
+			{
+				field: 'OrderItem.Service.Name',
+				displayName: 'Service',
+				cellTemplate:
+					'<a ui-sref="pci.workOrderDetail({id: row.entity.Id})">{{ COL_FIELD }}</a>'
+			},
 			{ field: 'OrderItem.ServiceDeadline', displayName: 'Deadline' },
 			{ field: 'OrderItem.ScheduledStart', displayName: 'Scheduled Start' },
 			{ field: 'OrderItem.ScheduledCompletion', displayName: 'Scheduled Completion' }

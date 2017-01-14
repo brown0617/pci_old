@@ -196,7 +196,7 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 					}
 				]
 			},
-			controller: 'WorkOrderDetailCtrl',
+			controller: 'WorkOrderDtlCtrl',
 			controllerAs: 'workOrderDtl'
 		});
 
