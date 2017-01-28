@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Backend.Domain.Repositories
 {
 	public interface IRepository<TEntity, in TKey> where TEntity : class
 	{
-		IEnumerable<TEntity> Get();
+		IQueryable<TEntity> Get();
 		TEntity Get(TKey id);
 		TEntity New();
 		TEntity Save(TEntity entity);

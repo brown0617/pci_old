@@ -1,9 +1,6 @@
-﻿<!-- Wrapper-->
-<div>
+﻿<div>
 
-	<!--<div ng-include="'main/mainNavigation.html'"></div>-->
-
-	<nav class="navbar navbar-inverse">
+	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<a class="navbar-brand" href="#">
@@ -34,28 +31,30 @@
 			</ul>
 			<form class="navbar-form navbar-right">
 				<div class="input-group input-group-sm">
-					<input type="text" class="form-control" style="border-top-left-radius: 30px; border-bottom-left-radius: 30px" placeholder="Search">
-					<span type="submit" class="btn btn-default input-group-addon" style="border-top-right-radius: 30px; border-bottom-right-radius: 30px"><i class="glyphicon glyphicon-search"></i></span>
+					<input type="text" class="form-control" style="border-bottom-left-radius: 30px; border-top-left-radius: 30px;" placeholder="Search">
+					<span type="submit" class="btn btn-default input-group-addon" style="border-bottom-right-radius: 30px; border-top-right-radius: 30px;"><i class="glyphicon glyphicon-search"></i></span>
 				</div>
 			</form>
 
 		</div>
 	</nav>
+	
+	<div style="margin-top: 75px;">
 
+		<ng-form name="mainForm" novalidate save-manager>
+			<save-manager-modal></save-manager-modal>
 
-	<ng-form name="mainForm" novalidate save-manager>
-		<save-manager-modal></save-manager-modal>
+			<!-- Main view -->
+			<div ui-view></div>
+		</ng-form>
+	</div>
 
-		<!-- Header bar -->
-		<!--<div ng-include="'main/mainHeader.html'"></div>-->
-		<!--<main-header></main-header>-->
-
-		<!-- Main view -->
-		<div ui-view></div>
-
-		<!-- Footer -->
-		<!--<div ng-include="'views/common/footer.html'"></div>-->
-	</ng-form>
+	<!--<nav class="navbar navbar-inverse navbar-fixed-bottom">
+		<div class="container-fluid">
+			<div class="text-center" style="margin-top: 15px;">
+				<p>&copy; 2017 AGP Management Consulting</p>
+			</div>
+		</div>
+	</nav>-->
 
 </div>
-<!-- End wrapper-->

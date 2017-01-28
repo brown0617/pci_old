@@ -17,10 +17,10 @@ namespace Backend.Domain.Repositories
 			_ctx = appDbContext;
 		}
 
-		public IEnumerable<Quote> Get()
+		public IQueryable<Quote> Get()
 		{
 			return
-				_ctx.Quotes.Where(w => w.DeletedOn == null).Include("Property").Include("Customer").ToList();
+				_ctx.Quotes.Where(w => w.DeletedOn == null).Include("Property").Include("Customer");
 		}
 
 		public Quote Get(int id)

@@ -14,9 +14,9 @@ namespace Backend.Domain.Repositories
 			_ctx = appDbContext;
 		}
 
-		public IEnumerable<Service> Get()
+		public IQueryable<Service> Get()
 		{
-			return _ctx.Services.OrderBy(o => o.Name).ToList();
+			return _ctx.Services.OrderBy(o => o.Name);
 		}
 
 		public Service Get(int id)

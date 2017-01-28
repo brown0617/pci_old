@@ -32,7 +32,7 @@ namespace Backend.Domain.Repositories
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<Customer> Get()
+		public IQueryable<Customer> Get()
 		{
 			return _ctx.Customers;
 		}

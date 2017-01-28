@@ -4,7 +4,10 @@
 
 h1, h2, h3, h4, h5, h6 { font-weight: 200 }
 
-h1 { font-size: 30px;font-weight: bold; }
+h1 {
+	font-size: 30px;
+	font-weight: bold;
+}
 
 h2 { font-size: 24px }
 
@@ -276,13 +279,19 @@ body.mini-navbar .navbar-default .nav > li > .nav-second-level li a {
 }
 
 .navbar-fixed-top {
-	background: #fff;
+	background: #222;
 	border-bottom: 1px solid #e7eaec !important;
 	transition-duration: 0.4s;
 	z-index: 2030
 }
 
-.navbar-fixed-top, .navbar-static-top { background: #f3f3f4 }
+.navbar-fixed-top, .navbar-static-top { background: #222 }
+
+.navbar-fixed-bottom {
+	background: #222;
+	border-top: 1px solid #e7eaec !important;
+	transition-duration: 0.4s;
+}
 
 .fixed-nav #wrapper { margin-top: 0 }
 
@@ -3395,7 +3404,7 @@ table.table-mail tr td { padding: 12px }
 	color: #ffffff
 }
 
-.panel-info { border-color:darkorange }
+.panel-info { border-color: darkorange }
 
 .panel-info > .panel-heading {
 	background-color: darkorange;
@@ -7311,3 +7320,5 @@ body.md-skin {
 
 	#page-wrapper { margin: 0 }
 }
+
+.panel-group > .panel > .panel-default { margin-bottom: 1px; }

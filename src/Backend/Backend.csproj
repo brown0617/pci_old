@@ -134,6 +134,7 @@
     <Compile Include="API\AutoMapperConfig.cs" />
     <Compile Include="API\Controllers\OptionsController.cs" />
     <Compile Include="API\Controllers\MaterialController.cs" />
+    <Compile Include="API\Controllers\HomeController.cs" />
     <Compile Include="API\Controllers\OrdersController.cs" />
     <Compile Include="API\Controllers\ServicesController.cs" />
     <Compile Include="API\Controllers\QuotesController.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="API\ExceptionHandlingAttribute.cs" />
     <Compile Include="API\Models\MaterialData.cs" />
     <Compile Include="API\Models\OptionData.cs" />
+    <Compile Include="API\Models\OrdersSummaryData.cs" />
     <Compile Include="API\Models\OrderDataNoItems.cs" />
     <Compile Include="API\Models\OrderData.cs" />
     <Compile Include="API\Models\OrderItemData.cs" />

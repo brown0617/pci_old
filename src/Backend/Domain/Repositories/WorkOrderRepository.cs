@@ -37,9 +37,9 @@ namespace Backend.Domain.Repositories
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<WorkOrder> Get()
+		public IQueryable<WorkOrder> Get()
 		{
-			return _ctx.WorkOrders.Where(w => w.DeletedOn == null).ToList();
+			return _ctx.WorkOrders.Where(w => w.DeletedOn == null);
 		}
 	}
 }

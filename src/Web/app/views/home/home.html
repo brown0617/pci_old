@@ -1,17 +1,17 @@
 ﻿<div class="container">
-	<div class="col-md-12">
+	<div class="col-md-6">
 		<div class="panel panel-primary">
-			<div class="panel-heading">Active Quotes</div>
+			<div class="panel-heading">Sales Summary</div>
 			<div class="panel-body">
-				<div ui-view="quotes"></div>
+				<pre>{{ home.ordersSummary | json }}</pre>
 			</div>
 		</div>
 	</div>
-	<div class="col-md-12">
+	<div class="col-md-6">
 		<div class="panel panel-primary">
-			<div class="panel-heading">Open Work Orders</div>
+			<div class="panel-heading">Work Summary</div>
 			<div class="panel-body">
-				<div ui-view="workOrders"></div>
+				<div></div>
 			</div>
 		</div>
 	</div>

@@ -18,7 +18,7 @@ function QuoteCtrl($state, $stateParams, $filter, $uibModal, quoteData) {
 		multiSelect: false,
 		columnDefs: [
 			{ field: 'PropertyName', displayName: 'Property Name', visible: !self.hasPropertyId },
-			{ field: 'CustomerName', displayName: 'Customer Name'},
+			{ field: 'CustomerName', displayName: 'Customer Name', visible: !self.hasPropertyId },
 			{ field: 'Title', displayName: 'Title' },
 			{ field: 'ContractYear', displayName: 'Year', width: '7%' },
 			{ field: 'TypeDesc', displayName: 'Type', width: '13%' },

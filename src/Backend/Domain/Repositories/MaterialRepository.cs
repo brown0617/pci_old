@@ -14,7 +14,7 @@ namespace Backend.Domain.Repositories
 			_ctx = appDbContext;
 		}
 
-		public IEnumerable<Material> Get()
+		public IQueryable<Material> Get()
 		{
 			throw new NotImplementedException();
 		}

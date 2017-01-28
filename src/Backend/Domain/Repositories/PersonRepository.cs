@@ -15,7 +15,7 @@ namespace Backend.Domain.Repositories
 			_ctx = appDbContext;
 		}
 
-		public IEnumerable<Person> Get()
+		public IQueryable<Person> Get()
 		{
 			return _ctx.People;
 		}

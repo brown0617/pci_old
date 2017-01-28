@@ -31,9 +31,9 @@ namespace Backend.Domain.Repositories
 			return _ctx.Properties.Where(w => w.Name.Contains(propertyName)).OrderBy(o => o.Name).ToList();
 		}
 
-		public IEnumerable<Property> Get()
+		public IQueryable<Property> Get()
 		{
-			return _ctx.Properties.ToList();
+			return _ctx.Properties;
 		}
 
 		public Property Get(int id)

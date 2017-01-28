@@ -15,9 +15,9 @@ namespace Backend.Domain.Repositories
 			_ctx = appDbContext;
 		}
 
-		public IEnumerable<Order> Get()
+		public IQueryable<Order> Get()
 		{
-			return _ctx.Orders.Where(w => w.DeletedOn == null).ToList();
+			return _ctx.Orders.Where(w => w.DeletedOn == null);
 		}
 
 		public Order Get(int id)
@@ -40,14 +40,14 @@ namespace Backend.Domain.Repositories
 			if (newOrder)
 				// create work order records
 				entity.Items.ToList().ForEach(x =>
-					_ctx.WorkOrders.Add(new WorkOrder
-					{
-						OrderItemId = x.Id,
-						Details = x.Description,
-						VisitNumber = 1,
-						ScheduledCompletion = x.ServiceDeadline
-					})
-					);
+						_ctx.WorkOrders.Add(new WorkOrder
+						{
+							OrderItemId = x.Id,
+							Details = x.Description,
+							VisitNumber = 1,
+							ScheduledCompletion = x.ServiceDeadline
+						})
+				);
 
 			_ctx.SaveChanges();
 
