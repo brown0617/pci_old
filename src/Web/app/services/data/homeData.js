@@ -3,9 +3,9 @@
 function homeData($http) {
 	var uri = 'http://localhost:32150/api/home';
 
-	//	fetch orders summary by contract year
+	//	fetch sales summary by contract year
 	this.getOrdersSummary = function(contractYear) {
-		return $http.get(uri + '/ordersSummary/' + contractYear);
+		return $http.get(uri + '/salesSummary/' + contractYear);
 	};
 };
 

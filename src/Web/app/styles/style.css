@@ -7322,3 +7322,11 @@ body.md-skin {
 }
 
 .panel-group > .panel > .panel-default { margin-bottom: 1px; }
+
+.numberAlignment {
+	text-align: right;
+}
+
+.headAlignmentCenter {
+	text-align: center;
+}

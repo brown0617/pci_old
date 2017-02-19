@@ -18,28 +18,45 @@ namespace Backend.API.Controllers
 			_repository = orderRepository;
 		}
 
-		[Route("ordersSummary/{contractYear}")]
-		public IEnumerable<OrdersSummaryData> GetOrdersSummary(string contractYear)
+		[Route("salesSummary/{contractYear}")]
+		public IEnumerable<OrdersBySeasonData> GetSalesSummary(int contractYear)
 		{
-			var ordersSummaryData=
-				_repository.Get()
-					.Where(w => w.ContractYear == contractYear)
-					.GroupBy(g => g.Season)
-					.Select(
-						o =>
-							new OrdersSummaryData
-							{
-								Season = o.Key,
-								OrderCount = o.Count(),
-								TotalCost = o.Sum(w => w.TotalCost),
-								TotalPrice = o.Sum(w => w.TotalPrice),
-								GrossProfit = o.Sum(w => w.TotalPrice) - o.Sum(w => w.TotalCost)
-							})
-					.ToList();
+			var priorYear = contractYear - 1;
+			var ordersSummaryData = _repository.Get()
+				.Where(w => w.ContractYear <= contractYear)
+				.GroupBy(g => g.Season)
+				.Select(
+					o =>
+						new OrdersBySeasonData
+						{
+							Season = o.Key,
+							TotalPriceCurrent = o.Sum(w => w.ContractYear == contractYear ? w.TotalPrice : 0),
+							TotalPricePrior = o.Sum(w => w.ContractYear == priorYear ? w.TotalPrice : 0),
+							TotalPriceAllPrior = o.Sum(w => w.ContractYear < contractYear ? w.TotalPrice : 0)
+						})
+				.ToList();
 
-			ordersSummaryData.ForEach(
-				r => r.SeasonDesc = r.Season.ToDescription()
-			);
+			var priorYears = _repository.Get()
+				.Where(w => w.ContractYear <= contractYear)
+				.GroupBy(g => g.Season)
+				.Select(o => new
+				{
+					Season = o.Key,
+					YearCount = o.Select(l => l.ContractYear).Distinct().Count()
+				}).ToLookup(item => item.Season);
+
+			foreach (var ordersBySeasonData in ordersSummaryData)
+			{
+				ordersBySeasonData.SeasonDesc = ordersBySeasonData.Season.ToDescription();
+
+				var firstOrDefault = priorYears[ordersBySeasonData.Season].FirstOrDefault();
+				if (firstOrDefault != null)
+				{
+					var priorYearsCount = firstOrDefault.YearCount;
+
+					ordersBySeasonData.AveragePriceAllPrior = ordersBySeasonData.TotalPriceAllPrior/priorYearsCount;
+				}
+			}
 
 			return ordersSummaryData;
 		}

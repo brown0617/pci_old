@@ -3,7 +3,22 @@
 		<div class="panel panel-primary">
 			<div class="panel-heading">Sales Summary</div>
 			<div class="panel-body">
-				<pre>{{ home.ordersSummary | json }}</pre>
+				<table class="table">
+					<thead>
+					<tr>
+						<th>Season</th>
+						<th class="headAlignmentCenter">Current</th>
+						<th class ="headAlignmentCenter">Prior</th>
+						<th class="headAlignmentCenter">Average</th>
+					</tr>
+					</thead>
+					<tr ng-repeat="season in home.ordersSummary">
+						<td>{{ season.SeasonDesc }}</td>
+						<td class="numberAlignment">{{ season.TotalPriceCurrent | number:0 }}</td>
+						<td class="numberAlignment">{{ season.TotalPricePrior | number:0 }}</td>
+						<td class="numberAlignment">{{ season.AveragePriceAllPrior | number:0 }}</td>
+					</tr>
+				</table>
 			</div>
 		</div>
 	</div>

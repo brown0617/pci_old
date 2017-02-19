@@ -2,7 +2,7 @@
 
 namespace Backend.API.Models
 {
-	public class OrdersSummaryData
+	public class OrdersBySeasonData
 	{
 		/// <summary>
 		///     Season description (Summer or Winter)
@@ -10,24 +10,24 @@ namespace Backend.API.Models
 		public string SeasonDesc { get; set; }
 
 		/// <summary>
-		///     Total number of orders
+		///     Total Price of current year orders
 		/// </summary>
-		public int OrderCount { get; set; }
+		public decimal TotalPriceCurrent { get; set; }
 
 		/// <summary>
-		///     Total Cost of orders
+		///     Total Price of prior year orders
 		/// </summary>
-		public decimal TotalCost { get; set; }
+		public decimal TotalPricePrior { get; set; }
 
 		/// <summary>
-		///     Total Price of orders
+		///     Total Price of all prior year orders
 		/// </summary>
-		public decimal TotalPrice { get; set; }
+		public decimal TotalPriceAllPrior { get; set; }
 
 		/// <summary>
-		///     Gross Profit of orders
+		///     Average Price of all prior year orders
 		/// </summary>
-		public decimal GrossProfit { get; set; }
+		public decimal AveragePriceAllPrior { get; set; }
 
 		/// <summary>
 		///     Season

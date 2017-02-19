@@ -145,7 +145,7 @@
     <Compile Include="API\ExceptionHandlingAttribute.cs" />
     <Compile Include="API\Models\MaterialData.cs" />
     <Compile Include="API\Models\OptionData.cs" />
-    <Compile Include="API\Models\OrdersSummaryData.cs" />
+    <Compile Include="API\Models\OrdersBySeasonData.cs" />
     <Compile Include="API\Models\OrderDataNoItems.cs" />
     <Compile Include="API\Models\OrderData.cs" />
     <Compile Include="API\Models\OrderItemData.cs" />
@@ -153,6 +153,7 @@
     <Compile Include="API\Models\PersonData.cs" />
     <Compile Include="API\Models\QuoteData.cs" />
     <Compile Include="API\Models\QuoteItemData.cs" />
+    <Compile Include="API\Models\SalesSummaryData.cs" />
     <Compile Include="API\Models\WorkOrderData.cs" />
     <Compile Include="Domain\AppDbContext.cs" />
     <Compile Include="Domain\Entities\Employee.cs" />

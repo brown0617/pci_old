@@ -293,7 +293,7 @@ namespace Backend.Domain
 						BillingDay = (BillingDay) (quote.quoteExt.New_BillingDay ?? 1),
 						BillingStart = (Month) (quote.quoteExt.New_BillingStart ?? 1),
 						ContractTermYears = contractTermYears,
-						ContractYear = quote.quoteExt.New_ContractYear,
+						ContractYear = Convert.ToInt32(quote.quoteExt.New_ContractYear),
 						CrmQuoteId = crmQuoteId,
 						PropertyId = property.Id,
 						CustomerId = (int) customerId,
@@ -382,7 +382,7 @@ namespace Backend.Domain
 					if (crmOrder == null)
 					{
 						// no order
-						if (newQuote.ContractYear != "2016")
+						if (newQuote.ContractYear != 2016)
 						{
 							// prior year quotes, mark them as lost
 							newQuote.Status = QuoteStatus.Lost;
@@ -399,7 +399,7 @@ namespace Backend.Domain
 						BillingDay = (BillingDay) (crmOrder.orderExt.New_BillingDay ?? 1),
 						BillingStart = (Month) (crmOrder.orderExt.New_BillingStart ?? 1),
 						ContractTermYears = contractTermYears,
-						ContractYear = orderContractYear,
+						ContractYear = Convert.ToInt32(orderContractYear),
 						QuoteId = newQuote.Id,
 						PropertyId = property.Id,
 						CustomerId = (int) customerId,
@@ -603,7 +603,6 @@ namespace Backend.Domain
 			};
 			return snowProducts.Contains(productName) ? Season.Winter : Season.Summer;
 		}
-
 
 		private bool IsCommercialProperty(Guid? crmAccountId)
 		{

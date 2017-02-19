@@ -58,7 +58,7 @@ namespace Backend.API.Models
 		/// <summary>
 		///     Base year of the Contract
 		/// </summary>
-		public string ContractYear { get; set; }
+		public int ContractYear { get; set; }
 
 		/// <summary>
 		///     Number of payments
