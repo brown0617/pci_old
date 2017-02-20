@@ -298,16 +298,16 @@ namespace Backend.Domain
 						PropertyId = property.Id,
 						CustomerId = (int) customerId,
 						NumberOfPayments = quote.quoteExt.New_NumPayments ?? 1,
-						SalesTaxAmount = quote.quoteExt.New_SalesTaxAmount ?? 0,
+						//SalesTaxAmount = quote.quoteExt.New_SalesTaxAmount ?? 0,
 						SalesTaxRate = property.County.SalesTaxRate,
 						Season = (Season) (quote.quoteExt.New_Season ?? 1),
 						Status = (QuoteStatus) statusCode,
 						Taxable = quote.quoteExt.New_Taxable ?? true,
 						Title = quote.quote.Name,
-						TotalLaborPrice = quote.quoteExt.New_TotalAmountLabor ?? 0,
-						TotalMaterialPrice = quote.quoteExt.New_TotalAmountMaterials ?? 0,
-						TotalPricePretax = quote.quoteExt.New_TotalAmountPretax ?? 0,
-						TotalPrice = quote.quoteExt.New_TotalAmountQuote ?? 0,
+						//TotalLaborPrice = quote.quoteExt.New_TotalAmountLabor ?? 0,
+						//TotalMaterialPrice = quote.quoteExt.New_TotalAmountMaterials ?? 0,
+						//TotalPricePretax = quote.quoteExt.New_TotalAmountPretax ?? 0,
+						//TotalPrice = quote.quoteExt.New_TotalAmountQuote ?? 0,
 						TotalEstimatedManHours = quote.quoteExt.New_TotalManHoursEst ?? 0,
 						Type = (QuoteType) (quote.quoteExt.New_QuoteType ?? 0),
 						CreatedOn = quote.quote.CreatedOn ?? DateTime.UtcNow,
@@ -318,6 +318,8 @@ namespace Backend.Domain
 					pciContext.SaveChanges();
 
 					// QuoteDetailBase/Extension ==> QuoteItem
+					decimal quoteMaterialPrice = 0;
+					decimal quoteLaborPrice = 0;
 					var quoteItems =
 						crmContext.QuoteDetails.Join(crmContext.QuoteDetailsExtension, qd => qd.QuoteDetailId, qde => qde.QuoteDetailId,
 								(qd, qde) => new {qd, qde})
@@ -345,6 +347,13 @@ namespace Backend.Domain
 							materialId = materialId == 0 ? null : materialId;
 						}
 
+						quoteMaterialPrice += (quoteItem.qde.New_PricePerUnit_Materials ?? 0)*(quoteItem.qde.New_QuantityMaterials ?? 0);
+						if (quoteItem.qde.New_BillingMethod == 1)
+							// per visit
+							quoteLaborPrice += (quoteItem.qd.ExtendedAmount ?? 0) * (quoteItem.qde.New_Visits ?? 1);
+						else
+							quoteLaborPrice += quoteItem.qd.ExtendedAmount ?? 0;
+
 						var newQuoteItem = new QuoteItem
 						{
 							BillingMethod = quoteItem.qde.New_BillingMethod,
@@ -371,6 +380,23 @@ namespace Backend.Domain
 						pciContext.SaveChanges();
 					}
 
+					// recalc quote totals from quote items
+					newQuote.TotalLaborPrice = quoteLaborPrice;
+					newQuote.TotalMaterialPrice = quoteMaterialPrice;
+					newQuote.TotalPricePretax = quoteLaborPrice + quoteMaterialPrice;
+					if (newQuote.Taxable && (newQuote.SalesTaxRate != 0))
+					{
+						newQuote.SalesTaxAmount = newQuote.TotalPricePretax*newQuote.SalesTaxRate;
+						newQuote.TotalPrice = newQuote.TotalPricePretax + newQuote.SalesTaxAmount;
+					}
+					else
+					{
+						newQuote.SalesTaxAmount = 0;
+						newQuote.TotalPrice = newQuote.TotalPricePretax;
+					}
+					pciContext.Quotes.AddOrUpdate(newQuote);
+					pciContext.SaveChanges();
+
 					// SalesOrderBase/SalesOrderExtensionBase ==> Order
 					var crmOrder =
 						crmContext.SalesOrders
@@ -393,6 +419,7 @@ namespace Backend.Domain
 					}
 					var crmSalesOrderId = crmOrder.order.SalesOrderId;
 					var orderContractYear = crmOrder.orderExt.New_ContractYear;
+
 					var newOrder = new Order
 					{
 						AnnualIncreasePercentage = annualIncreasePercentage,
@@ -404,15 +431,15 @@ namespace Backend.Domain
 						PropertyId = property.Id,
 						CustomerId = (int) customerId,
 						NumberOfPayments = crmOrder.orderExt.New_NumPayments ?? 1,
-						SalesTaxAmount = crmOrder.orderExt.New_SalesTaxAmount ?? 0,
+						//SalesTaxAmount = crmOrder.orderExt.New_SalesTaxAmount ?? 0,
 						SalesTaxRate = property.County.SalesTaxRate,
 						Season = (Season) (crmOrder.orderExt.New_Season ?? 1),
 						Taxable = crmOrder.orderExt.New_Taxable ?? true,
 						Title = crmOrder.order.Name,
-						TotalLaborPrice = crmOrder.orderExt.New_TotalAmountLabor ?? 0,
-						TotalMaterialPrice = crmOrder.orderExt.New_TotalAmountMaterials ?? 0,
-						TotalPricePretax = crmOrder.orderExt.New_TotalAmountPretax ?? 0,
-						TotalPrice = crmOrder.orderExt.New_TotalAmountOrder ?? 0,
+						//TotalLaborPrice = crmOrder.orderExt.New_TotalAmountLabor ?? 0,
+						//TotalMaterialPrice = crmOrder.orderExt.New_TotalAmountMaterials ?? 0,
+						//TotalPricePretax = crmOrder.orderExt.New_TotalAmountPretax ?? 0,
+						//TotalPrice = crmOrder.orderExt.New_TotalAmountOrder ?? 0,
 						TotalEstimatedManHours = crmOrder.orderExt.New_TotalManHoursEst ?? 0,
 						Type = (QuoteType) (crmOrder.orderExt.New_OrderType ?? 0),
 						CreatedOn = crmOrder.order.CreatedOn ?? DateTime.UtcNow,
@@ -436,6 +463,9 @@ namespace Backend.Domain
 							.Where(w => w.sod.SalesOrderId == crmSalesOrderId)
 							.ToList();
 
+					decimal orderMaterialPrice = 0;
+					decimal orderLaborPrice = 0;
+
 					foreach (var orderItem in orderItems)
 					{
 						var orderId =
@@ -457,6 +487,13 @@ namespace Backend.Domain
 								pciContext.Materials.Where(w => w.CrmProductId == materialProductId).Select(s => s.Id).FirstOrDefault();
 							materialId = materialId == 0 ? null : materialId;
 						}
+
+						orderMaterialPrice += (orderItem.sode.New_PricePerUnitMaterials ?? 0)*(orderItem.sode.New_QuantityMaterials ?? 0);
+						if (orderItem.sode.New_BillingMethod ==1)
+							// per visit
+							orderLaborPrice += (orderItem.sod.ExtendedAmount ?? 0) * (orderItem.sode.New_visits ?? 1);
+						else
+							orderLaborPrice += orderItem.sod.ExtendedAmount ?? 0;
 
 						var newOrderItem = new OrderItem
 						{
@@ -548,6 +585,23 @@ namespace Backend.Domain
 							}
 						}
 					}
+
+					// recalc order totals from order items
+					newOrder.TotalLaborPrice = orderLaborPrice;
+					newOrder.TotalMaterialPrice = orderMaterialPrice;
+					newOrder.TotalPricePretax = orderLaborPrice + orderMaterialPrice;
+					if (newOrder.Taxable && (newOrder.SalesTaxRate != 0))
+					{
+						newOrder.SalesTaxAmount = newOrder.TotalPricePretax*newOrder.SalesTaxRate;
+						newOrder.TotalPrice = newOrder.TotalPricePretax + newOrder.SalesTaxAmount;
+					}
+					else
+					{
+						newOrder.SalesTaxAmount = 0;
+						newOrder.TotalPrice = newOrder.TotalPricePretax;
+					}
+					pciContext.Orders.AddOrUpdate(newOrder);
+					pciContext.SaveChanges();
 				}
 			}
 		}
