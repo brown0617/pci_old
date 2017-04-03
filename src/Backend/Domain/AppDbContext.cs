@@ -14,7 +14,7 @@ namespace Backend.Domain
 	public class AppDbContext : DbContext
 	{
 		public AppDbContext()
-			: base("PCIData")
+			: base("PCI")
 		{
 		}
 
@@ -57,11 +57,11 @@ namespace Backend.Domain
 	{
 		private IEnumerable<County> _counties;
 		private IEnumerable<Employee> _employees;
-		// seed data from MS Dynamics CRM extract
 		private IEnumerable<Person> _people;
 
 		protected override void Seed(AppDbContext pciContext)
 		{
+			// seed data from MS Dynamics CRM extract
 			base.Seed(pciContext);
 
 			var crmContext = new CrmDbContext();
@@ -350,7 +350,7 @@ namespace Backend.Domain
 						quoteMaterialPrice += (quoteItem.qde.New_PricePerUnit_Materials ?? 0)*(quoteItem.qde.New_QuantityMaterials ?? 0);
 						if (quoteItem.qde.New_BillingMethod == 1)
 							// per visit
-							quoteLaborPrice += (quoteItem.qd.ExtendedAmount ?? 0) * (quoteItem.qde.New_Visits ?? 1);
+							quoteLaborPrice += (quoteItem.qd.ExtendedAmount ?? 0)*(quoteItem.qde.New_Visits ?? 1);
 						else
 							quoteLaborPrice += quoteItem.qd.ExtendedAmount ?? 0;
 
@@ -489,9 +489,9 @@ namespace Backend.Domain
 						}
 
 						orderMaterialPrice += (orderItem.sode.New_PricePerUnitMaterials ?? 0)*(orderItem.sode.New_QuantityMaterials ?? 0);
-						if (orderItem.sode.New_BillingMethod ==1)
+						if (orderItem.sode.New_BillingMethod == 1)
 							// per visit
-							orderLaborPrice += (orderItem.sod.ExtendedAmount ?? 0) * (orderItem.sode.New_visits ?? 1);
+							orderLaborPrice += (orderItem.sod.ExtendedAmount ?? 0)*(orderItem.sode.New_visits ?? 1);
 						else
 							orderLaborPrice += orderItem.sod.ExtendedAmount ?? 0;
 

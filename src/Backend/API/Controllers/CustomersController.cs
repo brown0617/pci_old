@@ -9,6 +9,7 @@ using Backend.Domain.Repositories;
 
 namespace Backend.API.Controllers
 {
+	[Authorize]
 	[ExceptionHandling]
 	public class CustomersController : ApiController
 	{

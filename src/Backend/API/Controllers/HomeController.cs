@@ -18,6 +18,7 @@ namespace Backend.API.Controllers
 			_repository = orderRepository;
 		}
 
+		[Authorize]
 		[Route("salesSummary/{contractYear}")]
 		public IEnumerable<OrdersBySeasonData> GetSalesSummary(int contractYear)
 		{

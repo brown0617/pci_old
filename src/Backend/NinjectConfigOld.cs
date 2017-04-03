@@ -5,7 +5,7 @@ using Ninject;
 
 namespace Backend
 {
-	public static class NinjectConfig
+	public static class NinjectConfigOld
 	{
 		public static IKernel CreateKernel()
 		{

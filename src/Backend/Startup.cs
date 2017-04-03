@@ -1,13 +1,13 @@
 ﻿using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Cors;
-using Ninject.Web.Common.OwinHost;
-using Ninject.Web.WebApi.OwinHost;
+using Backend.Authentication.Config;
+using Ninject;
 using Owin;
 
 namespace Backend
 {
-	public class Startup
+	public partial class Startup
 	{
 		public void Configuration(IAppBuilder appBuilder)
 		{
@@ -23,10 +23,10 @@ namespace Backend
 				new {id = RouteParameter.Optional, controller = "values"});
 
 			config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
-			
-			appBuilder.UseNinjectMiddleware(NinjectConfig.CreateKernel);
 
-			appBuilder.UseNinjectWebApi(config);
+			var kernel = ConfigureNinject(appBuilder, config);
+
+			appBuilder.UseOAuthAuthorizationServer(kernel.Get<AppOAuthAuthorizationServerOptions>().GetOptions());
 		}
 	}
 }
