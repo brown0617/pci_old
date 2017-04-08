@@ -3,6 +3,7 @@ using System.Web.Http;
 using AutoMapper;
 using Backend.API;
 using Backend.Authentication.Config;
+using Backend.Authentication.Identity_Models;
 using Backend.Authentication.Models;
 using Backend.Authentication.Repositories;
 using Backend.Domain;
@@ -48,9 +49,8 @@ namespace Backend
 
 		private void RegisterServices(IBindingRoot kernel)
 		{
-			//kernel.Bind<AppDbContext>().ToSelf().InRequestScope();
-			kernel.Bind<AuthContext>().ToConstructor(_ => new AuthContext());
 			kernel.Bind<AppDbContext>().ToConstructor(_ => new AppDbContext());
+			kernel.Bind<AppUserManager>().ToConstructor(_ => new AppUserManager(new UserStore(new AppDbContext())));
 
 			// auth bindings
 			kernel.Bind<IOAuthAuthorizationServerOptions>()
@@ -60,8 +60,8 @@ namespace Backend
 			kernel.Bind<IAuthenticationTokenProvider>()
 				.To<AppAuthenticationTokenProvider>();
 
-			kernel.Bind<IUserStore<IdentityUser>>().To<UserStore<IdentityUser>>();
-			//kernel.Bind<UserManager<AppUser>>().ToSelf();
+			kernel.Bind<IUserStore<User, int>>().To<UserStore>();
+			kernel.Bind<UserManager<User, int>>().ToSelf();
 
 			// interface bindings
 			kernel.Bind<ICustomerRepository>().To<CustomerRepository>();

@@ -5,13 +5,15 @@ using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Migrations;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
+using Backend.Authentication.Identity_Models;
 using Backend.Domain.Entities;
 using Backend.Domain.Enums;
 using Backend.Domain.Migration;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Backend.Domain
 {
-	public class AppDbContext : DbContext
+	public class AppDbContext : IdentityDbContext
 	{
 		public AppDbContext()
 			: base("PCI")
@@ -36,7 +38,59 @@ namespace Backend.Domain
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
-			modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+			base.OnModelCreating(modelBuilder);
+
+			modelBuilder.Entity<User>()
+				.Property(p => p.Id)
+				.HasColumnType("int")
+				.IsRequired();
+
+			modelBuilder.Entity<Role>()
+				.Property(p => p.Id)
+				.HasColumnType("int")
+				.IsRequired();
+
+			modelBuilder.Entity<UserRole>()
+				.Property(p => p.RoleId)
+				.HasColumnType("int")
+				.IsRequired();
+
+			modelBuilder.Entity<UserRole>()
+				.Property(p => p.UserId)
+				.HasColumnType("int")
+				.IsRequired();
+
+			modelBuilder.Entity<UserClaim>()
+				.Property(p => p.Id)
+				.HasColumnType("int")
+				.IsRequired();
+
+			modelBuilder.Entity<UserClaim>()
+				.Property(p => p.UserId)
+				.HasColumnType("int")
+				.IsRequired();
+
+			modelBuilder.Entity<UserLogin>()
+				.Property(p => p.UserId)
+				.HasColumnType("int")
+				.IsRequired();
+
+			modelBuilder.Entity<User>()
+				.ToTable("Users", "Auth");
+
+			modelBuilder.Entity<Role>()
+				.ToTable("Roles", "Auth");
+
+			modelBuilder.Entity<UserRole>()
+				.HasKey(r => new { r.UserId, r.RoleId })
+				.ToTable("UserRoles", "Auth");
+
+			modelBuilder.Entity<UserClaim>()
+				.ToTable("UserClaims", "Auth");
+
+			modelBuilder.Entity<UserLogin>()
+				.HasKey(l => new { l.LoginProvider, l.ProviderKey, l.UserId })
+				.ToTable("UserLogins", "Auth");
 		}
 
 		public override int SaveChanges()

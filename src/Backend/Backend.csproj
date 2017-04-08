@@ -54,6 +54,10 @@
       <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
       <Private>True</Private>
@@ -72,6 +76,10 @@
     </Reference>
     <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.2.1.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -170,6 +178,17 @@
     <Compile Include="API\Models\SalesSummaryData.cs" />
     <Compile Include="API\Models\WorkOrderData.cs" />
     <Compile Include="Authentication\Controllers\AccountController.cs" />
+    <Compile Include="Authentication\Identity Models\AppUserManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Authentication\Identity Models\Role.cs" />
+    <Compile Include="Authentication\Identity Models\UserClaim.cs" />
+    <Compile Include="Authentication\Identity Models\UserRole.cs" />
+    <Compile Include="Authentication\Identity Models\UserLogin.cs" />
+    <Compile Include="Authentication\Identity Models\User.cs" />
+    <Compile Include="Authentication\Identity Models\UserStore.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Authentication\Models\AppUser.cs" />
     <Compile Include="Authentication\Config\AppAuthenticationTokenProvider.cs" />
     <Compile Include="Authentication\Config\AppOAuthAuthorizationServerProvider.cs" />
@@ -178,7 +197,6 @@
     <Compile Include="Authentication\Repositories\IAuthRepository.cs" />
     <Compile Include="Authentication\Repositories\AuthRepository.cs" />
     <Compile Include="Domain\AppDbContext.cs" />
-    <Compile Include="Authentication\Models\AuthContext.cs" />
     <Compile Include="Domain\Entities\Employee.cs" />
     <Compile Include="Domain\Entities\County.cs" />
     <Compile Include="Domain\Entities\GlItem.cs" />

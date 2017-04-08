@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using Backend.Authentication.Config;
+using Backend.Authentication.Identity_Models;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
 using Ninject;
@@ -32,6 +33,8 @@ namespace Backend
 			jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
 			var kernel = ConfigureNinject(app, config);
+			
+			app.CreatePerOwinContext<AppUserManager>(AppUserManager.Create);
 
 			app.UseOAuthAuthorizationServer(kernel.Get<AppOAuthAuthorizationServerOptions>().GetOptions());
 			app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());

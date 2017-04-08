@@ -1,24 +1,25 @@
 ﻿using System.Threading.Tasks;
+using Backend.Authentication.Identity_Models;
 using Backend.Authentication.Models;
+using Backend.Domain;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Backend.Authentication.Repositories
 {
 	public class AuthRepository : IAuthRepository
 	{
-		private readonly AuthContext _authContext;
-		private readonly UserManager<IdentityUser> _userManager;
+		private readonly AppDbContext _ctx;
+		private readonly AppUserManager _userManager;
 
-		public AuthRepository(AuthContext authContext, UserManager<IdentityUser> userManager)
+		public AuthRepository(AppDbContext ctx, AppUserManager userManager)
 		{
-			_authContext = authContext;
+			_ctx = ctx;
 			_userManager = userManager;
 		}
 
 		public async Task<IdentityResult> RegisterUser(AppUser appUser)
 		{
-			var user = new IdentityUser
+			var user = new User
 			{
 				UserName = appUser.UserName
 			};
@@ -28,7 +29,7 @@ namespace Backend.Authentication.Repositories
 			return result;
 		}
 
-		public async Task<IdentityUser> FindUser(string userName, string password)
+		public async Task<User> FindUser(string userName, string password)
 		{
 			var user = await _userManager.FindAsync(userName, password);
 
@@ -37,7 +38,7 @@ namespace Backend.Authentication.Repositories
 
 		public void Dispose()
 		{
-			_authContext.Dispose();
+			_ctx.Dispose();
 			_userManager.Dispose();
 		}
 	}
