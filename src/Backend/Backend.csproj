@@ -39,11 +39,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -169,13 +169,16 @@
     <Compile Include="API\Models\QuoteItemData.cs" />
     <Compile Include="API\Models\SalesSummaryData.cs" />
     <Compile Include="API\Models\WorkOrderData.cs" />
+    <Compile Include="Authentication\Controllers\AccountController.cs" />
     <Compile Include="Authentication\Models\AppUser.cs" />
     <Compile Include="Authentication\Config\AppAuthenticationTokenProvider.cs" />
     <Compile Include="Authentication\Config\AppOAuthAuthorizationServerProvider.cs" />
     <Compile Include="Authentication\Config\IOAuthAuthorizationServerOptions.cs" />
     <Compile Include="Authentication\Config\AppOAuthAuthorizationServerOptions.cs" />
+    <Compile Include="Authentication\Repositories\IAuthRepository.cs" />
+    <Compile Include="Authentication\Repositories\AuthRepository.cs" />
     <Compile Include="Domain\AppDbContext.cs" />
-    <Compile Include="Authentication\Models\AppUserDbContext.cs" />
+    <Compile Include="Authentication\Models\AuthContext.cs" />
     <Compile Include="Domain\Entities\Employee.cs" />
     <Compile Include="Domain\Entities\County.cs" />
     <Compile Include="Domain\Entities\GlItem.cs" />

@@ -1,18 +1,17 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
+using Backend.Authentication.Repositories;
 using Microsoft.Owin.Security.OAuth;
 
 namespace Backend.Authentication.Config
 {
 	public class AppOAuthAuthorizationServerProvider : OAuthAuthorizationServerProvider
 	{
-		private readonly UserManager<IdentityUser> _user;
+		private readonly IAuthRepository _authRepository;
 
-		public AppOAuthAuthorizationServerProvider(UserManager<IdentityUser> user)
+		public AppOAuthAuthorizationServerProvider(IAuthRepository authRepository)
 		{
-			_user = user;
+			_authRepository = authRepository;
 		}
 
 		public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
@@ -20,36 +19,26 @@ namespace Backend.Authentication.Config
 			context.Validated();
 		}
 
-		public override Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
+		public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
 		{
 			context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] {"*"});
 
-			//Get User Information
-			var user = _user.FindByName(context.UserName);
-			if (user == null)
+			using (_authRepository)
 			{
-				context.SetError("invalid_grant", "The user name or password is incorrect.");
-				return Task.FromResult<object>(null);
-			}
+				var user = await _authRepository.FindUser(context.UserName, context.Password);
 
-			//Get Roles for User
-			var roles = _user.GetRoles(user.Id);
-			if (roles == null)
-			{
-				context.SetError("invalid_grant", "Could not determine Roles for the Specified User");
-				return Task.FromResult<object>(null);
+				if (user == null)
+				{
+					context.SetError("invalid_grant", "The user name or password is incorrect.");
+					return;
+				}
 			}
 
 			var identity = new ClaimsIdentity(context.Options.AuthenticationType);
-			identity.AddClaim(new Claim("UserID", user.Id));
-			identity.AddClaim(new Claim("UserName", user.UserName));
-
-			foreach (var role in roles)
-				identity.AddClaim(new Claim(ClaimTypes.Role, role));
+			identity.AddClaim(new Claim("sub", context.UserName));
+			identity.AddClaim(new Claim("role", "user"));
 
 			context.Validated(identity);
-
-			return Task.FromResult<object>(null);
 		}
 	}
 }

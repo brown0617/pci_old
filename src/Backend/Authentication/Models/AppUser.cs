@@ -1,15 +1,24 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Backend.Authentication.Models
 {
-	public class AppUser : IdentityUser
+	public class AppUser
 	{
-		public int UserId { get; set; }
-		public string FirstName { get; set; }
-		public string LastName { get; set; }
+		public int Id { get; set; }
 
 		[Required]
-		public bool InActive { get; set; }
+		[Display(Name = "User name")]
+		public string UserName { get; set; }
+
+		[Required]
+		[StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+		[DataType(DataType.Password)]
+		[Display(Name = "Password")]
+		public string Password { get; set; }
+
+		[DataType(DataType.Password)]
+		[Display(Name = "Confirm password")]
+		[Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+		public string ConfirmPassword { get; set; }
 	}
 }

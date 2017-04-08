@@ -24,8 +24,8 @@ namespace Backend.Authentication.Config
 				AllowInsecureHttp = true, //TODO: HTTPS
 				TokenEndpointPath = new PathString("/token"),
 				AccessTokenExpireTimeSpan = TimeSpan.FromHours(3),
-				Provider = _provider,
-				RefreshTokenProvider = _tokenProvider
+				Provider = _provider
+				//RefreshTokenProvider = _tokenProvider
 			};
 		}
 	}

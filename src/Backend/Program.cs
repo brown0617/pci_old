@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using Backend.Authentication.Models;
 using Backend.Domain;
 using Microsoft.Owin.Hosting;
 
@@ -12,6 +13,7 @@ namespace Backend
 			// Set up and seed the database:
 			Console.WriteLine("Initializing and seeding database...");
 			Database.SetInitializer(new AppDbInitializer());
+			Database.SetInitializer(new AuthDbInitializer());
 
 			const string uri = "http://localhost:32150";
 
